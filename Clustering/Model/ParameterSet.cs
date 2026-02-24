@@ -8,4 +8,6 @@ namespace Clustering.Model
     {
 
     }
+
+    internal enum ParameterType { Integer, FloatingPoint, Boolean }
 }
