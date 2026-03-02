@@ -10,7 +10,9 @@ namespace Clustering.Model
         private ParameterSet parameterSet;
         private IAlgorithm algorithm;
 
-        public Model() { }
+        public Model() 
+        {
+        }
 
         public void ResetParameters() { }
     }
