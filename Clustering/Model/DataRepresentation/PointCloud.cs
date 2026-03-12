@@ -9,10 +9,10 @@ namespace Clustering.Model.DataRepresentation
         public int Dimension { get; private set; }
 
         // pointId -> point (1to1)
-        private Dictionary<int, IDataPoint> Points;
+        private Dictionary<int, IDataPoint> _points;
 
         // pointId -> cluster (nto1)
-        private Dictionary<int, Cluster> PointToClusterMapping;
+        private Dictionary<int, Cluster> _pointToClusterMapping;
 
         //public Type PointType;
 
