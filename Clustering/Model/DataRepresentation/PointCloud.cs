@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Clustering.Model.DataRepresentation
 {
-    internal class PointCloud
+    public class PointCloud
     {
         public int Dimension { get; private set; }
 

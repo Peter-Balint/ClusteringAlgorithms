@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Clustering.ViewModel.Navigation;
+using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
@@ -8,6 +7,7 @@ namespace Clustering.ViewModel
     {
         public NavigationBarViewModel NavigationBarViewModel { get; }
         public ViewModelBase ContentViewModel { get; }
+
 
         public LayoutViewModel(NavigationBarViewModel navigationBarViewModel, ViewModelBase contentViewModel)
         {

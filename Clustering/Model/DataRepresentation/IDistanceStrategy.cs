@@ -14,7 +14,12 @@ namespace Clustering.Model.DataRepresentation
     {
         public double Distance(IDataPoint a, IDataPoint b)
         {
-            throw new NotImplementedException();
+            double distance = 0;
+            for(int i=0; i<a.Dimension; i++)
+            {
+                distance += Math.Abs(a.GetCoordinateAt(i) - b.GetCoordinateAt(i));
+            }
+            return distance;
         }
     }
     internal class EuclideanDistance : ISpatialDistanceStrategy

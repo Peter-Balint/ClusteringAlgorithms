@@ -4,9 +4,11 @@ using System.Text;
 
 namespace Clustering.Model.DataRepresentation
 {
-    internal class RGBAPoint : IDataPoint
+    public class RGBAPoint : IDataPoint
     {
-        int[] colorCoordinates = new int[4];
+        public int Id { get; set; }
+
+        private int[] colorCoordinates = new int[4];
 
         public int Dimension { get { return 4; } }
 
@@ -16,6 +18,18 @@ namespace Clustering.Model.DataRepresentation
             for(int i = 1; i < 4; i++)
             {
                 colorCoordinates[i] = (int)coordinates[i];
+            }
+        }
+
+        public void Modify(double[] newCoordinates)
+        {
+            if (newCoordinates.Length != Dimension)
+            {
+                throw new Exception("Incorrect dimension while trying to modify RGBA point");
+            }
+            for (int i = 1; i < 4; i++)
+            {
+                colorCoordinates[i] = (int)newCoordinates[i];
             }
         }
     }

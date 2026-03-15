@@ -4,15 +4,32 @@ namespace Clustering.Model.DataRepresentation
 {
     internal class SpatialPoint : IDataPoint
     {
-        public SpatialPoint(double[] coordinates) { }
+        public int Id { get; set; }
 
-        int IDataPoint.Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private int[] coordinates = new int[4];
 
-        int IDataPoint.Dimension => throw new NotImplementedException();
+        public int Dimension { get { return coordinates.Length; } }
 
-        void IDataPoint.Modify(double[] coordinates)
+
+        public SpatialPoint(double[] coordinates, int id) 
         {
-            throw new NotImplementedException();
+            for (int i = 1; i < 4; i++)
+            {
+                coordinates[i] = (int)coordinates[i];
+            }
+        }
+
+
+        public void Modify(double[] newCoordinates)
+        {
+            if (newCoordinates.Length != Dimension)
+            {
+                throw new Exception("Incorrect dimension while trying to modify RGBA point");
+            }
+            for (int i = 1; i < 4; i++)
+            {
+                coordinates[i] = (int)newCoordinates[i];
+            }
         }
     }
 }
