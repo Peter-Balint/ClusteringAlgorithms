@@ -32,5 +32,10 @@ namespace Clustering.Model.DataRepresentation
                 colorCoordinates[i] = (int)newCoordinates[i];
             }
         }
+
+        public double GetCoordinateAt(int index)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

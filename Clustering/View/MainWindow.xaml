@@ -3,10 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Clustering"
+        xmlns:local="clr-namespace:Clustering.View"
+        xmlns:viewmodel="clr-namespace:Clustering.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Clustering" Height="450" Width="800">
     <Grid>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewmodel:ParametersViewModel}">
+                <local:ParametersView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:SetupViewModel}">
+                <local:SetupView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ResultViewModel}">
+                <local:ResultView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:LayoutViewModel}">
+                <local:Layout />
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -21,5 +36,6 @@
                 <MenuItem Header="Pointcloud" />
             </MenuItem>
         </Menu>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

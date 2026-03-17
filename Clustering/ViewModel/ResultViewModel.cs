@@ -3,11 +3,11 @@ using Clustering.Model;
 
 namespace Clustering.ViewModel
 {
-    public class SetupViewModel : ViewModelBase
+    public class ResultViewModel : ViewModelBase
     {
         private readonly MainModel _model;
 
-        public SetupViewModel(MainModel model)
+        public ResultViewModel(MainModel model)
         {
             _model = model;
         }

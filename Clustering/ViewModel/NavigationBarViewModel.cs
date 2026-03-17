@@ -8,16 +8,16 @@ namespace Clustering.ViewModel
     {
         public ICommand NavigateToParameters { get; }
         public ICommand NavigateToSetup { get; }
-        public ICommand NavigateToWalkthrough { get; }
+        public ICommand NavigateToResult { get; }
 
         public NavigationBarViewModel(
             INavigationService parametersNavigationService,
             INavigationService setupNavigationService,
-            INavigationService walkthroughNavigationService)
+            INavigationService resultNavigationService)
         {
             NavigateToParameters = new NavigateCommand(parametersNavigationService);
             NavigateToSetup = new NavigateCommand(setupNavigationService);
-            NavigateToWalkthrough = new NavigateCommand(walkthroughNavigationService);
+            NavigateToResult = new NavigateCommand(resultNavigationService);
         }
     }
 }

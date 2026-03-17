@@ -10,6 +10,8 @@ namespace Clustering.Model
         private ParameterSet _parameterSet;
         private IAlgorithm _algorithm;
 
+        public Action ClusteringFinished;
+
         public MainModel() 
         {
         }
