@@ -7,10 +7,12 @@ namespace Clustering.Model
     {
         private PointCloud _pointCloud;
         private IDistanceStrategy _distanceStrategy;
-        private ParameterSet _parameterSet;
+        public ParameterSet ParameterSet { get; }
         private IAlgorithm _algorithm;
 
         public Action ClusteringFinished;
+
+        public bool Visualizable {  get; private set; }
 
         public MainModel() 
         {

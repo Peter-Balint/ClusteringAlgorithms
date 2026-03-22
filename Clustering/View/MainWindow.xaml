@@ -36,6 +36,6 @@
                 <MenuItem Header="Pointcloud" />
             </MenuItem>
         </Menu>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <ContentControl Grid.Row ="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

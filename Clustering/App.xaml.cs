@@ -26,7 +26,7 @@ namespace Clustering
 
             services.AddTransient<ParametersViewModel>();
             services.AddTransient<SetupViewModel>();
-            services.AddTransient <ResultViewModel>();
+            services.AddTransient<ResultViewModel>();
             services.AddTransient<NavigationBarViewModel>(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
