@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Clustering.View"
         xmlns:viewmodel="clr-namespace:Clustering.ViewModel"
         mc:Ignorable="d"
-        Title="Clustering" Height="450" Width="800">
+        Title="Clustering" 
+        Height="720" Width="1280" ResizeMode="CanMinimize">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodel:ParametersViewModel}">

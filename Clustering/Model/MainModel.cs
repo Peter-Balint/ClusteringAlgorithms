@@ -16,6 +16,7 @@ namespace Clustering.Model
 
         public MainModel() 
         {
+            ParameterSet = new ParameterSet();
         }
 
         public void ResetParameters() { }
