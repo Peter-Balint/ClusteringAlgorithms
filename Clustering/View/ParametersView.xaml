@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Clustering.View"
+             xmlns:vm="clr-namespace:Clustering.ViewModel"
 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -26,8 +27,15 @@
             Text="Parameters"
             />
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <ComboBox ItemsSource="{Binding Source={StaticResource DisplayModeEnum}}"
-                      SelectedItem="{Binding DisplayMode}"/>
+            <StackPanel>
+                <Label>Point Type</Label>
+                <!--ItemsSource="{Binding Source={StaticResource DisplayModeEnum}}"-->
+                <ComboBox 
+                    ItemsSource="{Binding DisplayModeValues, Mode=OneTime}"
+                    SelectedItem="{Binding DisplayMode}"
+                    Height="20" Width="150" HorizontalAlignment="Left" Margin="10"/>
+
+            </StackPanel>
         </ScrollViewer>
 
     </Grid>

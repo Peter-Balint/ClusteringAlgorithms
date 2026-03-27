@@ -15,6 +15,6 @@ namespace Clustering.ViewModel.Navigation
             }
         }
 
-        public event Action CurrentViewModelChanged;
+        public event Action? CurrentViewModelChanged;
     }
 }

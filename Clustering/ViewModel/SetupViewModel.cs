@@ -15,6 +15,11 @@ namespace Clustering.ViewModel
         //in the lifecycle of this viewmodel the displaymode cannot change
         public DisplayMode DisplayMode => _model.ParameterSet.DisplayMode;
 
+        //there probably should be unique viewmodels for the different displays
+        //will they be reusable for results? let's try
+
+        public ViewModelBase DisplayViewModel;
+
         public ObservableCollection<SphereVisual3D> Spheres { get; set; } = [new SphereVisual3D() { Center = new Point3D(2, 0, 0), Radius = 1 }];
 
         public string TestText { get; }

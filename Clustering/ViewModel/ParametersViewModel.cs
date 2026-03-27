@@ -1,5 +1,6 @@
 ﻿
 using Clustering.Model;
+using System.Windows.Controls;
 
 namespace Clustering.ViewModel
 {
@@ -18,7 +19,9 @@ namespace Clustering.ViewModel
                 _model.ParameterSet.DisplayMode = value;
                 OnPropertyChanged(nameof(DisplayMode));
             }
-        }
+        }        
+        public DisplayMode[] DisplayModeValues => Enum.GetValues<DisplayMode>();
+
         public SpatialDistanceMetric SpatialDistanceMetric
         {
             get => _model.ParameterSet.SpatialDistanceMetric;
@@ -28,6 +31,8 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(SpatialDistanceMetric));
             }
         }
+        public SpatialDistanceMetric[] SpatialDistanceMetricValues => Enum.GetValues<SpatialDistanceMetric>();
+
         public CenterType CenterType
         {
             get => _model.ParameterSet.CenterType;
@@ -37,6 +42,8 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(CenterType));
             }
         }
+        public CenterType[] CenterTypeValues => Enum.GetValues<CenterType>();
+
         public TerminateCondition TerminateCondition
         {
             get => _model.ParameterSet.TerminateCondition;
@@ -46,6 +53,8 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(TerminateCondition));
             }
         }
+        public TerminateCondition[] TerminateConditionValues => Enum.GetValues<TerminateCondition>();
+
         public int IterationNumber
         {
             get => _model.ParameterSet.IterationNumber;
@@ -64,15 +73,17 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(MinimalDelta));
             }
         }
-        public ClusterInitilizationMethod ClusterInitilizationMethod
+        public ClusterInitializationMethod ClusterInitializationMethod
         {
-            get => _model.ParameterSet.ClusterInitilizationMethod;
+            get => _model.ParameterSet.ClusterInitializationMethod;
             set
             {
-                _model.ParameterSet.ClusterInitilizationMethod = value;
-                OnPropertyChanged(nameof(ClusterInitilizationMethod));
+                _model.ParameterSet.ClusterInitializationMethod = value;
+                OnPropertyChanged(nameof(ClusterInitializationMethod));
             }
         }
+        public ClusterInitializationMethod[] ClusterInitializationMethodValues => Enum.GetValues<ClusterInitializationMethod>();
+
         public int InitialClusterNumber
         {
             get => _model.ParameterSet.InitialClusterNumber;

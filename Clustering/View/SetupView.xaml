@@ -16,6 +16,6 @@
             Grid.Row="0"
             FontSize="28"
             Text="Setup" />
-        <c:DisplaySpatial3D Grid.Row="1" />
+        <c:DisplaySpatial2D Grid.Row="1"  DataContext="{Binding DisplayViewModel}"/>
     </Grid>
 </UserControl>

@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Clustering.View.Components.DisplaySpatial2D"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Clustering.View.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" >
+            <!--canvas "mozgatása": koordináták a viewmodelben változnak
+            a mutatott helyzet a modellből vett koordináta plusz transzformáció a viewmodelben
+            zoomolás: méret és koordináta változtatása
+            kell majd egy kis matek
+            honnan tudom a canvas méretét?
+            -->
+            <ItemsControl>
+                
+            </ItemsControl>
+            <Ellipse Width="50" Height="50" Fill="Gainsboro" Canvas.Left="-10"/>
+
+        </Canvas>
+    </Grid>
+</UserControl>
