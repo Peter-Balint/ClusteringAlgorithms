@@ -18,9 +18,9 @@ namespace Clustering.ViewModel
         //there probably should be unique viewmodels for the different displays
         //will they be reusable for results? let's try
 
-        public ViewModelBase DisplayViewModel;
+        public ViewModelBase DisplayViewModel { get; private set; }
 
-        public ObservableCollection<SphereVisual3D> Spheres { get; set; } = [new SphereVisual3D() { Center = new Point3D(2, 0, 0), Radius = 1 }];
+        //public ObservableCollection<SphereVisual3D> Spheres { get; set; } = [new SphereVisual3D() { Center = new Point3D(2, 0, 0), Radius = 1 }];
 
         public string TestText { get; }
 
@@ -29,15 +29,17 @@ namespace Clustering.ViewModel
         public SetupViewModel(MainModel model)
         {
             _model = model;
-            Spheres = new();
+
+            DisplayViewModel = new Display2DViewModel();
+            /*Spheres = new();
             Spheres.Add(new SphereVisual3D() { Center = new Point3D(0, 0, 0), Radius = 1 });
-            TestText = "setupviewmodel is visible in component";
-            TestCommand = new RelayCommand(() => AddSphere());
+            TestText = "setupviewmodel is visible in component";*/
+            //TestCommand = new RelayCommand(() => AddSphere());
         }
 
-        private void AddSphere()
+        /*private void AddSphere()
         {
             Spheres.Add(new SphereVisual3D() { Center = new Point3D(-2, 0, 0), Radius = 1 });
-        }
+        }*/
     }
 }

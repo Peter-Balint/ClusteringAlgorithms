@@ -6,35 +6,37 @@ namespace Clustering.Model.DataRepresentation
     {
         public int Id { get; set; }
 
-        private int[] coordinates = new int[4];
+        private double[] _coordinates;
 
-        public int Dimension { get { return coordinates.Length; } }
+        public int Dimension { get { return _coordinates.Length; } }
 
 
-        public SpatialPoint(double[] coordinates, int id) 
+        public SpatialPoint(double[] coordinates, int dimension, int id) 
         {
-            for (int i = 1; i < 4; i++)
+            _coordinates = new double[dimension];
+            for (int i = 1; i < dimension; i++)
             {
-                coordinates[i] = (int)coordinates[i];
+                _coordinates[i] = coordinates[i];
             }
         }
 
 
         public void Modify(double[] newCoordinates)
         {
+            //unify place to check later
             if (newCoordinates.Length != Dimension)
             {
-                throw new Exception("Incorrect dimension while trying to modify RGBA point");
+                throw new Exception("Incorrect dimension while trying to modify spatial point");
             }
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < Dimension; i++)
             {
-                coordinates[i] = (int)newCoordinates[i];
+                _coordinates[i] = (int)newCoordinates[i];
             }
         }
 
         public double GetCoordinateAt(int index)
         {
-            throw new NotImplementedException();
+            return _coordinates[index];
         }
     }
 }

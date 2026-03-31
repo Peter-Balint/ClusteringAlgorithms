@@ -8,8 +8,7 @@ namespace Clustering.Model
     //maybe figure out a more generic way later
     public class ParameterSet
     {
-        public DisplayMode DisplayMode { get; 
-            set; }
+        public DisplayMode DisplayMode { get; set; }
         public SpatialDistanceMetric SpatialDistanceMetric { get; set; }
         public CenterType CenterType { get; set; }
         public TerminateCondition TerminateCondition { get; set; }

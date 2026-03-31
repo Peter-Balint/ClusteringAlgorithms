@@ -19,6 +19,17 @@ namespace Clustering.Model
             ParameterSet = new ParameterSet();
         }
 
+        //return the factory method that will be passed to pointcloud
+        private Func<IDataPoint> CreatePointFactory()
+        {
+            return null;
+        }
+
         public void ResetParameters() { }
+
+        public void AddPoint(double[] coordinates, int clusterId = 0)
+        {
+
+        }
     }
 }

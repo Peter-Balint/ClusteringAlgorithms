@@ -16,7 +16,13 @@ namespace Clustering.Model.DataRepresentation
 
         //public Type PointType;
 
-        public PointCloud(int dimension, IDataPoint[]? initalPoints = null) { }
+        private Func<IDataPoint> CreatePoint;
+
+        public PointCloud(int dimension /*might be unneccessary with the factory function*/,
+            Func<IDataPoint> createPoint, IDataPoint[]? initalPoints = null)
+        {
+            CreatePoint = createPoint;
+        }
 
         public virtual void AddPoint(IDataPoint point, int clusterId = 0)
         {
@@ -26,7 +32,7 @@ namespace Clustering.Model.DataRepresentation
 
         public void AddCluster() { }
 
-        //might need to return the points that were left in the cluster and need to be redistributed (which should probably be done ain the alg)
+        //might need to return the points that were left in the cluster and need to be redistributed (which should probably be done in the alg)
         //or have a constraint that only empty clusters can be deleted and redistribution has to happen beforehand
         public void RemoveCluster(int clusterId) { }
 

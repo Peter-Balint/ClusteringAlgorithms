@@ -6,19 +6,57 @@
              xmlns:local="clr-namespace:Clustering.View.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" >
-            <!--canvas "mozgatása": koordináták a viewmodelben változnak
+
+        <!--<Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" >
+            <!-canvas "mozgatása": koordináták a viewmodelben változnak
             a mutatott helyzet a modellből vett koordináta plusz transzformáció a viewmodelben
             zoomolás: méret és koordináta változtatása
             kell majd egy kis matek
             honnan tudom a canvas méretét?
-            -->
-            <ItemsControl>
-                
+            ->
+            <ItemsControl ItemsSource="{Binding Points}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet"
+                                 Canvas.Left ="{Binding X}" Canvas.Top ="{Binding X}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
             <Ellipse Width="50" Height="50" Fill="Gainsboro" Canvas.Left="-10"/>
 
-        </Canvas>
-    </Grid>
+        </Canvas>-->
+    <Border BorderBrush="Black" BorderThickness="3">
+        <ItemsControl ItemsSource="{Binding Points}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
+                        <Ellipse.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding OnClick}" />
+                        </Ellipse.InputBindings>
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="Stroke" Value="Black" />
+                                        <Setter Property="StrokeThickness" Value="2" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+    </Border>
 </UserControl>
