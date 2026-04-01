@@ -20,9 +20,25 @@ namespace Clustering.Model
         }
 
         //return the factory method that will be passed to pointcloud
-        private Func<IDataPoint> CreatePointFactory()
+        //if needs be, can rework to assign dimension from parameter as well, unifying spatial point creation, and allowing higher dimensions
+        private Func<double[],int,IDataPoint> CreatePointFactory()
         {
-            return null;
+            switch (ParameterSet.DisplayMode)
+            {
+                case DisplayMode.Spatial2D:
+                    {
+                        return (coordinates, id) => { return new SpatialPoint(coordinates, 2, id); };
+                    }
+                case DisplayMode.Spatial3D:
+                    {
+                        return (coordinates, id) => { return new SpatialPoint(coordinates, 3, id); };
+                    }
+                case DisplayMode.RGBA:
+                    {
+                        return (coordinates, id) => { return new RGBAPoint(coordinates); };
+                    }
+            }
+            return null!;
         }
 
         public void ResetParameters() { }
@@ -32,4 +48,6 @@ namespace Clustering.Model
 
         }
     }
+
+
 }

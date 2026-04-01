@@ -16,15 +16,17 @@ namespace Clustering.Model.DataRepresentation
 
         //public Type PointType;
 
-        private Func<IDataPoint> CreatePoint;
+        private Func<double[], int, IDataPoint> CreatePoint;
+
+        private int _newId = 0;
 
         public PointCloud(int dimension /*might be unneccessary with the factory function*/,
-            Func<IDataPoint> createPoint, IDataPoint[]? initalPoints = null)
+            Func<double[], int, IDataPoint> createPoint, IDataPoint[]? initalPoints = null)
         {
             CreatePoint = createPoint;
         }
 
-        public virtual void AddPoint(IDataPoint point, int clusterId = 0)
+        public virtual void AddPoint(double[] coordinates, int clusterId = 0)
         {
             //itt is a validation a kérdés, kell-e ellenőrizni a pont dimenzióját?
         }
@@ -37,5 +39,12 @@ namespace Clustering.Model.DataRepresentation
         public void RemoveCluster(int clusterId) { }
 
         public void ChangeDimensions(int to) { }
+
+        private int GetNewId()
+        {
+            int newId = _newId;
+            _newId++;
+            return newId;
+        }
     }
 }
