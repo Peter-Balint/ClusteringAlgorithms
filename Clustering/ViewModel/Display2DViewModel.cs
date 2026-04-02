@@ -14,6 +14,17 @@ namespace Clustering.ViewModel
         private double _currentDiameter;
 
         private CircleViewModel? _selectedPoint = null;
+        public CircleViewModel? SelectedPoint
+        { 
+            get => _selectedPoint;
+            set
+            {
+                if (_selectedPoint == value) return;
+                _selectedPoint = value;
+                OnPropertyChanged(nameof(SelectedPoint));
+            }
+        }
+
         private double? _clickedX = null;
         public double? ClickedX 
         {
@@ -56,6 +67,7 @@ namespace Clustering.ViewModel
             //link up points from the model here, dummy for now
             Points.Add(new CircleViewModel(100, 100, 30, 1));
             Points.Add(new CircleViewModel(200, 300, 30, 2));
+            Points.Add(new CircleViewModel(-10, -10, 30, 3));
 
             foreach (CircleViewModel point in Points)
             {
@@ -71,18 +83,18 @@ namespace Clustering.ViewModel
         {
             if(sender is not null && sender is CircleViewModel point)
             {
-                _selectedPoint?.IsSelected = false;
+                SelectedPoint?.IsSelected = false;
                 ClickedX = ClickedY = null;
-                _selectedPoint = point;
-                _selectedPoint.IsSelected = true;
+                SelectedPoint = point;
+                SelectedPoint.IsSelected = true;
             }
         }
 
         private void OnCanvasClicked(MouseButtonEventArgs? m)
         {
             if (m is null) return;
-            _selectedPoint?.IsSelected = false;
-            _selectedPoint = null;
+            SelectedPoint?.IsSelected = false;
+            SelectedPoint = null;
 
             var position = m.GetPosition((IInputElement)m.Source);
 

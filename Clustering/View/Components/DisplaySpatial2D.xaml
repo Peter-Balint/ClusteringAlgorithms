@@ -19,10 +19,10 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <TextBlock>
+        <StackPanel Grid.Column="0" Background="#F4F8D3">
+            <TextBlock Name="CanvasPointInfo" HorizontalAlignment="Center" TextAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0},{1}">
+                    <MultiBinding StringFormat="{}Selected point on canvas:&#10;{0}, {1}">
                         <Binding Path="ClickedX" />
                         <Binding Path="ClickedY" />
                     </MultiBinding>
@@ -31,12 +31,31 @@
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ClickedX}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+            <TextBlock DataContext="{Binding SelectedPoint}" Name="SelectedPointInfo" HorizontalAlignment="Center" TextAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Selected point:&#10;{0}, {1}">
+                        <Binding Path="X" />
+                        <Binding Path="Y" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button Content="Add point">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ClickedX}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}">
@@ -61,7 +80,7 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" Background="Transparent">
+                        <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" Background="Transparent" ClipToBounds="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction 

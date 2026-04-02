@@ -25,6 +25,7 @@
             Grid.Row="0"
             FontSize="28"
             Text="Parameters"
+            Margin="10"
             />
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>

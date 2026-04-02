@@ -10,6 +10,7 @@
         <TextBlock
             Grid.Row="0"
             FontSize="28"
-            Text="Result" />
+            Text="Result"
+            Margin="10" />
     </Grid>
 </UserControl>

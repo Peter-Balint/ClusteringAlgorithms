@@ -12,8 +12,26 @@ namespace Clustering.ViewModel
         //viewből is jöhet: zoom, scroll
 
         public double Diameter { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
+        private double _x;
+        public double X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                OnPropertyChanged(nameof(X));
+            }
+        }
+        private double _y;
+        public double Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                OnPropertyChanged(nameof(Y));
+            }
+        }
 
         public int Id { get; }
 
