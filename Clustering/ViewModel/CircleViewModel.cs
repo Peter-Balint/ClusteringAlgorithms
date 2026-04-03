@@ -49,7 +49,7 @@ namespace Clustering.ViewModel
             }
         }
 
-        public ICommand OnClick { get; }
+        public ICommand OnClickCommand { get; }
         public event EventHandler PointClicked;
 
         public CircleViewModel(double  x, double y, double diameter, int id)
@@ -59,7 +59,7 @@ namespace Clustering.ViewModel
             Diameter = diameter;
             Id = id;
             _isSelected = false;
-            OnClick = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
+            OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
         }
 
         public void Scale(double deltaX, double deltaY, double? newDiameter = null)

@@ -20,9 +20,27 @@
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Background="#F4F8D3">
+            <TextBlock Name="SelectedPointInfo" HorizontalAlignment="Center" TextAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Selected point:&#10;{0}, {1}">
+                        <Binding Path="SelectedPoint.X" />
+                        <Binding Path="SelectedPoint.Y" />
+                    </MultiBinding>
+                </TextBlock.Text>
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedPoint}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <TextBlock Name="CanvasPointInfo" HorizontalAlignment="Center" TextAlignment="Center">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Selected point on canvas:&#10;{0}, {1}">
+                    <MultiBinding StringFormat="{}Clicked on canvas:&#10;{0}, {1}">
                         <Binding Path="ClickedX" />
                         <Binding Path="ClickedY" />
                     </MultiBinding>
@@ -37,20 +55,23 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBlock DataContext="{Binding SelectedPoint}" Name="SelectedPointInfo" HorizontalAlignment="Center" TextAlignment="Center">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Selected point:&#10;{0}, {1}">
-                        <Binding Path="X" />
-                        <Binding Path="Y" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-            <Button Content="Add point">
+            <Button Content="Add point" Command="{Binding AddPointCommand}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ClickedX}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Remove point" Command="{Binding RemovePointCommand}">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedPoint}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -62,9 +83,16 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
-                            <Ellipse.InputBindings>
+                            <!--<Ellipse.InputBindings>
                                 <MouseBinding Gesture="LeftClick" Command="{Binding OnClick}" />
-                            </Ellipse.InputBindings>
+                            </Ellipse.InputBindings>-->
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction 
+                                        Command="{Binding OnClickCommand}"
+                                        PassEventArgsToCommand="False"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Ellipse.Style>
                                 <Style TargetType="Ellipse">
                                     <Style.Triggers>
@@ -84,7 +112,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction 
-                                            Command="{Binding CanvasClicked}"
+                                            Command="{Binding CanvasClickedCommand}"
                                             PassEventArgsToCommand="True"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>

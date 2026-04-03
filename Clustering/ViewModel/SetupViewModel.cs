@@ -30,7 +30,7 @@ namespace Clustering.ViewModel
         {
             _model = model;
 
-            DisplayViewModel = new Display2DViewModel();
+            DisplayViewModel = new Display2DViewModel(_model);
             /*Spheres = new();
             Spheres.Add(new SphereVisual3D() { Center = new Point3D(0, 0, 0), Radius = 1 });
             TestText = "setupviewmodel is visible in component";*/

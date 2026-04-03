@@ -47,6 +47,11 @@ namespace Clustering.Model
         {
 
         }
+
+        internal IEnumerable<(double, double, int)> GetAllPoints()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

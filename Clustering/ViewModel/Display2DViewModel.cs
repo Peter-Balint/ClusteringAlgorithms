@@ -1,17 +1,21 @@
 ﻿
+using Clustering.Model;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
     class Display2DViewModel : ViewModelBase
     {
+        private MainModel _mainModel;
+
         public double CanvasHeight { get; set; }
         public double CanvasWidth { get; set; }
 
-        private double _currentDiameter;
+        private double _currentDiameter = 50; //will have some zoom factor
 
         private CircleViewModel? _selectedPoint = null;
         public CircleViewModel? SelectedPoint
@@ -58,13 +62,22 @@ namespace Clustering.ViewModel
         //akkor a model pont létrehozásáról és törléséről jelez eventtel? in the alg
         public ObservableCollection<CircleViewModel> Points { get; set; }
 
-        public ICommand AddPoint { get; }
-        public ICommand CanvasClicked { get; }
+        public ICommand CanvasClickedCommand { get; }
+        public ICommand AddPointCommand { get; }
+        public ICommand RemovePointCommand { get; }
 
-        public Display2DViewModel()
+        public Display2DViewModel(MainModel model)
         {
+            _mainModel = model;
+
             Points = new ObservableCollection<CircleViewModel>();
             //link up points from the model here, dummy for now
+            IEnumerable<(double x, double y, int id)> modelPoints = _mainModel.GetAllPoints();
+            foreach(var triple in modelPoints)
+            {
+                Points.Add(new CircleViewModel(triple.x, triple.y, _currentDiameter, triple.id));
+            }
+
             Points.Add(new CircleViewModel(100, 100, 30, 1));
             Points.Add(new CircleViewModel(200, 300, 30, 2));
             Points.Add(new CircleViewModel(-10, -10, 30, 3));
@@ -74,14 +87,14 @@ namespace Clustering.ViewModel
                 point.PointClicked += OnPointClicked;
             }
 
-            CanvasClicked = new RelayCommand<MouseButtonEventArgs>(OnCanvasClicked);
+            CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClicked);
 
-            //AddPoint = new RelayCommand();
+            AddPointCommand = new RelayCommand(AddPoint);
         }
 
         private void OnPointClicked(object? sender, EventArgs e)
         {
-            if(sender is not null && sender is CircleViewModel point)
+            if(sender is not null && sender is CircleViewModel point && point!= SelectedPoint)
             {
                 SelectedPoint?.IsSelected = false;
                 ClickedX = ClickedY = null;
@@ -92,7 +105,7 @@ namespace Clustering.ViewModel
 
         private void OnCanvasClicked(MouseButtonEventArgs? m)
         {
-            if (m is null) return;
+            if (m is null || m.Source is not Canvas) return;
             SelectedPoint?.IsSelected = false;
             SelectedPoint = null;
 
@@ -100,6 +113,11 @@ namespace Clustering.ViewModel
 
             ClickedX = position.X;
             ClickedY = position.Y;
+        }
+
+        public void AddPoint()
+        {
+
         }
 
         private void ScalePoints(double deltaX, double deltaY, double? newDiameter = null)
