@@ -1,5 +1,6 @@
 ﻿
 using Clustering.Model;
+using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -71,16 +72,16 @@ namespace Clustering.ViewModel
             _mainModel = model;
 
             Points = new ObservableCollection<CircleViewModel>();
-            //link up points from the model here, dummy for now
-            IEnumerable<(double x, double y, int id)> modelPoints = _mainModel.GetAllPoints();
-            foreach(var triple in modelPoints)
+
+            IEnumerable<IDataPoint> modelPoints = _mainModel.GetAllPoints();
+            foreach(IDataPoint point in modelPoints)
             {
-                Points.Add(new CircleViewModel(triple.x, triple.y, _currentDiameter, triple.id));
+                Points.Add(new CircleViewModel(point,_currentDiameter));
             }
 
-            Points.Add(new CircleViewModel(100, 100, 30, 1));
-            Points.Add(new CircleViewModel(200, 300, 30, 2));
-            Points.Add(new CircleViewModel(-10, -10, 30, 3));
+            Points.Add(new CircleViewModel(100, 100, 30, 100));
+            Points.Add(new CircleViewModel(200, 300, 30, 200));
+            Points.Add(new CircleViewModel(-10, -10, 30, 300));
 
             foreach (CircleViewModel point in Points)
             {
@@ -90,6 +91,9 @@ namespace Clustering.ViewModel
             CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClicked);
 
             AddPointCommand = new RelayCommand(AddPoint);
+            RemovePointCommand = new RelayCommand(RemovePoint);
+
+            _mainModel.PointCreated += OnPointCreated;
         }
 
         private void OnPointClicked(object? sender, EventArgs e)
@@ -115,9 +119,26 @@ namespace Clustering.ViewModel
             ClickedY = position.Y;
         }
 
-        public void AddPoint()
+        private void AddPoint()
         {
+            if (ClickedX is not null && ClickedY is not null)
+            {
+                _mainModel.AddPoint([ClickedX.Value, ClickedY.Value]);
+            }
+        }
+        private void RemovePoint()
+        {
+            if (SelectedPoint is not null)
+            {
+                _mainModel.RemovePoint(SelectedPoint!.Id);
+                Points.Remove(SelectedPoint);
+                SelectedPoint = null;
+            }
+        }
 
+        private void OnPointCreated(object? sender, IDataPoint point)
+        {
+            Points.Add(new CircleViewModel(point, _currentDiameter));
         }
 
         private void ScalePoints(double deltaX, double deltaY, double? newDiameter = null)

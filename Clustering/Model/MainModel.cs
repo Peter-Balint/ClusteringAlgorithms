@@ -12,11 +12,18 @@ namespace Clustering.Model
 
         public Action ClusteringFinished;
 
+        public event EventHandler<IDataPoint>? PointCreated;
+
         public bool Visualizable {  get; private set; }
 
         public MainModel() 
         {
             ParameterSet = new ParameterSet();
+
+            //dummy
+            ParameterSet.DisplayMode = DisplayMode.Spatial2D;
+            SpatialPoint p = new SpatialPoint([30, 60], 2, 10);
+            _pointCloud = new PointCloud([p], CreatePointFactory());
         }
 
         //return the factory method that will be passed to pointcloud
@@ -43,14 +50,20 @@ namespace Clustering.Model
 
         public void ResetParameters() { }
 
-        public void AddPoint(double[] coordinates, int clusterId = 0)
-        {
 
+        public IEnumerable<IDataPoint> GetAllPoints()
+        {
+            return _pointCloud.GetAllPoints();
         }
 
-        internal IEnumerable<(double, double, int)> GetAllPoints()
+        public void AddPoint(double[] coordinates, int clusterId = 0)
         {
-            throw new NotImplementedException();
+            IDataPoint point = _pointCloud.AddPoint(coordinates);
+            PointCreated?.Invoke(this,point);
+        }
+        public void RemovePoint(int id)
+        {
+            _pointCloud.RemovePoint(id);
         }
     }
 

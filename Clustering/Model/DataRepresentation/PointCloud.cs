@@ -25,12 +25,28 @@ namespace Clustering.Model.DataRepresentation
         {
             CreatePoint = createPoint;
         }
+        //dummy constructor for testing
+        public PointCloud(IDataPoint[] initalPoints, Func<double[], int, IDataPoint> createPoint)
+        {
+            _points = new Dictionary<int, IDataPoint>();
+            foreach (IDataPoint point in initalPoints)
+            {
+                _points.Add(point.Id, point);
+            }
+            CreatePoint = createPoint;
+        }
 
-        public virtual void AddPoint(double[] coordinates, int clusterId = 0)
+        public IDataPoint AddPoint(double[] coordinates, int clusterId = 0)
         {
             //itt is a validation a kérdés, kell-e ellenőrizni a pont dimenzióját?
+            IDataPoint point = CreatePoint(coordinates, GetNewId());
+            _points.Add(point.Id, point);
+            return point;
         }
-        public void RemovePoint(int PointId) { }
+        public void RemovePoint(int PointId) 
+        { 
+            _points.Remove(PointId);
+        }
 
         public void AddCluster() { }
 
@@ -45,6 +61,11 @@ namespace Clustering.Model.DataRepresentation
             int newId = _newId;
             _newId++;
             return newId;
+        }
+
+        public IEnumerable<IDataPoint> GetAllPoints()
+        {
+            return _points.Values;
         }
     }
 }

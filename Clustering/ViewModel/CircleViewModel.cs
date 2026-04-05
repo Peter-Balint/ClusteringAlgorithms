@@ -1,4 +1,5 @@
 ﻿
+using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
 using SharpDX.Direct3D11;
 using System.Windows.Input;
@@ -49,15 +50,27 @@ namespace Clustering.ViewModel
             }
         }
 
-        public ICommand OnClickCommand { get; }
-        public event EventHandler PointClicked;
+        public ICommand OnClickCommand { get; private set; } = null!;
+        public event EventHandler? PointClicked;
 
         public CircleViewModel(double  x, double y, double diameter, int id)
         {
             X = x;
             Y = y;
-            Diameter = diameter;
             Id = id;
+            SetShared(diameter);
+        }
+        public CircleViewModel(IDataPoint point, double diameter)
+        {
+            X = point.GetCoordinateAt(0);
+            Y = point.GetCoordinateAt(1);
+            Id = point.Id;
+            SetShared(diameter);
+        }
+
+        private void SetShared(double diameter)
+        {
+            Diameter = diameter;
             _isSelected = false;
             OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
         }

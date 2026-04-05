@@ -14,10 +14,11 @@ namespace Clustering.Model.DataRepresentation
         public SpatialPoint(double[] coordinates, int dimension, int id) 
         {
             _coordinates = new double[dimension];
-            for (int i = 1; i < dimension; i++)
+            for (int i = 0; i < dimension; i++)
             {
                 _coordinates[i] = coordinates[i];
             }
+            Id = id;
         }
 
 

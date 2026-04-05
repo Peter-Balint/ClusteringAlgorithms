@@ -7,6 +7,6 @@
 
         public double GetCoordinateAt(int index);
 
-        public void Modify(double[] coordinates);
+        //public void Modify(double[] coordinates);
     }
 }
