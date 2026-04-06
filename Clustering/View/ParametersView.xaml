@@ -9,12 +9,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary>
+        <!--<ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/View/Resources/EnumConversion.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-        </ResourceDictionary>
+        </ResourceDictionary>-->
+        <Style TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -29,13 +40,31 @@
             />
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
-                <Label>Point Type</Label>
-                <!--ItemsSource="{Binding Source={StaticResource DisplayModeEnum}}"-->
+                <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <StackPanel>
+                        <Label>Point Type</Label>
+                        <ComboBox 
+                            ItemsSource="{Binding DisplayModeValues, Mode=OneTime}"
+                            SelectedItem="{Binding DisplayMode}"/>
+                    </StackPanel>
+                </Border>
+                <Label>Spatial Distance Metric</Label>
                 <ComboBox 
-                    ItemsSource="{Binding DisplayModeValues, Mode=OneTime}"
-                    SelectedItem="{Binding DisplayMode}"
-                    Height="20" Width="150" HorizontalAlignment="Left" Margin="10"/>
-
+                    ItemsSource="{Binding SpatialDistanceMetricValues, Mode=OneTime}"
+                    SelectedItem="{Binding SpatialDistanceMetric}"/>
+                <Label>Center Type</Label>
+                <ComboBox 
+                    ItemsSource="{Binding CenterTypeValues, Mode=OneTime}"
+                    SelectedItem="{Binding CenterType}"/>
+                <Label>Terminate Condition</Label>
+                <ComboBox 
+                    ItemsSource="{Binding TerminateConditionValues, Mode=OneTime}"
+                    SelectedItem="{Binding TerminateCondition}"/>
+                <!--<TextBox Height="20" Width="150" HorizontalAlignment="Left" Margin="10"></TextBox>-->
+                <Label>Cluster Initialization Method</Label>
+                <ComboBox
+                    ItemsSource="{Binding ClusterInitializationMethodValues, Mode=OneTime}"
+                    SelectedItem="{Binding ClusterInitializationMethod}" />
             </StackPanel>
         </ScrollViewer>
 
