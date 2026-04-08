@@ -1,13 +1,20 @@
 ﻿
 using Clustering.Model;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
     public class ParametersViewModel : ViewModelBase
     {
         private readonly MainModel _model;
+        //private readonly ErrorRelay _errorRelay;
 
+        public ObservableCollection<PropertyError> Errors { get; }
+
+        public ICommand PreviewPositiveIntegerInputCommand { get; }
 
         #region properties
 
@@ -61,7 +68,26 @@ namespace Clustering.ViewModel
             set
             {
                 _model.ParameterSet.IterationNumber = value;
-                OnPropertyChanged(nameof(IterationNumber));
+            }
+        }
+        public string IterationNumberDisplay
+        {
+            get => IterationNumber.ToString();
+            set
+            {
+                if(value is not null && int.TryParse(value, out _))
+                {
+                    IterationNumber = int.Parse(value);
+                    ClearErrors(nameof(IterationNumber));
+                }//flaw:textbox now can't be empty, maybe onewaytosource and more manual handling?
+                else
+                {
+                    IterationNumber = 0;
+                    ClearErrors(nameof(IterationNumber));
+                    AddError(nameof(IterationNumber), "Iteration Number field should contain a positive integer and should not be empty");
+                }
+                //this can work if im careful
+                //do I even need the IterationNumber property as a proxy
             }
         }
         public double MinimalDelta
@@ -101,7 +127,46 @@ namespace Clustering.ViewModel
         public ParametersViewModel(MainModel model)
         {
             _model = model;
-            DisplayMode = DisplayMode.Spatial3D;
+            //_errorRelay = new ErrorRelay();
+            Errors = new ObservableCollection<PropertyError>();
+            PreviewPositiveIntegerInputCommand = new RelayCommand<TextCompositionEventArgs>(ValidatePositiveIntegerInputFromText);
+        }
+
+
+        private void ValidatePositiveIntegerInputFromText(TextCompositionEventArgs? args)
+        {
+            args!.Handled = !args.Text.All(char.IsDigit) || args.Text == string.Empty;
+        }
+
+        private void AddError(string propertyName, string message)
+        {
+            for (int i = 0; i < Errors.Count; i++)
+            {
+                if (Errors[i].PropertyName == propertyName)
+                {
+                    Errors[i].ErrorMessages.Add(message);
+                    return;
+                }
+            }
+            Errors.Add(new PropertyError(propertyName, message));
+        }
+        private void ClearErrors(string? propertyName = null)
+        {
+            if(propertyName is null)
+            {
+                Errors.Clear();
+            }
+            else
+            {
+                for(int i = 0; i < Errors.Count; i++)
+                {
+                    if (Errors[i].PropertyName == propertyName)
+                    {
+                        Errors.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

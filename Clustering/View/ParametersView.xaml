@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Clustering.View"
              xmlns:vm="clr-namespace:Clustering.ViewModel"
+                          xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -32,6 +33,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <TextBlock
             Grid.Row="0"
             FontSize="28"
@@ -39,33 +41,91 @@
             Margin="10"
             />
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel>
-                <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
-                    <StackPanel>
-                        <Label>Point Type</Label>
-                        <ComboBox 
-                            ItemsSource="{Binding DisplayModeValues, Mode=OneTime}"
-                            SelectedItem="{Binding DisplayMode}"/>
-                    </StackPanel>
-                </Border>
-                <Label>Spatial Distance Metric</Label>
-                <ComboBox 
-                    ItemsSource="{Binding SpatialDistanceMetricValues, Mode=OneTime}"
-                    SelectedItem="{Binding SpatialDistanceMetric}"/>
-                <Label>Center Type</Label>
-                <ComboBox 
-                    ItemsSource="{Binding CenterTypeValues, Mode=OneTime}"
-                    SelectedItem="{Binding CenterType}"/>
-                <Label>Terminate Condition</Label>
-                <ComboBox 
-                    ItemsSource="{Binding TerminateConditionValues, Mode=OneTime}"
-                    SelectedItem="{Binding TerminateCondition}"/>
-                <!--<TextBox Height="20" Width="150" HorizontalAlignment="Left" Margin="10"></TextBox>-->
-                <Label>Cluster Initialization Method</Label>
-                <ComboBox
-                    ItemsSource="{Binding ClusterInitializationMethodValues, Mode=OneTime}"
-                    SelectedItem="{Binding ClusterInitializationMethod}" />
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Primary parameters" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Point Type</Label>
+                            <ComboBox 
+                                ItemsSource="{Binding DisplayModeValues, Mode=OneTime}"
+                                SelectedItem="{Binding DisplayMode}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Center Type</Label>
+                            <ComboBox 
+                                ItemsSource="{Binding CenterTypeValues, Mode=OneTime}"
+                                SelectedItem="{Binding CenterType}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Terminate Condition</Label>
+                            <ComboBox 
+                                ItemsSource="{Binding TerminateConditionValues, Mode=OneTime}"
+                                SelectedItem="{Binding TerminateCondition}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Cluster Initialization Method</Label>
+                            <ComboBox
+                                ItemsSource="{Binding ClusterInitializationMethodValues, Mode=OneTime}"
+                                SelectedItem="{Binding ClusterInitializationMethod}" />
+                        </StackPanel>
+                    </Border>
+
+
+
+                    <!--<TextBox Height="20" Width="150" HorizontalAlignment="Left" Margin="10"></TextBox>-->
+                    
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Secondary parameters" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Spatial Distance Metric</Label>
+                            <ComboBox 
+                                ItemsSource="{Binding SpatialDistanceMetricValues, Mode=OneTime}"
+                                SelectedItem="{Binding SpatialDistanceMetric}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                        <StackPanel>
+                            <Label>Iteration Number</Label>
+                            <TextBox Text="{Binding IterationNumberDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewTextInput">
+                                        <i:InvokeCommandAction Command="{Binding PreviewPositiveIntegerInputCommand}" PassEventArgsToCommand="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Errors" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
+                    <ItemsControl ItemsSource="{Binding Errors}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock ></TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
         </ScrollViewer>
 
     </Grid>
