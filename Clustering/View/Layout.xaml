@@ -6,13 +6,17 @@
              xmlns:local="clr-namespace:Clustering.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <local:NavigationBar Grid.Row="1" DataContext="{Binding NavigationBarViewModel}" />
+        <local:NavigationBar Grid.Row="1" DataContext="{Binding NavigationBarViewModel}" 
+                             Visibility="{Binding DataContext.IsNavigationEnabled, ElementName=LayoutRoot, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <ContentControl
         Grid.Row="0"

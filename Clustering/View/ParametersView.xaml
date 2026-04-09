@@ -10,12 +10,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <!--<ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/View/Resources/EnumConversion.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-
-        </ResourceDictionary>-->
         <Style TargetType="ComboBox">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="18"/>
@@ -27,6 +21,15 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="18"/>
         </Style>
+        <Style x:Key="RoundedBorderStyleBlack" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -49,7 +52,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Primary parameters" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
                         <StackPanel>
                             <Label>Point Type</Label>
                             <ComboBox 
@@ -57,7 +60,7 @@
                                 SelectedItem="{Binding DisplayMode}"/>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
                         <StackPanel>
                             <Label>Center Type</Label>
                             <ComboBox 
@@ -65,7 +68,7 @@
                                 SelectedItem="{Binding CenterType}"/>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
                         <StackPanel>
                             <Label>Terminate Condition</Label>
                             <ComboBox 
@@ -73,7 +76,7 @@
                                 SelectedItem="{Binding TerminateCondition}"/>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
                         <StackPanel>
                             <Label>Cluster Initialization Method</Label>
                             <ComboBox
@@ -81,15 +84,10 @@
                                 SelectedItem="{Binding ClusterInitializationMethod}" />
                         </StackPanel>
                     </Border>
-
-
-
-                    <!--<TextBox Height="20" Width="150" HorizontalAlignment="Left" Margin="10"></TextBox>-->
-                    
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="Secondary parameters" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsSpatialDistanceMetricApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <Label>Spatial Distance Metric</Label>
                             <ComboBox 
@@ -97,16 +95,18 @@
                                 SelectedItem="{Binding SpatialDistanceMetric}"/>
                         </StackPanel>
                     </Border>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="10" Width="300" CornerRadius="10" Padding="10">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsIterationNumberApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <Label>Iteration Number</Label>
                             <TextBox Text="{Binding IterationNumberDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="PreviewTextInput">
-                                        <i:InvokeCommandAction Command="{Binding PreviewPositiveIntegerInputCommand}" PassEventArgsToCommand="True"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
                             </TextBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsMinimalDeltaApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <Label>Minimal Delta</Label>
+                            <TextBox Text="{Binding MinimalDeltaDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -115,12 +115,19 @@
                     <ItemsControl ItemsSource="{Binding Errors}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel></StackPanel>
+                                <StackPanel/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock ></TextBlock>
+                                <ItemsControl ItemsSource="{Binding ErrorMessages}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="18" TextAlignment="Center" 
+                                                       Foreground="PaleVioletRed" TextWrapping="Wrap" Margin="10"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

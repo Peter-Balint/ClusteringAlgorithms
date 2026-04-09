@@ -1,22 +1,18 @@
 ﻿
 using Clustering.Model;
-using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
     public class ParametersViewModel : ViewModelBase
     {
         private readonly MainModel _model;
-        //private readonly ErrorRelay _errorRelay;
+
+        //todo: add apply button, checks if there are any errors, if not then enables navigation
+        //changing a parameter disables it again
+        #region properties
 
         public ObservableCollection<PropertyError> Errors { get; }
-
-        public ICommand PreviewPositiveIntegerInputCommand { get; }
-
-        #region properties
 
         public DisplayMode DisplayMode
         {
@@ -25,6 +21,7 @@ namespace Clustering.ViewModel
             {
                 _model.ParameterSet.DisplayMode = value;
                 OnPropertyChanged(nameof(DisplayMode));
+                OnPropertyChanged(nameof(IsSpatialDistanceMetricApplicable));
             }
         }        
         public DisplayMode[] DisplayModeValues => Enum.GetValues<DisplayMode>();
@@ -39,6 +36,7 @@ namespace Clustering.ViewModel
             }
         }
         public SpatialDistanceMetric[] SpatialDistanceMetricValues => Enum.GetValues<SpatialDistanceMetric>();
+        public bool IsSpatialDistanceMetricApplicable => DisplayMode == DisplayMode.Spatial2D || DisplayMode == DisplayMode.Spatial3D;
 
         public CenterType CenterType
         {
@@ -58,6 +56,17 @@ namespace Clustering.ViewModel
             {
                 _model.ParameterSet.TerminateCondition = value;
                 OnPropertyChanged(nameof(TerminateCondition));
+
+                //dependent parameters
+                OnPropertyChanged(nameof(IsIterationNumberApplicable));
+                ClearErrors(nameof(IterationNumber));
+                //maybe replace this with a method that checks for the errors the same way the setter does
+                //since just the errors getting added is what we want and the binding isn't two way
+                //find out if that works on start as well
+                if(IsIterationNumberApplicable) IterationNumberDisplay = IterationNumber.ToString();
+                OnPropertyChanged(nameof(IsMinimalDeltaApplicable));
+                ClearErrors(nameof(MinimalDelta));
+                if (IsMinimalDeltaApplicable) MinimalDeltaDisplay = MinimalDelta.ToString();
             }
         }
         public TerminateCondition[] TerminateConditionValues => Enum.GetValues<TerminateCondition>();
@@ -75,21 +84,27 @@ namespace Clustering.ViewModel
             get => IterationNumber.ToString();
             set
             {
-                if(value is not null && int.TryParse(value, out _))
-                {
-                    IterationNumber = int.Parse(value);
-                    ClearErrors(nameof(IterationNumber));
-                }//flaw:textbox now can't be empty, maybe onewaytosource and more manual handling?
-                else
+                ClearErrors(nameof(IterationNumber));
+
+                if(value == string.Empty)
                 {
                     IterationNumber = 0;
-                    ClearErrors(nameof(IterationNumber));
-                    AddError(nameof(IterationNumber), "Iteration Number field should contain a positive integer and should not be empty");
+                    AddError(nameof(IterationNumber), "Iteration Number field should not be empty", IsIterationNumberApplicable);
                 }
-                //this can work if im careful
-                //do I even need the IterationNumber property as a proxy
+                else if(!int.TryParse(value, out int parsedValue) || parsedValue < 1)
+                {
+                    IterationNumber = 0;
+                    AddError(nameof(IterationNumber), "Iteration Number field should contain a positive integer", IsIterationNumberApplicable);
+                }
+                else
+                {
+                    IterationNumber = parsedValue;
+                    ClearErrors(nameof(IterationNumber));
+                }
             }
         }
+        public bool IsIterationNumberApplicable => TerminateCondition == TerminateCondition.IterationNumber;
+
         public double MinimalDelta
         {
             get => _model.ParameterSet.MinimalDelta;
@@ -99,6 +114,32 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(MinimalDelta));
             }
         }
+        public string MinimalDeltaDisplay
+        {
+            get => MinimalDelta.ToString();
+            set
+            {
+                ClearErrors(nameof(MinimalDelta));
+
+                if (value == string.Empty)
+                {
+                    MinimalDelta = 0;
+                    AddError(nameof(MinimalDelta), "Minimal Delta field should not be empty", IsMinimalDeltaApplicable);
+                }
+                else if (!double.TryParse(value, out double parsedValue) || parsedValue <= 0)
+                {
+                    IterationNumber = 0;
+                    AddError(nameof(MinimalDelta), "Minimal Delta field should contain a positive real number, with comma separator character", IsMinimalDeltaApplicable);
+                }
+                else
+                {
+                    MinimalDelta = parsedValue;
+                    ClearErrors(nameof(MinimalDelta));
+                }
+            }
+        }
+        public bool IsMinimalDeltaApplicable => TerminateCondition == TerminateCondition.MinimalDelta;
+
         public ClusterInitializationMethod ClusterInitializationMethod
         {
             get => _model.ParameterSet.ClusterInitializationMethod;
@@ -127,19 +168,14 @@ namespace Clustering.ViewModel
         public ParametersViewModel(MainModel model)
         {
             _model = model;
-            //_errorRelay = new ErrorRelay();
+
             Errors = new ObservableCollection<PropertyError>();
-            PreviewPositiveIntegerInputCommand = new RelayCommand<TextCompositionEventArgs>(ValidatePositiveIntegerInputFromText);
         }
 
 
-        private void ValidatePositiveIntegerInputFromText(TextCompositionEventArgs? args)
+        private void AddError(string propertyName, string message, bool? isApplicable = null)
         {
-            args!.Handled = !args.Text.All(char.IsDigit) || args.Text == string.Empty;
-        }
-
-        private void AddError(string propertyName, string message)
-        {
+            if (isApplicable is not null && !isApplicable.Value) return;
             for (int i = 0; i < Errors.Count; i++)
             {
                 if (Errors[i].PropertyName == propertyName)
