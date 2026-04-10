@@ -81,7 +81,7 @@ namespace Clustering.ViewModel
 
             Points.Add(new CircleViewModel(100, 100, 30, 100));
             Points.Add(new CircleViewModel(200, 300, 30, 200));
-            Points.Add(new CircleViewModel(-10, -10, 30, 300));
+            Points.Add(new CircleViewModel(-5, -5, 30, 300));
 
             foreach (CircleViewModel point in Points)
             {
@@ -132,13 +132,16 @@ namespace Clustering.ViewModel
             {
                 _mainModel.RemovePoint(SelectedPoint!.Id);
                 Points.Remove(SelectedPoint);
+                SelectedPoint.PointClicked -= OnPointClicked;
                 SelectedPoint = null;
             }
         }
 
         private void OnPointCreated(object? sender, IDataPoint point)
         {
-            Points.Add(new CircleViewModel(point, _currentDiameter));
+            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter);
+            pointVM.PointClicked += OnPointClicked;
+            Points.Add(pointVM);
         }
 
         private void ScalePoints(double deltaX, double deltaY, double? newDiameter = null)

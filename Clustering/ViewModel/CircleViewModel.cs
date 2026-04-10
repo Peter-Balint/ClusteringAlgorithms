@@ -1,7 +1,6 @@
 ﻿
 using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
-using SharpDX.Direct3D11;
 using System.Windows.Input;
 
 namespace Clustering.ViewModel
@@ -12,6 +11,7 @@ namespace Clustering.ViewModel
         //lehet itt nem kell notification, mert mindig változáskor új pont lesz: csak a modellből érkező változásra igaz, mert az új állapot
         //viewből is jöhet: zoom, scroll
 
+        //mégegy dolog amit figyelembe kell venni: a position binding nem a kör közepét, hanem a bal felső részét állítja
         public double Diameter { get; set; }
         private double _x;
         public double X
@@ -21,8 +21,11 @@ namespace Clustering.ViewModel
             {
                 _x = value;
                 OnPropertyChanged(nameof(X));
+                OnPropertyChanged(nameof(PutCenterToX));
             }
         }
+        public double PutCenterToX => X - Diameter / 2;
+
         private double _y;
         public double Y
         {
@@ -31,8 +34,10 @@ namespace Clustering.ViewModel
             {
                 _y = value;
                 OnPropertyChanged(nameof(Y));
+                OnPropertyChanged(nameof(PutCenterToY));
             }
         }
+        public double PutCenterToY => Y - Diameter/2;
 
         public int Id { get; }
 
@@ -55,17 +60,17 @@ namespace Clustering.ViewModel
 
         public CircleViewModel(double  x, double y, double diameter, int id)
         {
+            SetShared(diameter);
             X = x;
             Y = y;
             Id = id;
-            SetShared(diameter);
         }
         public CircleViewModel(IDataPoint point, double diameter)
         {
+            SetShared(diameter);
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
             Id = point.Id;
-            SetShared(diameter);
         }
 
         private void SetShared(double diameter)

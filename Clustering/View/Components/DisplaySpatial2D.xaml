@@ -83,9 +83,6 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
-                            <!--<Ellipse.InputBindings>
-                                <MouseBinding Gesture="LeftClick" Command="{Binding OnClick}" />
-                            </Ellipse.InputBindings>-->
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction 
@@ -121,8 +118,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemContainerStyle>
                     <Style TargetType="ContentPresenter">
-                        <Setter Property="Canvas.Left" Value="{Binding X}" />
-                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        <Setter Property="Canvas.Left" Value="{Binding PutCenterToX}" />
+                        <Setter Property="Canvas.Top" Value="{Binding PutCenterToY}" />
                     </Style>
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>

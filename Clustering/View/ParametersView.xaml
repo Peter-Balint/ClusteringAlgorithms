@@ -110,28 +110,36 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-                <StackPanel Grid.Column="2">
-                    <TextBlock Text="Errors" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
-                    <ItemsControl ItemsSource="{Binding Errors}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding ErrorMessages}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="18" TextAlignment="Center" 
-                                                       Foreground="PaleVioletRed" TextWrapping="Wrap" Margin="10"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="Errors" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
+                        <ItemsControl ItemsSource="{Binding Errors}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding ErrorMessages}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" FontSize="18" TextAlignment="Center" 
+                                                           Foreground="PaleVioletRed" TextWrapping="Wrap" Margin="10"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <Button Content="Apply" Grid.Row="1"
+                                Height="40" Width="100" FontSize="20" Margin="15"/>
+                </Grid>
             </Grid>
         </ScrollViewer>
 
