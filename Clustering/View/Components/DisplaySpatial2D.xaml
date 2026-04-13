@@ -79,50 +79,72 @@
             </Button>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding Points}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction 
-                                        Command="{Binding OnClickCommand}"
-                                        PassEventArgsToCommand="False"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="Stroke" Value="Black" />
-                                            <Setter Property="StrokeThickness" Value="2" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Ellipse.Style>
-                        </Ellipse>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Height="{Binding CanvasHeight, Mode=OneWayToSource}" Background="Transparent" ClipToBounds="True">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction 
-                                            Command="{Binding CanvasClickedCommand}"
-                                            PassEventArgsToCommand="True"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Canvas>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ContentPresenter">
-                        <Setter Property="Canvas.Left" Value="{Binding PutCenterToX}" />
-                        <Setter Property="Canvas.Top" Value="{Binding PutCenterToY}" />
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ItemsControl>
+            <!--<ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseWheel">
+                        <i:InvokeCommandAction Command="{Binding ZoomCommand}"
+                           PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>-->
+            <!--width binding doesn't work this way-->
+            <ItemsControl x:Name="ic" ItemsSource="{Binding Points}" Background="Aquamarine" Width="{Binding ICWidth, Mode=OneWayToSource}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseWheel">
+                        <i:InvokeCommandAction Command="{Binding ZoomCommand}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ItemsControl.Resources>
+                        <ScaleTransform x:Key="ZoomTransform"
+                            ScaleX="{Binding ZoomFactor}"
+                            ScaleY="{Binding ZoomFactor}" />
+                    </ItemsControl.Resources>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction 
+                                            Command="{Binding OnClickCommand}"
+                                            PassEventArgsToCommand="False"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Stroke" Value="Black" />
+                                                <Setter Property="StrokeThickness" Value="2" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas RenderTransform="{StaticResource ZoomTransform}"  Background="PaleGoldenrod" ClipToBounds="True"
+                                    Width="{Binding CanvasWidth}"
+                                    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <!--add a select and a drag mode-->
+                                        <i:InvokeCommandAction 
+                                                    Command="{Binding CanvasClickedCommand}"
+                                                    PassEventArgsToCommand="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Canvas>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding PutCenterToX}" />
+                            <Setter Property="Canvas.Top" Value="{Binding PutCenterToY}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            <!--</ScrollViewer>-->
         </Border>
     </Grid>
 </UserControl>

@@ -38,8 +38,8 @@ namespace Clustering
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            CreateParametersNavigationService(_serviceProvider).Navigate();
-            //CreateSetupNavigationService(_serviceProvider).Navigate();
+            //CreateParametersNavigationService(_serviceProvider).Navigate();
+            CreateSetupNavigationService(_serviceProvider).Navigate();
             MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
 

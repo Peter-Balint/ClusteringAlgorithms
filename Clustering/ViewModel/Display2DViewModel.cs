@@ -14,9 +14,26 @@ namespace Clustering.ViewModel
         private MainModel _mainModel;
 
         public double CanvasHeight { get; set; }
-        public double CanvasWidth { get; set; }
+        public double ICWidth {  get; set; }
+        //private double _canvasWidth;
+        public double CanvasWidth
+        {
+            get => ICWidth/ZoomFactor;
+        }
 
         private double _currentDiameter = 50; //will have some zoom factor
+
+        private double _zoomFactor;
+        public double ZoomFactor
+        {
+            get => _zoomFactor;
+            set
+            {
+                _zoomFactor = value;
+                OnPropertyChanged(nameof(ZoomFactor));
+                OnPropertyChanged(nameof(CanvasWidth));
+            }
+        }
 
         private CircleViewModel? _selectedPoint = null;
         public CircleViewModel? SelectedPoint
@@ -66,12 +83,15 @@ namespace Clustering.ViewModel
         public ICommand CanvasClickedCommand { get; }
         public ICommand AddPointCommand { get; }
         public ICommand RemovePointCommand { get; }
+        public ICommand ZoomCommand { get; }
 
         public Display2DViewModel(MainModel model)
         {
             _mainModel = model;
 
             Points = new ObservableCollection<CircleViewModel>();
+
+            ZoomFactor = 1;
 
             IEnumerable<IDataPoint> modelPoints = _mainModel.GetAllPoints();
             foreach(IDataPoint point in modelPoints)
@@ -89,6 +109,7 @@ namespace Clustering.ViewModel
             }
 
             CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClicked);
+            ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
 
             AddPointCommand = new RelayCommand(AddPoint);
             RemovePointCommand = new RelayCommand(RemovePoint);
@@ -117,6 +138,19 @@ namespace Clustering.ViewModel
 
             ClickedX = position.X;
             ClickedY = position.Y;
+        }
+
+        private void OnCanvasScrolling(MouseWheelEventArgs? m)
+        {
+            if (m is null) return;
+
+            if (m.Delta > 0)
+                ZoomFactor += 0.1;
+            else
+                ZoomFactor -= 0.1;
+
+            // Clamp zoom
+            ZoomFactor = Math.Max(0.1, Math.Min(ZoomFactor, 5.0));
         }
 
         private void AddPoint()
