@@ -137,8 +137,18 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <Button Content="Apply" Grid.Row="1"
-                                Height="40" Width="100" FontSize="20" Margin="15"/>
+                    <Button Content="Apply" Grid.Row="1" Command="{Binding ApplyCommand}"
+                                Height="40" Width="100" FontSize="20" Margin="15">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Grid>
         </ScrollViewer>

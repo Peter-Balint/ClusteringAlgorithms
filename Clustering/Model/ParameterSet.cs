@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
-
+﻿
 namespace Clustering.Model
 {
     //maybe figure out a more generic way later

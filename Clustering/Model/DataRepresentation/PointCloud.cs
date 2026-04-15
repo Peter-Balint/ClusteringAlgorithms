@@ -20,9 +20,10 @@ namespace Clustering.Model.DataRepresentation
 
         private int _newId = 0;
 
-        public PointCloud(int dimension /*might be unneccessary with the factory function*/,
-            Func<double[], int, IDataPoint> createPoint, IDataPoint[]? initalPoints = null)
+        public PointCloud(/*int dimension might be unneccessary with the factory function,*/
+            Func<double[], int, IDataPoint> createPoint)
         {
+            _points = new Dictionary<int, IDataPoint>();
             CreatePoint = createPoint;
         }
         //dummy constructor for testing

@@ -1,6 +1,8 @@
 ﻿
 using Clustering.Model;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
@@ -13,6 +15,9 @@ namespace Clustering.ViewModel
         #region properties
 
         public ObservableCollection<PropertyError> Errors { get; }
+        public bool HasErrors => Errors.Any();
+
+        public ICommand ApplyCommand {  get; }
 
         public DisplayMode DisplayMode
         {
@@ -170,6 +175,8 @@ namespace Clustering.ViewModel
             _model = model;
 
             Errors = new ObservableCollection<PropertyError>();
+
+            ApplyCommand = new RelayCommand(EnableNavigation);
         }
 
 
@@ -185,6 +192,8 @@ namespace Clustering.ViewModel
                 }
             }
             Errors.Add(new PropertyError(propertyName, message));
+            DisableNavigation();
+            OnPropertyChanged(nameof(HasErrors));
         }
         private void ClearErrors(string? propertyName = null)
         {
@@ -203,6 +212,7 @@ namespace Clustering.ViewModel
                     }
                 }
             }
+            OnPropertyChanged(nameof(HasErrors));
         }
     }
 }

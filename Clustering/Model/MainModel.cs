@@ -6,6 +6,7 @@ namespace Clustering.Model
     public class MainModel
     {
         private PointCloud _pointCloud;
+        //may be removed, only to be initialized in the algorithm
         private IDistanceStrategy _distanceStrategy;
         public ParameterSet ParameterSet { get; }
         private IAlgorithm _algorithm;
@@ -19,11 +20,6 @@ namespace Clustering.Model
         public MainModel() 
         {
             ParameterSet = new ParameterSet();
-
-            //dummy
-            ParameterSet.DisplayMode = DisplayMode.Spatial2D;
-            SpatialPoint p = new SpatialPoint([30, 60], 2, 10);
-            _pointCloud = new PointCloud([p], CreatePointFactory());
         }
 
         //return the factory method that will be passed to pointcloud
@@ -48,8 +44,6 @@ namespace Clustering.Model
             return null!;
         }
 
-        public void ResetParameters() { }
-
 
         public IEnumerable<IDataPoint> GetAllPoints()
         {
@@ -64,6 +58,16 @@ namespace Clustering.Model
         public void RemovePoint(int id)
         {
             _pointCloud.RemovePoint(id);
+        }
+
+        public void Initialize()
+        {
+            _pointCloud = new PointCloud(CreatePointFactory());
+            _algorithm = new KMeansAlgorithm();
+        }
+        public void RunClustering()
+        {
+            _algorithm.Run(_pointCloud);
         }
     }
 

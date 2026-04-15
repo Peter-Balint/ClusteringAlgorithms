@@ -7,12 +7,19 @@ namespace Clustering.ViewModel
 {
     class CircleViewModel : ViewModelBase
     {
-        //itt sem direkt referencia lesz valszeg a modellbeli pontra
-        //lehet itt nem kell notification, mert mindig változáskor új pont lesz: csak a modellből érkező változásra igaz, mert az új állapot
-        //viewből is jöhet: zoom, scroll
+        private double _offsetX;
+        private double _offsetY;
 
-        //mégegy dolog amit figyelembe kell venni: a position binding nem a kör közepét, hanem a bal felső részét állítja
-        public double Diameter { get; set; }
+        private double _diameter;
+        public double Diameter
+        {
+            get => _diameter;
+            set
+            {
+                _diameter = value;
+                OnPropertyChanged(nameof(Diameter));
+            }
+        }
         private double _x;
         public double X
         {
@@ -24,7 +31,7 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToX));
             }
         }
-        public double PutCenterToX => X - Diameter / 2;
+        public double PutCenterToX => X + _offsetX - Diameter / 2;
 
         private double _y;
         public double Y
@@ -37,7 +44,7 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToY));
             }
         }
-        public double PutCenterToY => Y - Diameter/2;
+        public double PutCenterToY => Y + _offsetY- Diameter/2;
 
         public int Id { get; }
 
@@ -58,38 +65,46 @@ namespace Clustering.ViewModel
         public ICommand OnClickCommand { get; private set; } = null!;
         public event EventHandler? PointClicked;
 
-        public CircleViewModel(double  x, double y, double diameter, int id)
+        public CircleViewModel(double  x, double y, double diameter, int id, double offsetX = 0, double offsetY = 0)
         {
-            SetShared(diameter);
+            SetShared(diameter, offsetX, offsetY);
             X = x;
             Y = y;
             Id = id;
         }
-        public CircleViewModel(IDataPoint point, double diameter)
+        public CircleViewModel(IDataPoint point, double diameter, double offsetX = 0, double offsetY = 0)
         {
-            SetShared(diameter);
+            SetShared(diameter, offsetX, offsetY);
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
             Id = point.Id;
         }
 
-        private void SetShared(double diameter)
+        private void SetShared(double diameter, double offsetX, double offsetY)
         {
             Diameter = diameter;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
             _isSelected = false;
             OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
         }
 
-        public void Scale(double deltaX, double deltaY, double? newDiameter = null)
+        public void ScaleOffset(double offsetX, double offsetY)
         {
-            //math it out how to translate the model's coordinate to the canvases, including zooming
-            //otherwise simply offsetting it would work
-            if(newDiameter is null)
-            {
-                X += deltaX;
-                Y += deltaY;
-                return;
-            }
+            _offsetX += offsetX;
+            _offsetY += offsetY;
+            OnPropertyChanged();
+        }
+        public void ScaleZoom(double centerX, double centerY, double newDiameter, double zoomDelta)
+        {
+            //not correct yet
+            //offset changes have happened in displayvm since
+            double _deltaX = ((centerX - X) * zoomDelta)/3;
+            double _deltaY = ((centerY - Y) * zoomDelta)/3;
+            _offsetX += _deltaX;
+            _offsetY += _deltaY;
+            Diameter = newDiameter;
+            OnPropertyChanged();
         }
     }
 }

@@ -13,15 +13,27 @@ namespace Clustering.ViewModel
     {
         private MainModel _mainModel;
 
-        public double CanvasHeight { get; set; }
-        public double ICWidth {  get; set; }
-        //private double _canvasWidth;
-        public double CanvasWidth
+        private bool _isSelectMode;
+        public bool IsSelectMode
         {
-            get => ICWidth/ZoomFactor;
+            get => _isSelectMode;
+            set
+            {
+                _isSelectMode = value;
+                OnPropertyChanged(nameof(IsSelectMode));
+                OnPropertyChanged(nameof(IsDragMode));
+            }
         }
+        private double _dragStartX;
+        private double _dragStartY;
+        public bool IsDragMode => !IsSelectMode;
 
-        private double _currentDiameter = 50; //will have some zoom factor
+
+        private double _offsetX = 0;
+        private double _offsetY = 0;
+
+        private double _baseDiameter = 50;
+        private double _currentDiameter => _baseDiameter / ZoomFactor; //will have some zoom factor
 
         private double _zoomFactor;
         public double ZoomFactor
@@ -30,8 +42,7 @@ namespace Clustering.ViewModel
             set
             {
                 _zoomFactor = value;
-                OnPropertyChanged(nameof(ZoomFactor));
-                OnPropertyChanged(nameof(CanvasWidth));
+                //OnPropertyChanged(nameof(ZoomFactor));
             }
         }
 
@@ -53,7 +64,7 @@ namespace Clustering.ViewModel
             get
             {
                 if (_clickedX == null) return null;
-                return Math.Round(_clickedX.Value, 2);
+                return Math.Round(_clickedX.Value+_offsetX, 2);
             }
             set
             {
@@ -67,7 +78,7 @@ namespace Clustering.ViewModel
             get
             {
                 if (_clickedY == null) return null;
-                return Math.Round(_clickedY.Value,2);
+                return Math.Round(_clickedY.Value+_offsetY,2);
             }
             set
             {
@@ -80,10 +91,14 @@ namespace Clustering.ViewModel
         //akkor a model pont létrehozásáról és törléséről jelez eventtel? in the alg
         public ObservableCollection<CircleViewModel> Points { get; set; }
 
-        public ICommand CanvasClickedCommand { get; }
+        public ICommand CanvasClickedCommand { get; private set; }
+        public ICommand MouseMoveCommand { get; private set; }
+        public ICommand CanvasReleasedCommand { get; }
         public ICommand AddPointCommand { get; }
         public ICommand RemovePointCommand { get; }
         public ICommand ZoomCommand { get; }
+        public ICommand SwitchToSelectModeCommand {  get; }
+        public ICommand SwitchToDragModeCommand { get; }
 
         public Display2DViewModel(MainModel model)
         {
@@ -99,22 +114,40 @@ namespace Clustering.ViewModel
                 Points.Add(new CircleViewModel(point,_currentDiameter));
             }
 
-            Points.Add(new CircleViewModel(100, 100, 30, 100));
-            Points.Add(new CircleViewModel(200, 300, 30, 200));
-            Points.Add(new CircleViewModel(-5, -5, 30, 300));
+            Points.Add(new CircleViewModel(100, 100, _currentDiameter, 100));
+            Points.Add(new CircleViewModel(200, 300, _currentDiameter, 200));
+            Points.Add(new CircleViewModel(-5, -5, _currentDiameter, 300));
 
             foreach (CircleViewModel point in Points)
             {
                 point.PointClicked += OnPointClicked;
             }
 
-            CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClicked);
-            ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
+            IsSelectMode = false;
+
+            CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
+            //MouseMoveCommand = new RelayCommand<MouseEventArgs>(OnMouseDrag);
+            CanvasReleasedCommand = new RelayCommand(OnDragReleased);
+
+            //ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
 
             AddPointCommand = new RelayCommand(AddPoint);
             RemovePointCommand = new RelayCommand(RemovePoint);
 
             _mainModel.PointCreated += OnPointCreated;
+
+            SwitchToSelectModeCommand = new RelayCommand(() => 
+                { 
+                    CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedSelect);
+                    IsSelectMode = true;
+                    OnPropertyChanged(nameof(CanvasClickedCommand));
+                });
+            SwitchToDragModeCommand = new RelayCommand(() => 
+                { 
+                    CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
+                    IsSelectMode = false;
+                    OnPropertyChanged(nameof(CanvasClickedCommand));
+                });
         }
 
         private void OnPointClicked(object? sender, EventArgs e)
@@ -128,7 +161,7 @@ namespace Clustering.ViewModel
             }
         }
 
-        private void OnCanvasClicked(MouseButtonEventArgs? m)
+        private void OnCanvasClickedSelect(MouseButtonEventArgs? m)
         {
             if (m is null || m.Source is not Canvas) return;
             SelectedPoint?.IsSelected = false;
@@ -139,18 +172,69 @@ namespace Clustering.ViewModel
             ClickedX = position.X;
             ClickedY = position.Y;
         }
+        private void OnCanvasClickedDrag(MouseButtonEventArgs? m)
+        {
+            if (m is null || m.Source is not Canvas) return;
+
+            MouseMoveCommand = new RelayCommand<MouseEventArgs>(OnMouseDrag);
+            OnPropertyChanged(nameof(MouseMoveCommand));
+
+            SelectedPoint?.IsSelected = false;
+            SelectedPoint = null;
+            ClickedX = ClickedY = null;
+
+            _dragStartX = m.GetPosition((IInputElement)m.Source).X;
+            _dragStartY = m.GetPosition((IInputElement)m.Source).Y;
+        }
+        private void OnMouseDrag(MouseEventArgs? m)
+        {
+            if (m is null) return;
+
+            var currentLocation = m.GetPosition((IInputElement)m.Source);
+
+            double offsetIncrementX = currentLocation.X - _dragStartX;
+            double offsetIncrementY = currentLocation.Y - _dragStartY;
+            _offsetX -= offsetIncrementX;
+            _offsetY -= offsetIncrementY;
+            ScalePointsOffset(offsetIncrementX,offsetIncrementY);
+            _dragStartX = currentLocation.X;
+            _dragStartY = currentLocation.Y;
+        }
+        private void OnDragReleased()
+        {
+            MouseMoveCommand = null;
+            OnPropertyChanged(nameof(MouseMoveCommand));
+        }
 
         private void OnCanvasScrolling(MouseWheelEventArgs? m)
         {
             if (m is null) return;
 
+            double zoomDelta;
             if (m.Delta > 0)
-                ZoomFactor += 0.1;
+            {
+                zoomDelta = -0.1;
+                ZoomFactor += zoomDelta;
+            }
             else
-                ZoomFactor -= 0.1;
+            {
+                zoomDelta = 0.1;
+                ZoomFactor += zoomDelta;
+            }
 
-            // Clamp zoom
-            ZoomFactor = Math.Max(0.1, Math.Min(ZoomFactor, 5.0));
+            if (ZoomFactor < 0.1)
+            {
+                zoomDelta = -ZoomFactor;
+                ZoomFactor = 0.1;
+            }
+            else if(ZoomFactor > 3)
+            {
+                zoomDelta = 3 - (ZoomFactor - 0.1);
+                ZoomFactor = 3;
+            }
+
+            var currentLocation = m.GetPosition((IInputElement)m.Source);
+            ScalePointsZoom(currentLocation.X + _offsetX, currentLocation.Y + _offsetY, zoomDelta);
         }
 
         private void AddPoint()
@@ -178,13 +262,19 @@ namespace Clustering.ViewModel
             Points.Add(pointVM);
         }
 
-        private void ScalePoints(double deltaX, double deltaY, double? newDiameter = null)
+        private void ScalePointsOffset(double offsetIncrementX, double offsetIncrementY)
         {
             foreach (CircleViewModel point in Points)
             {
-                point.Scale(deltaX, deltaY, newDiameter);
+                point.ScaleOffset(offsetIncrementX, offsetIncrementY);
             }
         }
-
+        private void ScalePointsZoom(double aroundX, double aroundY, double zoomDelta)
+        {
+            foreach (CircleViewModel point in Points)
+            {
+                point.ScaleZoom(aroundX, aroundY, _currentDiameter, zoomDelta);
+            }
+        }
     }
 }

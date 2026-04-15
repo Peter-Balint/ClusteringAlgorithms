@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Clustering.Model.DataRepresentation;
 
 namespace Clustering.Model.Algorithm
 {
     internal interface IAlgorithm
     {
+        public StepSequence Run(PointCloud pointCloud);
     }
 }

@@ -24,17 +24,17 @@ namespace Clustering.ViewModel
             NavigationBarViewModel = navigationBarViewModel;
             ContentViewModel = contentViewModel;
 
-            ContentViewModel.NavigatabilityChanged += OnContentNaviagatabilityChanged;
+            ContentViewModel.NavigatabilityChanged += OnContentNavigatabilityChanged;
         }
 
-        private void OnContentNaviagatabilityChanged(object? sender, bool isEnabled)
+        private void OnContentNavigatabilityChanged(object? sender, bool isEnabled)
         {
             IsNavigationEnabled = isEnabled;
         }
 
         public override void Dispose()
         {
-            ContentViewModel.NavigatabilityChanged -= OnContentNaviagatabilityChanged;
+            ContentViewModel.NavigatabilityChanged -= OnContentNavigatabilityChanged;
 
             NavigationBarViewModel.Dispose();
             ContentViewModel.Dispose();
