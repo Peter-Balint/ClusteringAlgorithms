@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
-    class CircleViewModel : ViewModelBase
+    class CircleViewModel : ViewModelBase, IShape
     {
         private double _offsetX;
         private double _offsetY;

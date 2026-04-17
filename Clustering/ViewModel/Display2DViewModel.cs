@@ -86,6 +86,8 @@ namespace Clustering.ViewModel
             }
         }
 
+        public bool IsRunnable => _mainModel.IsRunnable;
+
         public ObservableCollection<CircleViewModel> Points { get; set; }
 
         public ICommand CanvasClickedCommand { get; private set; }
@@ -96,6 +98,7 @@ namespace Clustering.ViewModel
         public ICommand ZoomCommand { get; }
         public ICommand SwitchToSelectModeCommand {  get; }
         public ICommand SwitchToDragModeCommand { get; }
+        public ICommand RunCommand { get; }
 
         public Display2DViewModel(MainModel model)
         {
@@ -144,6 +147,8 @@ namespace Clustering.ViewModel
                     IsSelectMode = false;
                     OnPropertyChanged(nameof(CanvasClickedCommand));
                 });
+
+            RunCommand = new RelayCommand(RunClustering);
         }
 
         private void OnPointClicked(object? sender, EventArgs e)
@@ -248,6 +253,7 @@ namespace Clustering.ViewModel
                 Points.Remove(SelectedPoint);
                 SelectedPoint.PointClicked -= OnPointClicked;
                 SelectedPoint = null;
+                OnPropertyChanged(nameof(IsRunnable));
             }
         }
 
@@ -256,6 +262,7 @@ namespace Clustering.ViewModel
             CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, _offsetX,_offsetY);
             pointVM.PointClicked += OnPointClicked;
             Points.Add(pointVM);
+            OnPropertyChanged(nameof(IsRunnable));
         }
 
         private void ScalePointsOffset(double offsetIncrementX, double offsetIncrementY)
@@ -274,5 +281,10 @@ namespace Clustering.ViewModel
         }
 
         //alg futtatása előtt ellenőrizni hogy K<points.length
+
+        private void RunClustering()
+        {
+            _mainModel.RunClustering();
+        }
     }
 }

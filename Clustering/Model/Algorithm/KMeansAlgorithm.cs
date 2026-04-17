@@ -63,11 +63,12 @@ namespace Clustering.Model.Algorithm
             do
             {
                 RedistributePoints(points, clusters);
-                AssignNewCenters(points, clusters);
+                AssignNewCenters(points, clusters, pointCloud.GetPointFactoryMethod());
 
                 results.SaveStep(points, clusters);
             } while (!IsTerminateConditionFullfilled(results));
 
+            return results;
         }
 
         private void RedistributePoints(IDataPoint[] points, Cluster[] clusters)
@@ -113,15 +114,24 @@ namespace Clustering.Model.Algorithm
             }
         }
 
-        private void AssignNewCenters(IDataPoint[] points, Cluster[] clusters)
+        private void AssignNewCenters(IDataPoint[] points, Cluster[] clusters, Func<double[], int, IDataPoint> CreatePoint)
         {
             IDataPoint[] pointsInCluster;
             //nem euklidészi metrikánál ugyanaz az átlag?
+            double[] centerCoordinates;
             foreach(Cluster cluster in clusters)
             {
+                centerCoordinates = new double[points[0].Dimension];
                 pointsInCluster = points.Where((p) => p.ClusterId == cluster.Id).ToArray();
-
-
+                foreach(IDataPoint point in pointsInCluster)
+                {
+                    for(int i=0; i<point.Dimension; i++)
+                    {
+                        centerCoordinates[i] += point.GetCoordinateAt(i)/point.Dimension;
+                    }
+                }
+                //cluster centers don't need their own id when they are not actual points, and if they are they aren't assigned like this
+                cluster.CenterPoint = CreatePoint(centerCoordinates,-1);
             }
         }
     }

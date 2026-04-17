@@ -11,11 +11,14 @@ namespace Clustering.Model
         public ParameterSet ParameterSet { get; }
         private IAlgorithm _algorithm;
 
+        public StepSequence? Results { get; private set; }
+
         public Action ClusteringFinished;
 
         public event EventHandler<IDataPoint>? PointCreated;
 
-        public bool Visualizable {  get; private set; }
+        public bool ResultsAvailable => Results != null;
+        public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
 
         public MainModel() 
         {
@@ -67,7 +70,7 @@ namespace Clustering.Model
         }
         public void RunClustering()
         {
-            _algorithm.Run(_pointCloud);
+            Results = _algorithm.Run(_pointCloud);
         }
     }
 

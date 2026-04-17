@@ -80,16 +80,19 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Switch to Select Mode" Command="{Binding SwitchToSelectModeCommand}"
-                    Visibility="{Binding IsDragMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Content="Switch to Select Mode" Command="{Binding SwitchToSelectModeCommand}" Margin="10"
+                    Visibility="{Binding IsDragMode, Converter={StaticResource BooleanToVisibilityConverter}}">c:\users\peter\documents\sulis\szem6\szakdolgozat\application\clustering\view\components\displayspatial2d.xaml.cs
+c:\users\peter\documents\sulis\szem6\szakdolgozat\application\clustering\view\components\displayspatial2d.xaml
+
             </Button>
-            <Button Content="Switch to Drag Mode" Command="{Binding SwitchToDragModeCommand}"
+            <Button Content="Switch to Drag Mode" Command="{Binding SwitchToDragModeCommand}" Margin="10"
                     Visibility="{Binding IsSelectMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             </Button>
+            <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
+                    IsEnabled="{Binding IsRunnable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
-            <ItemsControl x:Name="ic" ItemsSource="{Binding Points}" Background="Aquamarine">
-
+            <ItemsControl ItemsSource="{Binding Points}" Background="Aquamarine">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">

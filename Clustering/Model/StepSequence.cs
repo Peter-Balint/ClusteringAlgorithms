@@ -3,7 +3,7 @@ using Clustering.Model.DataRepresentation;
 
 namespace Clustering.Model
 {
-    internal class StepSequence
+    public class StepSequence
     {
         // storage for each snapshot (static pointcloud) between steps
         private List<IDataPoint[]> _points;

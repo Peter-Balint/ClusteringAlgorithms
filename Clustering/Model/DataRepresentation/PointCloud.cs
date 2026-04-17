@@ -3,8 +3,6 @@ namespace Clustering.Model.DataRepresentation
 {
     public class PointCloud
     {
-        public int Dimension { get; private set; }
-
         // pointId -> point (1to1)
         private Dictionary<int, IDataPoint> _points;
 
@@ -16,8 +14,9 @@ namespace Clustering.Model.DataRepresentation
 
         private int _newId = 0;
 
-        public PointCloud(/*int dimension might be unneccessary with the factory function,*/
-            Func<double[], int, IDataPoint> createPoint)
+        public int PointCount => _points.Count;
+
+        public PointCloud(Func<double[], int, IDataPoint> createPoint)
         {
             _points = new Dictionary<int, IDataPoint>(256); //to skip frequent early capacity increases, without too much space wasted for smaller dicts
             CreatePoint = createPoint;
@@ -48,6 +47,11 @@ namespace Clustering.Model.DataRepresentation
         public void AddCluster(int id, IDataPoint? centerPoint = null)
         {
             _clusters.Add(new Cluster(id,centerPoint));
+        }
+
+        public Func<double[], int, IDataPoint> GetPointFactoryMethod()
+        {
+            return CreatePoint;
         }
 
         //might need to return the points that were left in the cluster and need to be redistributed (which should probably be done in the alg)

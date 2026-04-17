@@ -15,7 +15,6 @@ namespace Clustering.Model.DataRepresentation
 
         public RGBAPoint(double[] coordinates) 
         {
-            //some assertion that there are exactly four elements, or is all validation already done on the vm level?
             for(int i = 1; i < 4; i++)
             {
                 colorCoordinates[i] = (int)coordinates[i];
@@ -36,7 +35,7 @@ namespace Clustering.Model.DataRepresentation
 
         public double GetCoordinateAt(int index)
         {
-            throw new NotImplementedException();
+            return colorCoordinates[index];
         }
     }
 }
