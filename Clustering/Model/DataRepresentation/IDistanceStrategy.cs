@@ -23,14 +23,29 @@ namespace Clustering.Model.DataRepresentation
     {
         public double Distance(IDataPoint a, IDataPoint b)
         {
-            throw new NotImplementedException();
+            double distance = 0;
+            for (int i = 0; i < a.Dimension; i++)
+            {
+                distance += Math.Pow(a.GetCoordinateAt(i) - b.GetCoordinateAt(i),2);
+            }
+            return Math.Sqrt(distance);
         }
     }
     internal class SupDistance : ISpatialDistanceStrategy
     {
         public double Distance(IDataPoint a, IDataPoint b)
         {
-            throw new NotImplementedException();
+            double maxDistance = 0;
+            double distance;
+            for (int i = 0; i < a.Dimension; i++)
+            {
+                distance = Math.Abs(a.GetCoordinateAt(i) - b.GetCoordinateAt(i));
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                }
+            }
+            return maxDistance;
         }
     }
 

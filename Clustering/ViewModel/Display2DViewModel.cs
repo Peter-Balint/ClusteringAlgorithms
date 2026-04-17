@@ -42,7 +42,6 @@ namespace Clustering.ViewModel
             set
             {
                 _zoomFactor = value;
-                //OnPropertyChanged(nameof(ZoomFactor));
             }
         }
 
@@ -87,8 +86,6 @@ namespace Clustering.ViewModel
             }
         }
 
-        //mivel observable collection nem adhatja vissza egyből a model egy collectionjét
-        //akkor a model pont létrehozásáról és törléséről jelez eventtel? in the alg
         public ObservableCollection<CircleViewModel> Points { get; set; }
 
         public ICommand CanvasClickedCommand { get; private set; }
@@ -126,7 +123,6 @@ namespace Clustering.ViewModel
             IsSelectMode = false;
 
             CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
-            //MouseMoveCommand = new RelayCommand<MouseEventArgs>(OnMouseDrag);
             CanvasReleasedCommand = new RelayCommand(OnDragReleased);
 
             //ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
@@ -257,7 +253,7 @@ namespace Clustering.ViewModel
 
         private void OnPointCreated(object? sender, IDataPoint point)
         {
-            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter);
+            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, _offsetX,_offsetY);
             pointVM.PointClicked += OnPointClicked;
             Points.Add(pointVM);
         }
@@ -276,5 +272,7 @@ namespace Clustering.ViewModel
                 point.ScaleZoom(aroundX, aroundY, _currentDiameter, zoomDelta);
             }
         }
+
+        //alg futtatása előtt ellenőrizni hogy K<points.length
     }
 }

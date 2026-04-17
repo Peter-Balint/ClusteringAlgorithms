@@ -5,6 +5,7 @@ namespace Clustering.Model.DataRepresentation
     internal class SpatialPoint : IDataPoint
     {
         public int Id { get; set; }
+        public int ClusterId {  get; set; }
 
         private double[] _coordinates;
 

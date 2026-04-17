@@ -63,7 +63,7 @@ namespace Clustering.Model
         public void Initialize()
         {
             _pointCloud = new PointCloud(CreatePointFactory());
-            _algorithm = new KMeansAlgorithm();
+            _algorithm = new KMeansAlgorithm(ParameterSet);
         }
         public void RunClustering()
         {

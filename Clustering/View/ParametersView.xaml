@@ -84,6 +84,13 @@
                                 SelectedItem="{Binding ClusterInitializationMethod}" />
                         </StackPanel>
                     </Border>
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
+                        <StackPanel>
+                            <Label>Number of Clusters (K)</Label>
+                            <TextBox Text="{Binding InitialClusterNumberDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="Secondary parameters" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>

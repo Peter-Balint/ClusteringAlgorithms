@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Clustering.Model.DataRepresentation
 {
     public class PointCloud
@@ -11,10 +8,9 @@ namespace Clustering.Model.DataRepresentation
         // pointId -> point (1to1)
         private Dictionary<int, IDataPoint> _points;
 
-        // pointId -> cluster (nto1)
-        private Dictionary<int, Cluster> _pointToClusterMapping;
+        //clusters still kept in pointcloud for future user interaction
+        private List<Cluster> _clusters;
 
-        //public Type PointType;
 
         private Func<double[], int, IDataPoint> CreatePoint;
 
@@ -23,7 +19,7 @@ namespace Clustering.Model.DataRepresentation
         public PointCloud(/*int dimension might be unneccessary with the factory function,*/
             Func<double[], int, IDataPoint> createPoint)
         {
-            _points = new Dictionary<int, IDataPoint>();
+            _points = new Dictionary<int, IDataPoint>(256); //to skip frequent early capacity increases, without too much space wasted for smaller dicts
             CreatePoint = createPoint;
         }
         //dummy constructor for testing
@@ -34,12 +30,12 @@ namespace Clustering.Model.DataRepresentation
             {
                 _points.Add(point.Id, point);
             }
+            _clusters = new List<Cluster>();
             CreatePoint = createPoint;
         }
 
         public IDataPoint AddPoint(double[] coordinates, int clusterId = 0)
         {
-            //itt is a validation a kérdés, kell-e ellenőrizni a pont dimenzióját?
             IDataPoint point = CreatePoint(coordinates, GetNewId());
             _points.Add(point.Id, point);
             return point;
@@ -49,11 +45,14 @@ namespace Clustering.Model.DataRepresentation
             _points.Remove(PointId);
         }
 
-        public void AddCluster() { }
+        public void AddCluster(int id, IDataPoint? centerPoint = null)
+        {
+            _clusters.Add(new Cluster(id,centerPoint));
+        }
 
         //might need to return the points that were left in the cluster and need to be redistributed (which should probably be done in the alg)
         //or have a constraint that only empty clusters can be deleted and redistribution has to happen beforehand
-        public void RemoveCluster(int clusterId) { }
+        //public void RemoveCluster(int clusterId) { }
 
         public void ChangeDimensions(int to) { }
 
@@ -63,10 +62,22 @@ namespace Clustering.Model.DataRepresentation
             _newId++;
             return newId;
         }
+        public int[] GetIds()
+        {
+            return _points.Keys.ToArray();
+        }
 
         public IEnumerable<IDataPoint> GetAllPoints()
         {
             return _points.Values;
+        }
+        public IDataPoint GetPoint(int id)
+        {
+            return _points[id];
+        }
+        public IEnumerable<Cluster> GetClusters()
+        {
+            return _clusters;
         }
     }
 }

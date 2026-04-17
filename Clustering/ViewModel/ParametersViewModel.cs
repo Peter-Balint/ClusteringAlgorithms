@@ -165,6 +165,30 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(InitialClusterNumber));
             }
         }
+        public string InitialClusterNumberDisplay
+        {
+            get => InitialClusterNumber.ToString();
+            set
+            {
+                ClearErrors(nameof(InitialClusterNumber));
+
+                if (value == string.Empty)
+                {
+                    InitialClusterNumber = 0;
+                    AddError(nameof(InitialClusterNumber), "Number of Clusters field should not be empty");
+                }
+                else if (!int.TryParse(value, out int parsedValue) || parsedValue <= 0)
+                {
+                    InitialClusterNumber = 0;
+                    AddError(nameof(InitialClusterNumber), "Number of Clusters field should contain a positive whole number");
+                }
+                else
+                {
+                    InitialClusterNumber = parsedValue;
+                    ClearErrors(nameof(InitialClusterNumber));
+                }
+            }
+        }
 
 
         #endregion

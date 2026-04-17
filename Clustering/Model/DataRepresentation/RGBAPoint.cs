@@ -6,8 +6,8 @@ namespace Clustering.Model.DataRepresentation
 {
     public class RGBAPoint : IDataPoint
     {
-        //is Id neccessary here?
         public int Id { get; set; }
+        public int ClusterId {  get; set; }
 
         private int[] colorCoordinates = new int[4];
 

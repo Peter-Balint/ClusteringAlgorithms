@@ -29,7 +29,7 @@ namespace Clustering.ViewModel
         public SetupViewModel(MainModel model)
         {
             _model = model;
-
+            _model.Initialize();
             DisplayViewModel = new Display2DViewModel(_model);
             /*Spheres = new();
             Spheres.Add(new SphereVisual3D() { Center = new Point3D(0, 0, 0), Radius = 1 });
