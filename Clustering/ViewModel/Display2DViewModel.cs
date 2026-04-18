@@ -114,10 +114,6 @@ namespace Clustering.ViewModel
                 Points.Add(new CircleViewModel(point,_currentDiameter));
             }
 
-            Points.Add(new CircleViewModel(100, 100, _currentDiameter, 100));
-            Points.Add(new CircleViewModel(200, 300, _currentDiameter, 200));
-            Points.Add(new CircleViewModel(-5, -5, _currentDiameter, 300));
-
             foreach (CircleViewModel point in Points)
             {
                 point.PointClicked += OnPointClicked;
@@ -189,7 +185,7 @@ namespace Clustering.ViewModel
         }
         private void OnMouseDrag(MouseEventArgs? m)
         {
-            if (m is null) return;
+            if (m is null || m.Source is not Canvas) return;
 
             var currentLocation = m.GetPosition((IInputElement)m.Source);
 
@@ -259,7 +255,7 @@ namespace Clustering.ViewModel
 
         private void OnPointCreated(object? sender, IDataPoint point)
         {
-            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, _offsetX,_offsetY);
+            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, -_offsetX,-_offsetY);
             pointVM.PointClicked += OnPointClicked;
             Points.Add(pointVM);
             OnPropertyChanged(nameof(IsRunnable));
@@ -285,6 +281,7 @@ namespace Clustering.ViewModel
         private void RunClustering()
         {
             _mainModel.RunClustering();
+            EnableNavigation();
         }
     }
 }

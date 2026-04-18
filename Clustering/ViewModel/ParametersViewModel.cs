@@ -207,6 +207,7 @@ namespace Clustering.ViewModel
         private void AddError(string propertyName, string message, bool? isApplicable = null)
         {
             if (isApplicable is not null && !isApplicable.Value) return;
+            if (Errors.Count == 0) DisableNavigation();
             for (int i = 0; i < Errors.Count; i++)
             {
                 if (Errors[i].PropertyName == propertyName)
@@ -216,7 +217,6 @@ namespace Clustering.ViewModel
                 }
             }
             Errors.Add(new PropertyError(propertyName, message));
-            DisableNavigation();
             OnPropertyChanged(nameof(HasErrors));
         }
         private void ClearErrors(string? propertyName = null)

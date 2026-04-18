@@ -20,6 +20,7 @@ namespace Clustering.Model.DataRepresentation
         {
             _points = new Dictionary<int, IDataPoint>(256); //to skip frequent early capacity increases, without too much space wasted for smaller dicts
             CreatePoint = createPoint;
+            _clusters = new List<Cluster>();
         }
         //dummy constructor for testing
         public PointCloud(IDataPoint[] initalPoints, Func<double[], int, IDataPoint> createPoint)

@@ -6,19 +6,20 @@ namespace Clustering.Model.DataRepresentation
 {
     public class RGBAPoint : IDataPoint
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public int ClusterId {  get; set; }
 
-        private int[] colorCoordinates = new int[4];
+        private int[] _colorCoordinates = new int[4];
 
         public int Dimension { get { return 4; } }
 
-        public RGBAPoint(double[] coordinates) 
+        public RGBAPoint(double[] coordinates, int clusterId = 0) 
         {
             for(int i = 1; i < 4; i++)
             {
-                colorCoordinates[i] = (int)coordinates[i];
+                _colorCoordinates[i] = (int)coordinates[i];
             }
+            ClusterId = clusterId;
         }
 
         public void Modify(double[] newCoordinates)
@@ -29,13 +30,23 @@ namespace Clustering.Model.DataRepresentation
             }
             for (int i = 1; i < 4; i++)
             {
-                colorCoordinates[i] = (int)newCoordinates[i];
+                _colorCoordinates[i] = (int)newCoordinates[i];
             }
         }
 
         public double GetCoordinateAt(int index)
         {
-            return colorCoordinates[index];
+            return _colorCoordinates[index];
+        }
+
+        public IDataPoint DeepCopy()
+        {
+            double[] copiedCoordinates = new double[4];
+            for (int i = 0; i < 4; i++)
+            {
+                copiedCoordinates[i] = _colorCoordinates[i];
+            }
+            return new RGBAPoint(copiedCoordinates,ClusterId);
         }
     }
 }

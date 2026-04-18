@@ -2,6 +2,10 @@
 using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
+using System.Windows.Media;
+using Microsoft.VisualStudio.Modeling.Diagrams;
+using DrawingColor = System.Drawing.Color;
+using MediaColor = System.Windows.Media.Color;
 
 namespace Clustering.ViewModel
 {
@@ -47,6 +51,16 @@ namespace Clustering.ViewModel
         public double PutCenterToY => Y + _offsetY- Diameter/2;
 
         public int Id { get; }
+        public int _clusterId;
+
+        public Brush Color => new SolidColorBrush(GetColorFromId(_clusterId));
+
+        private Color GetColorFromId(int id)
+        {
+            int hue = (id * 137) %240;
+            DrawingColor dColor = new HslColor(hue, 120, 120).ToRgbColor();
+            return MediaColor.FromArgb(dColor.A,dColor.R,dColor.G,dColor.B);
+        }
 
         private bool _isSelected;
         public bool IsSelected 
@@ -78,6 +92,7 @@ namespace Clustering.ViewModel
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
             Id = point.Id;
+            _clusterId = point.ClusterId;
         }
 
         private void SetShared(double diameter, double offsetX, double offsetY)

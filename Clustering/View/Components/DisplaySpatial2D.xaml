@@ -81,9 +81,7 @@
                 </Button.Style>
             </Button>
             <Button Content="Switch to Select Mode" Command="{Binding SwitchToSelectModeCommand}" Margin="10"
-                    Visibility="{Binding IsDragMode, Converter={StaticResource BooleanToVisibilityConverter}}">c:\users\peter\documents\sulis\szem6\szakdolgozat\application\clustering\view\components\displayspatial2d.xaml.cs
-c:\users\peter\documents\sulis\szem6\szakdolgozat\application\clustering\view\components\displayspatial2d.xaml
-
+                    Visibility="{Binding IsDragMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             </Button>
             <Button Content="Switch to Drag Mode" Command="{Binding SwitchToDragModeCommand}" Margin="10"
                     Visibility="{Binding IsSelectMode, Converter={StaticResource BooleanToVisibilityConverter}}">

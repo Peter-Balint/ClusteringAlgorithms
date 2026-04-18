@@ -58,14 +58,15 @@ namespace Clustering.Model.Algorithm
 
             IDataPoint[] points = pointCloud.GetAllPoints().ToArray();
             Cluster[] clusters = pointCloud.GetClusters().ToArray();
-            results.SaveStep(points, clusters);
+            results.SaveStepCopy(points, clusters);
 
             do
             {
+                //is thi sin the right order?
                 RedistributePoints(points, clusters);
                 AssignNewCenters(points, clusters, pointCloud.GetPointFactoryMethod());
 
-                results.SaveStep(points, clusters);
+                results.SaveStepCopy(points, clusters);
             } while (!IsTerminateConditionFullfilled(results));
 
             return results;

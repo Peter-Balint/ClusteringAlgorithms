@@ -1,6 +1,4 @@
-﻿using Clustering.ViewModel.Navigation;
-using System.Windows.Input;
-
+﻿
 namespace Clustering.ViewModel
 {
     public class LayoutViewModel : ViewModelBase

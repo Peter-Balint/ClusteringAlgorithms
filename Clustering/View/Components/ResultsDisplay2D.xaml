@@ -17,34 +17,25 @@
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Background="#F4F8D3">
+            <Button Content="Step Back" Command="{Binding StepBackCommand}"/>
+            <Button Content="Step Forwards" Command="{Binding StepForwardsCommand}"/>
+            <TextBlock Text="{Binding CurrentStep}"></TextBlock>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}" Background="Aquamarine">
-                <ItemsControl.ItemTemplate>
+                <ItemsControl.Resources>
                     <DataTemplate DataType="{x:Type vm:CircleViewModel}">
-                        <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
-                            <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="Stroke" Value="Black" />
-                                            <Setter Property="StrokeThickness" Value="2" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Ellipse.Style>
-                        </Ellipse>
+                        <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="{Binding Color}"/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type vm:SquareViewModel}">
-                        <Rectangle></Rectangle>
+                        <Rectangle Width="{Binding SideLength}" Height="{Binding SideLength}" Fill="Black"/>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                </ItemsControl.Resources>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Background="PaleGoldenrod" ClipToBounds="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <!--add a select and a drag mode-->
                                     <i:InvokeCommandAction Command="{Binding CanvasClickedCommand}" PassEventArgsToCommand="True"/>
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="MouseLeftButtonUp">
@@ -53,9 +44,9 @@
                                 <i:EventTrigger EventName="MouseMove">
                                     <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True"/>
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseWheel">
+                                <!--<i:EventTrigger EventName="PreviewMouseWheel">
                                     <i:InvokeCommandAction Command="{Binding ZoomCommand}" PassEventArgsToCommand="True"/>
-                                </i:EventTrigger>
+                                </i:EventTrigger>-->
                             </i:Interaction.Triggers>
                         </Canvas>
                     </ItemsPanelTemplate>
