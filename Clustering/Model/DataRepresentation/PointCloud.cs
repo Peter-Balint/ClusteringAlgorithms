@@ -84,5 +84,12 @@ namespace Clustering.Model.DataRepresentation
         {
             return _clusters;
         }
+
+        public void Reset()
+        {
+            _points.Clear();
+            _clusters.Clear();
+            _newId = 0;
+        }
     }
 }

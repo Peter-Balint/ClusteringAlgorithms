@@ -86,6 +86,7 @@
             <Button Content="Switch to Drag Mode" Command="{Binding SwitchToDragModeCommand}" Margin="10"
                     Visibility="{Binding IsSelectMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             </Button>
+            <Button Content="Load Points" Command="{Binding LoadPointsCommand}" Margin="10"/>
             <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
                     IsEnabled="{Binding IsRunnable}"/>
         </StackPanel>

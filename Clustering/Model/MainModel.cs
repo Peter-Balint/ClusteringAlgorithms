@@ -16,6 +16,7 @@ namespace Clustering.Model
         public Action ClusteringFinished;
 
         public event EventHandler<IDataPoint>? PointCreated;
+        public event EventHandler<IDataPoint[]>? PointsCreated;
 
         public bool ResultsAvailable => Results != null;
         public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
@@ -61,6 +62,16 @@ namespace Clustering.Model
         public void RemovePoint(int id)
         {
             _pointCloud.RemovePoint(id);
+        }
+
+        public void ReplacePoints(IEnumerable<double[]> pointCoordinates)
+        {
+            _pointCloud.Reset();
+            foreach (double[] point in pointCoordinates)
+            {
+                _pointCloud.AddPoint(point);
+            }
+            PointsCreated?.Invoke(this, _pointCloud.GetAllPoints().ToArray());
         }
 
         public void Initialize()

@@ -2,7 +2,9 @@
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,7 +34,7 @@ namespace Clustering.ViewModel
         private double _offsetX = 0;
         private double _offsetY = 0;
 
-        private double _baseDiameter = 50;
+        private double _baseDiameter = 30;
         private double _currentDiameter => _baseDiameter / ZoomFactor; //will have some zoom factor
 
         private double _zoomFactor;
@@ -99,6 +101,7 @@ namespace Clustering.ViewModel
         public ICommand SwitchToSelectModeCommand {  get; }
         public ICommand SwitchToDragModeCommand { get; }
         public ICommand RunCommand { get; }
+        public ICommand LoadPointsCommand { get; }
 
         public Display2DViewModel(MainModel model)
         {
@@ -130,6 +133,7 @@ namespace Clustering.ViewModel
             RemovePointCommand = new RelayCommand(RemovePoint);
 
             _mainModel.PointCreated += OnPointCreated;
+            _mainModel.PointsCreated += OnPointsCreated;
 
             SwitchToSelectModeCommand = new RelayCommand(() => 
                 { 
@@ -144,6 +148,7 @@ namespace Clustering.ViewModel
                     OnPropertyChanged(nameof(CanvasClickedCommand));
                 });
 
+            LoadPointsCommand = new RelayCommand(LoadPoints);
             RunCommand = new RelayCommand(RunClustering);
         }
 
@@ -260,6 +265,16 @@ namespace Clustering.ViewModel
             Points.Add(pointVM);
             OnPropertyChanged(nameof(IsRunnable));
         }
+        private void OnPointsCreated(object? sender, IDataPoint[] points)
+        {
+            foreach(IDataPoint point in points)
+            {
+                CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, -_offsetX, -_offsetY);
+                pointVM.PointClicked += OnPointClicked;
+                Points.Add(pointVM);
+            }
+            OnPropertyChanged(nameof(IsRunnable));
+        }
 
         private void ScalePointsOffset(double offsetIncrementX, double offsetIncrementY)
         {
@@ -276,7 +291,60 @@ namespace Clustering.ViewModel
             }
         }
 
-        //alg futtatása előtt ellenőrizni hogy K<points.length
+        private void LoadPoints()
+        {
+            FileDialog fd = new OpenFileDialog();
+            fd.Filter = "Setup files (*.sup)|*.sup";
+            if (fd.ShowDialog() == false)
+            {
+                return;
+            }
+            using var reader = new StreamReader(fd.FileName);
+            List<double[]> pointsFromFile = new List<double[]>();
+            int lineCounter = 1;
+            string? line = reader.ReadLine();
+            if (line is null)
+            {
+                MessageBox.Show($"Opened file was empty:\n{fd.FileName}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                return;
+            }
+            line = line.Trim();
+            if (int.TryParse(line, out int dimension) == false)
+            {
+                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points was not declared","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                return;
+            }
+            if (dimension < 2)
+            {
+                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points must be at least 2", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            while ((line = reader.ReadLine()) is not null)
+            {
+                lineCounter++;
+                string[] splits = line.Split(';');
+                if (splits.Length != dimension)
+                {
+                    MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nNumber of coordinates of point didn't match the declared dimension","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                    return;
+                }
+                double[] coordinates = new double[dimension];
+                for (int i = 0; i < dimension; i++)
+                {
+                    if (double.TryParse(splits[i], out double coordinate) == false)
+                    {
+                        MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nCoordinate could not be parsed: {splits[i]}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                        return;
+                    }
+                    coordinates[i] = coordinate;
+                }
+                pointsFromFile.Add(coordinates);
+            }
+            //do I need to unsubscribe from the events of points?
+            Points.Clear();
+            _mainModel.ReplacePoints(pointsFromFile);
+            //todo: handle higher dimensional points
+        }
 
         private void RunClustering()
         {
