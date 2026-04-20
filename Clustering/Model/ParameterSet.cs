@@ -1,7 +1,6 @@
 ﻿
 namespace Clustering.Model
 {
-    //maybe figure out a more generic way later
     public class ParameterSet
     {
         public DisplayMode DisplayMode { get; set; }
@@ -20,5 +19,5 @@ namespace Clustering.Model
     public enum SpatialDistanceMetric { Manhattan, Euclidean, Sup };
     public enum CenterType { Mean, Medoid }
     public enum TerminateCondition { IterationNumber, MinimalDelta }
-    public enum ClusterInitializationMethod { Random, UserDefined }
+    public enum ClusterInitializationMethod { RandomDataPoint, UserDefined }
 }

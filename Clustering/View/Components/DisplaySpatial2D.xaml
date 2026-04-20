@@ -58,7 +58,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <Button Content="Add point" Command="{Binding AddPointCommand}">
+            <Button Content="Add point" Command="{Binding AddPointCommand}" Margin="10">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -69,7 +69,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Remove point" Command="{Binding RemovePointCommand}">
+            <Button Content="Remove point" Command="{Binding RemovePointCommand}" Margin="10">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -87,7 +87,7 @@
                     Visibility="{Binding IsSelectMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             </Button>
             <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
-                    IsEnabled="{Binding IsRunnable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    IsEnabled="{Binding IsRunnable}"/>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}" Background="Aquamarine">

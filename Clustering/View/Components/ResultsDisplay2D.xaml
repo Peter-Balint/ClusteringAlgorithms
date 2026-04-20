@@ -17,9 +17,9 @@
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Background="#F4F8D3">
-            <Button Content="Step Back" Command="{Binding StepBackCommand}"/>
-            <Button Content="Step Forwards" Command="{Binding StepForwardsCommand}"/>
-            <TextBlock Text="{Binding CurrentStep}"></TextBlock>
+            <Button Content="Step Back" Command="{Binding StepBackCommand}" Margin="10"/>
+            <Button Content="Step Forwards" Command="{Binding StepForwardsCommand}" Margin="10"/>
+            <TextBlock Text="{Binding CurrentStep, StringFormat={}Current step: {0}}" HorizontalAlignment="Center" TextAlignment="Center"/>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}" Background="Aquamarine">
