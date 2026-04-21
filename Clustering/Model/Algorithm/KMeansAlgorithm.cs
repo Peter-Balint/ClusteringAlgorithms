@@ -8,6 +8,8 @@ namespace Clustering.Model.Algorithm
         private readonly ParameterSet _parameters;
         private IDistanceStrategy _distanceStrategy;
 
+        //todo aside from user interaction: seeded randomness for conistency if needed
+
         public KMeansAlgorithm(ParameterSet parameters)
         {
             _parameters = parameters;

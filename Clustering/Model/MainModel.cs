@@ -1,5 +1,6 @@
 ﻿using Clustering.Model.DataRepresentation;
 using Clustering.Model.Algorithm;
+using Clustering.Model.DimensionalityReduction;
 
 namespace Clustering.Model
 {
@@ -64,7 +65,7 @@ namespace Clustering.Model
             _pointCloud.RemovePoint(id);
         }
 
-        public void ReplacePoints(IEnumerable<double[]> pointCoordinates)
+        public void NewPointSet(IEnumerable<double[]> pointCoordinates)
         {
             _pointCloud.Reset();
             foreach (double[] point in pointCoordinates)
@@ -72,6 +73,13 @@ namespace Clustering.Model
                 _pointCloud.AddPoint(point);
             }
             PointsCreated?.Invoke(this, _pointCloud.GetAllPoints().ToArray());
+        }
+        public void NewPointSetFromHigherDimension(double[][] pointCoordinates, int toDim)
+        {
+            //pca, then
+            PCA.ReduceDimension(pointCoordinates, 2);
+            _pointCloud.Reset();
+            NewPointSet(pointCoordinates);
         }
 
         public void Initialize()

@@ -59,8 +59,6 @@ namespace Clustering.Model.DataRepresentation
         //or have a constraint that only empty clusters can be deleted and redistribution has to happen beforehand
         //public void RemoveCluster(int clusterId) { }
 
-        public void ChangeDimensions(int to) { }
-
         private int GetNewId()
         {
             int newId = _newId;

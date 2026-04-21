@@ -340,10 +340,18 @@ namespace Clustering.ViewModel
                 }
                 pointsFromFile.Add(coordinates);
             }
+            //from here on out operating under the assumption that once parameters are set
+            //setting them again, or at least the important ones, leads to a full reset
             //do I need to unsubscribe from the events of points?
             Points.Clear();
-            _mainModel.ReplacePoints(pointsFromFile);
-            //todo: handle higher dimensional points
+            if (dimension > 2)
+            {
+                _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(),2);
+            }
+            else
+            {
+                _mainModel.NewPointSet(pointsFromFile);
+            }
         }
 
         private void RunClustering()
