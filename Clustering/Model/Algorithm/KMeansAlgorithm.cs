@@ -44,7 +44,7 @@ namespace Clustering.Model.Algorithm
             //add initial clusters, with randomized center elements from points
             List<int> centerIds = new List<int>();
             int[] pointIds = pointCloud.GetIds();
-            Random rand = new Random();
+            Random rand = _parameters.GetRandomInstance();
             for(int i = 0; i < _parameters.InitialClusterNumber; i++)
             {
                 int index = rand.Next(pointIds.Length);

@@ -86,6 +86,14 @@
                     </Border>
                     <Border Style="{StaticResource RoundedBorderStyleBlack}">
                         <StackPanel>
+                            <Label>Randomization</Label>
+                            <ComboBox
+                                ItemsSource="{Binding RandomizationTypeValues, Mode=OneTime}"
+                                SelectedItem="{Binding RandomizationType}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
+                        <StackPanel>
                             <Label>Number of Clusters (K)</Label>
                             <TextBox Text="{Binding InitialClusterNumberDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                             </TextBox>
@@ -109,11 +117,16 @@
                             </TextBox>
                         </StackPanel>
                     </Border>
-
                     <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsMinimalDeltaApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <Label>Minimal Delta</Label>
                             <TextBox Text="{Binding MinimalDeltaDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsSeedApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <Label>Seed</Label>
+                            <TextBox Text="{Binding SeedDisplay, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

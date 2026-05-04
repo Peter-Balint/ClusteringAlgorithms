@@ -116,7 +116,7 @@ namespace Clustering.ViewModel
             set
             {
                 _model.ParameterSet.MinimalDelta = value;
-                OnPropertyChanged(nameof(MinimalDelta));
+                //OnPropertyChanged(nameof(MinimalDelta));
             }
         }
         public string MinimalDeltaDisplay
@@ -155,6 +155,55 @@ namespace Clustering.ViewModel
             }
         }
         public ClusterInitializationMethod[] ClusterInitializationMethodValues => Enum.GetValues<ClusterInitializationMethod>();
+
+        public RandomizationType RandomizationType
+        {
+            get => _model.ParameterSet.RandomizationType;
+            set
+            {
+                _model.ParameterSet.RandomizationType = value;
+                OnPropertyChanged(nameof(RandomizationType));
+
+                //dependent parameters
+                OnPropertyChanged(nameof(IsSeedApplicable));
+                ClearErrors(nameof(Seed));
+                if (IsSeedApplicable) SeedDisplay = Seed.ToString();
+            }
+        }
+        public RandomizationType[] RandomizationTypeValues => Enum.GetValues<RandomizationType>();
+        public int Seed
+        {
+            get => _model.ParameterSet.Seed;
+            set
+            {
+                _model.ParameterSet.Seed = value;
+            }
+        }
+        public string SeedDisplay
+        {
+            get => Seed.ToString();
+            set
+            {
+                ClearErrors(nameof(Seed));
+
+                if (value == string.Empty)
+                {
+                    Seed = 0;
+                    AddError(nameof(Seed), "Seed field should not be empty", IsSeedApplicable);
+                }
+                else if (!int.TryParse(value, out int parsedValue) || parsedValue <= 0)
+                {
+                    Seed = 0;
+                    AddError(nameof(Seed), "Seed field should contain a whole number", IsSeedApplicable);
+                }
+                else
+                {
+                    Seed = parsedValue;
+                    ClearErrors(nameof(Seed));
+                }
+            }
+        }
+        public bool IsSeedApplicable => RandomizationType == RandomizationType.Seeded;
 
         public int InitialClusterNumber
         {
