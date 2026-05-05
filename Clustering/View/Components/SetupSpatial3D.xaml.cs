@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace Clustering.View.Components
 {
     /// <summary>
-    /// Interaction logic for DisplaySpatial3D.xaml
+    /// Interaction logic for SetupSpatial3D.xaml
     /// </summary>
-    public partial class DisplaySpatial3D : UserControl
+    public partial class SetupSpatial3D : UserControl
     {
-        public DisplaySpatial3D()
+        public SetupSpatial3D()
         {
             InitializeComponent();
         }

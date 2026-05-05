@@ -9,7 +9,8 @@ namespace Clustering.Model
         private PointCloud _pointCloud;
         //may be removed, only to be initialized in the algorithm
         private IDistanceStrategy _distanceStrategy;
-        public ParameterSet ParameterSet { get; }
+        public ParameterSet ParameterSet { get; private set; }
+        public ParameterSet? PreviousParameterSet { get; set; }
         private IAlgorithm _algorithm;
 
         public StepSequence? Results { get; private set; }
@@ -21,14 +22,14 @@ namespace Clustering.Model
 
         public bool ResultsAvailable => Results != null;
         public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
+        private bool _firstParameterSet = true;
 
         public MainModel() 
         {
             ParameterSet = new ParameterSet();
+            PreviousParameterSet = null;
         }
 
-        //return the factory method that will be passed to pointcloud
-        //if needs be, can rework to assign dimension from parameter as well, unifying spatial point creation, and allowing higher dimensions
         private Func<double[],int,IDataPoint> CreatePointFactory()
         {
             switch (ParameterSet.DisplayMode)
@@ -76,17 +77,33 @@ namespace Clustering.Model
         }
         public void NewPointSetFromHigherDimension(double[][] pointCoordinates, int toDim)
         {
-            //pca, then
             PCA.ReduceDimension(pointCoordinates, 2);
             _pointCloud.Reset();
             NewPointSet(pointCoordinates);
         }
 
+        public void NewParameterSet()
+        {
+            if (_firstParameterSet){
+                _firstParameterSet = false;
+                PreviousParameterSet = null;
+            }
+            else
+            {
+                PreviousParameterSet = ParameterSet.Copy();
+            }
+        }
+
         public void Initialize()
         {
-            _pointCloud = new PointCloud(CreatePointFactory());
-            _algorithm = new KMeansAlgorithm(ParameterSet);
+            if (ParameterSet.HasBreakingChanges(PreviousParameterSet))
+            {
+                _pointCloud = new PointCloud(CreatePointFactory());
+                _algorithm = new KMeansAlgorithm(ParameterSet);
+                if(PreviousParameterSet is null) { PreviousParameterSet = ParameterSet.Copy(); }
+            }
         }
+
         public void RunClustering()
         {
             Results = _algorithm.Run(_pointCloud);

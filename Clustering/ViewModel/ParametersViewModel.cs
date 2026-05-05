@@ -1,5 +1,6 @@
 ﻿
 using Clustering.Model;
+using Clustering.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -10,14 +11,14 @@ namespace Clustering.ViewModel
     {
         private readonly MainModel _model;
 
-        //todo: add apply button, checks if there are any errors, if not then enables navigation
-        //changing a parameter disables it again
         #region properties
 
         public ObservableCollection<PropertyError> Errors { get; }
         public bool HasErrors => Errors.Any();
+        public bool HasPreviousState => _model.PreviousParameterSet is not null;
 
         public ICommand ApplyCommand {  get; }
+        public ICommand CancelCommand { get; }
 
         public DisplayMode DisplayMode
         {
@@ -116,7 +117,6 @@ namespace Clustering.ViewModel
             set
             {
                 _model.ParameterSet.MinimalDelta = value;
-                //OnPropertyChanged(nameof(MinimalDelta));
             }
         }
         public string MinimalDeltaDisplay
@@ -243,20 +243,20 @@ namespace Clustering.ViewModel
         #endregion
 
 
-        public ParametersViewModel(MainModel model)
+        public ParametersViewModel(MainModel model, INavigationService setupNavigationService)
         {
             _model = model;
+            _model.NewParameterSet();
 
             Errors = new ObservableCollection<PropertyError>();
 
-            ApplyCommand = new RelayCommand(EnableNavigation);
+            ApplyCommand = new RelayCommand(setupNavigationService.Navigate);
         }
 
 
         private void AddError(string propertyName, string message, bool? isApplicable = null)
         {
             if (isApplicable is not null && !isApplicable.Value) return;
-            if (Errors.Count == 0) DisableNavigation();
             for (int i = 0; i < Errors.Count; i++)
             {
                 if (Errors[i].PropertyName == propertyName)

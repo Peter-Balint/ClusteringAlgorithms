@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Clustering.ViewModel.Navigation
 {
     //originally class of LayoutNavigationService

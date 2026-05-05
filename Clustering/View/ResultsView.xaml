@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Clustering.View.ResultView"
+﻿<UserControl x:Class="Clustering.View.ResultsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -17,6 +17,6 @@
             FontSize="28"
             Text="Result"
             Margin="10" />
-        <c:ResultsDisplay2D Grid.Row="1"  DataContext="{Binding DisplayViewModel}"/>
+        <c:ResultsSpatial2D Grid.Row="1"  DataContext="{Binding DisplayViewModel}"/>
     </Grid>
 </UserControl>

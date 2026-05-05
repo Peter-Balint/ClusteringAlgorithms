@@ -24,9 +24,6 @@ namespace Clustering.ViewModel
 
             _navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentViewModel));
             //_modalNavigationStore.CurrentViewModelChanged += OnCurrentModalViewModelChanged;
-
-
-            //_model.ParameterChanged
         }
 
         /*private void OnCurrentModalViewModelChanged()

@@ -16,8 +16,8 @@
             <DataTemplate DataType="{x:Type viewmodel:SetupViewModel}">
                 <local:SetupView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:ResultViewModel}">
-                <local:ResultView />
+            <DataTemplate DataType="{x:Type viewmodel:ResultsViewModel}">
+                <local:ResultsView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodel:LayoutViewModel}">
                 <local:Layout />
@@ -27,16 +27,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!--<Menu Grid.Row="0">
-            <MenuItem Header="Save">
-                <MenuItem Header="Current Configuration" />
-                <MenuItem Header="Current Pointcloud" />
-            </MenuItem>
-            <MenuItem Header="Load">
-                <MenuItem Header="Configuration" />
-                <MenuItem Header="Pointcloud" />
-            </MenuItem>
-        </Menu>-->
         <ContentControl Grid.Row ="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

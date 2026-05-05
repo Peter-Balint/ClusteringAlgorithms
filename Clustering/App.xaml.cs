@@ -22,9 +22,11 @@ namespace Clustering
             services.AddSingleton<MainModel>();
             services.AddSingleton<NavigationStore>();
 
-            services.AddTransient<ParametersViewModel>();
-            services.AddTransient<SetupViewModel>();
-            services.AddTransient<ResultViewModel>();
+            services.AddTransient<ParametersViewModel>(s =>
+                new ParametersViewModel(s.GetRequiredService<MainModel>(), CreateSetupNavigationService(s)));
+            services.AddTransient<SetupViewModel>(s => 
+                new SetupViewModel(s.GetRequiredService<MainModel>(), CreateResultNavigationService(s)));
+            services.AddTransient<ResultsViewModel>();
             services.AddTransient<NavigationBarViewModel>(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
@@ -74,9 +76,9 @@ namespace Clustering
 
         private INavigationService CreateResultNavigationService(IServiceProvider serviceProvider)
         {
-            return new NavigationService<ResultViewModel>(
+            return new NavigationService<ResultsViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),
-                () => serviceProvider.GetRequiredService<ResultViewModel>(),
+                () => serviceProvider.GetRequiredService<ResultsViewModel>(),
                 () => serviceProvider.GetRequiredService<NavigationBarViewModel>()
                 );
         }

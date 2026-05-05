@@ -6,13 +6,13 @@ namespace Clustering.ViewModel
         public NavigationBarViewModel NavigationBarViewModel { get; }
         public ViewModelBase ContentViewModel { get; }
 
-        private bool isNavigationEnabled;
+        private bool _isNavigationEnabled;
         public bool IsNavigationEnabled
         { 
-            get => isNavigationEnabled;
+            get => _isNavigationEnabled;
             private set
             {
-                isNavigationEnabled = value;
+                _isNavigationEnabled = value;
                 OnPropertyChanged(nameof(IsNavigationEnabled));
             } 
         }
@@ -22,9 +22,13 @@ namespace Clustering.ViewModel
             NavigationBarViewModel = navigationBarViewModel;
             ContentViewModel = contentViewModel;
 
+            if (ContentViewModel is ParametersViewModel _) _isNavigationEnabled = false;
+            else _isNavigationEnabled = true;
+
             ContentViewModel.NavigatabilityChanged += OnContentNavigatabilityChanged;
         }
 
+        //these events might have become obsolete
         private void OnContentNavigatabilityChanged(object? sender, bool isEnabled)
         {
             IsNavigationEnabled = isEnabled;

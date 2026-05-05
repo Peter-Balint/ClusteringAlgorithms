@@ -45,7 +45,9 @@
         <Button
         Grid.Column="0"
         Margin="10 0 0 0"
-        Command="{Binding NavigateToParameters}"
+        Command="{Binding NavigateToParameters}" 
+        CommandParameter=
+            "Changing certain paramateres may result in the current state of Setup and Results page resetting. Do you wish to continue?"
         Content="Parameters" />
 
         <Button

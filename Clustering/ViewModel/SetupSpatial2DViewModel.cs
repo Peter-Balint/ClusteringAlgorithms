@@ -1,6 +1,7 @@
 ﻿
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
+using Clustering.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -11,9 +12,10 @@ using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
-    class Display2DViewModel : ViewModelBase
+    class SetupSpatial2DViewModel : ViewModelBase
     {
         private MainModel _mainModel;
+        private INavigationService _resultsNavigationService;
 
         private bool _isSelectMode;
         public bool IsSelectMode
@@ -103,9 +105,10 @@ namespace Clustering.ViewModel
         public ICommand RunCommand { get; }
         public ICommand LoadPointsCommand { get; }
 
-        public Display2DViewModel(MainModel model)
+        public SetupSpatial2DViewModel(MainModel model, INavigationService resultsNavigationService)
         {
             _mainModel = model;
+            _resultsNavigationService = resultsNavigationService;
 
             Points = new ObservableCollection<CircleViewModel>();
 
@@ -357,7 +360,7 @@ namespace Clustering.ViewModel
         private void RunClustering()
         {
             _mainModel.RunClustering();
-            EnableNavigation();
+            _resultsNavigationService.Navigate();
         }
     }
 }

@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Clustering.View.Components
+namespace Clustering.View
 {
     /// <summary>
-    /// Interaction logic for ResultsDisplay2D.xaml
+    /// Interaction logic for ResultsView.xaml
     /// </summary>
-    public partial class ResultsDisplay2D : UserControl
+    public partial class ResultsView : UserControl
     {
-        public ResultsDisplay2D()
+        public ResultsView()
         {
             InitializeComponent();
         }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Navigation;
+﻿
+using System.Windows;
 
 namespace Clustering.ViewModel.Navigation
 {
@@ -14,8 +12,16 @@ namespace Clustering.ViewModel.Navigation
             _navigationService = navigationService;
         }
 
-        public override void Execute(object parameter)
+        public override void Execute(object? parameter)
         {
+            if(parameter != null && parameter is string warning)
+            {
+                if(MessageBox.Show(warning, "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    _navigationService.Navigate();
+                }
+                return;
+            }
             _navigationService.Navigate();
         }
     }

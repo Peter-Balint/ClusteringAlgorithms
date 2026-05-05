@@ -20,6 +20,28 @@ namespace Clustering.Model
             else return new Random(Seed);
         }
 
+        public bool HasBreakingChanges(ParameterSet? previous)
+        {
+            if (previous == null) return true;
+            if (DisplayMode != previous.DisplayMode || ClusterInitializationMethod != previous.ClusterInitializationMethod) return true;
+            return false;
+        }
+
+        public ParameterSet Copy()
+        {
+            ParameterSet ps = new ParameterSet();
+            ps.DisplayMode = DisplayMode;
+            ps.SpatialDistanceMetric = SpatialDistanceMetric;
+            ps.CenterType = CenterType;
+            ps.TerminateCondition = TerminateCondition;
+            ps.IterationNumber = IterationNumber;
+            ps.MinimalDelta = MinimalDelta;
+            ps.ClusterInitializationMethod = ClusterInitializationMethod;
+            ps.RandomizationType = RandomizationType;
+            ps.Seed = Seed;
+            ps.InitialClusterNumber = InitialClusterNumber;
+            return ps;
+        }
     }
 
     //add unset and description?

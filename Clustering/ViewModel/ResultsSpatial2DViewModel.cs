@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
-    public class ResultsDisplay2DViewModel : ViewModelBase
+    public class ResultsSpatial2DViewModel : ViewModelBase
     {
         //both in the shapevms and the displays many things could be moved to a parent class
         private MainModel _model;
@@ -20,7 +20,7 @@ namespace Clustering.ViewModel
         private double _dragStartX;
         private double _dragStartY;
 
-        private double _baseDiameter = 50;
+        private double _baseDiameter = 30;
 
         public bool ResultsAvailable => _model.ResultsAvailable;
 
@@ -45,7 +45,7 @@ namespace Clustering.ViewModel
         public ICommand StepBackCommand { get; }
         public ICommand StepForwardsCommand { get; }
 
-        public ResultsDisplay2DViewModel(MainModel model)
+        public ResultsSpatial2DViewModel(MainModel model)
         {
             _model = model;
 

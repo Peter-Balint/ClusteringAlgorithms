@@ -64,7 +64,7 @@ namespace Clustering.Model.Algorithm
 
             do
             {
-                //is thi sin the right order?
+                //is this in the right order?
                 RedistributePoints(points, clusters);
                 AssignNewCenters(points, clusters, pointCloud.GetPointFactoryMethod());
 

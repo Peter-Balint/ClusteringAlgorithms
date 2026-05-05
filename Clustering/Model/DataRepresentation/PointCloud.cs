@@ -22,17 +22,6 @@ namespace Clustering.Model.DataRepresentation
             CreatePoint = createPoint;
             _clusters = new List<Cluster>();
         }
-        //dummy constructor for testing
-        public PointCloud(IDataPoint[] initalPoints, Func<double[], int, IDataPoint> createPoint)
-        {
-            _points = new Dictionary<int, IDataPoint>();
-            foreach (IDataPoint point in initalPoints)
-            {
-                _points.Add(point.Id, point);
-            }
-            _clusters = new List<Cluster>();
-            CreatePoint = createPoint;
-        }
 
         public IDataPoint AddPoint(double[] coordinates, int clusterId = 0)
         {
