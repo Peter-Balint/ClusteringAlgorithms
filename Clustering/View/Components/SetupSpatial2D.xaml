@@ -8,12 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-            <!--canvas "mozgatása": koordináták a viewmodelben változnak
-            a mutatott helyzet a modellből vett koordináta plusz transzformáció a viewmodelben
-            zoomolás: méret és koordináta változtatása
-            kell majd egy kis matek
-            honnan tudom a canvas méretét?
-            -->
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
@@ -91,7 +85,7 @@
                     IsEnabled="{Binding IsRunnable}"/>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding Points}" Background="Aquamarine">
+            <ItemsControl ItemsSource="{Binding Points}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">

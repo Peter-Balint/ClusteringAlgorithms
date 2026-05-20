@@ -11,6 +11,8 @@ namespace Clustering.ViewModel
     {
         private readonly MainModel _model;
 
+        private INavigationService _setupNavigationService;
+
         #region properties
 
         public ObservableCollection<PropertyError> Errors { get; }
@@ -251,6 +253,8 @@ namespace Clustering.ViewModel
             Errors = new ObservableCollection<PropertyError>();
 
             ApplyCommand = new RelayCommand(setupNavigationService.Navigate);
+            _setupNavigationService = setupNavigationService;
+            CancelCommand = new RelayCommand(RevertParameters);
         }
 
 
@@ -286,6 +290,12 @@ namespace Clustering.ViewModel
                 }
             }
             OnPropertyChanged(nameof(HasErrors));
+        }
+
+        private void RevertParameters()
+        {
+            _model.RevertParameters();
+            _setupNavigationService.Navigate();
         }
     }
 }

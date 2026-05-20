@@ -104,6 +104,14 @@ namespace Clustering.Model
             }
         }
 
+        public void RevertParameters()
+        {
+            if (PreviousParameterSet is null) return;
+            ParameterSet = PreviousParameterSet;
+            PreviousParameterSet = null;
+            _firstParameterSet = true;
+        }
+
         public void RunClustering()
         {
             Results = _algorithm.Run(_pointCloud);

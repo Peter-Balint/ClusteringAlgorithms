@@ -132,10 +132,26 @@
                 </StackPanel>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
+                    <Button Content="Apply" Grid.Row="0" Command="{Binding ApplyCommand}"
+                        Height="40" Width="100" FontSize="20" Margin="15">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="Cancel" Grid.Row="1" Command="{Binding CancelCommand}"
+                        Height="40" Width="100" FontSize="20" Margin="15"
+                            IsEnabled="{Binding HasPreviousState}"/>
+                    <StackPanel Grid.Row="2">
                         <TextBlock Text="Errors" FontSize="22" Margin="10" HorizontalAlignment="Center"></TextBlock>
                         <ItemsControl ItemsSource="{Binding Errors}">
                             <ItemsControl.ItemsPanel>
@@ -157,18 +173,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <Button Content="Apply" Grid.Row="1" Command="{Binding ApplyCommand}"
-                                Height="40" Width="100" FontSize="20" Margin="15">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding HasErrors}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                 
                 </Grid>
             </Grid>
         </ScrollViewer>

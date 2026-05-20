@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Clustering.Model.DataRepresentation
 {
     public class RGBAPoint : IDataPoint
@@ -9,7 +6,7 @@ namespace Clustering.Model.DataRepresentation
         public int Id { get; }
         public int ClusterId {  get; set; }
 
-        private int[] _colorCoordinates = new int[4];
+        private byte[] _colorCoordinates = new byte[4];
 
         public int Dimension { get { return 4; } }
 
@@ -17,7 +14,7 @@ namespace Clustering.Model.DataRepresentation
         {
             for(int i = 1; i < 4; i++)
             {
-                _colorCoordinates[i] = (int)coordinates[i];
+                _colorCoordinates[i] = (byte)Math.Clamp(Math.Round(coordinates[i]), 0, 255);
             }
             ClusterId = clusterId;
         }
@@ -30,7 +27,7 @@ namespace Clustering.Model.DataRepresentation
             }
             for (int i = 1; i < 4; i++)
             {
-                _colorCoordinates[i] = (int)newCoordinates[i];
+                _colorCoordinates[i] = (byte)Math.Clamp(Math.Round(newCoordinates[i]), 0, 255);
             }
         }
 
