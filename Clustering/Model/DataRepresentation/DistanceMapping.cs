@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Clustering.Model.DataRepresentation
 {
     internal static class DistanceMapping
@@ -12,7 +9,7 @@ namespace Clustering.Model.DataRepresentation
             {
                 return typeof(ISpatialDistanceStrategy);
             }
-            if (pointType == typeof(RGBAPoint))
+            if (pointType == typeof(LabColorPoint))
             {
                 return typeof(RGBADistance);
             }

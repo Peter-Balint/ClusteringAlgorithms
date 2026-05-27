@@ -45,7 +45,7 @@ namespace Clustering.Model
     }
 
     //add unset and description?
-    public enum DisplayMode { Spatial2D, Spatial3D, RGBA }
+    public enum DisplayMode { Spatial2D, Spatial3D, Image }
     public enum SpatialDistanceMetric { Manhattan, Euclidean, Sup }
     public enum CenterType { Mean, Medoid }
     public enum TerminateCondition { IterationNumber, MinimalDelta }

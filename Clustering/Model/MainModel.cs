@@ -1,6 +1,12 @@
-﻿using Clustering.Model.DataRepresentation;
-using Clustering.Model.Algorithm;
+﻿using Clustering.Model.Algorithm;
+using Clustering.Model.DataRepresentation;
 using Clustering.Model.DimensionalityReduction;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
+using Colourful;
+using SharpDX.Mathematics.Interop;
+
 
 namespace Clustering.Model
 {
@@ -42,9 +48,9 @@ namespace Clustering.Model
                     {
                         return (coordinates, id) => { return new SpatialPoint(coordinates, 3, id); };
                     }
-                case DisplayMode.RGBA:
+                case DisplayMode.Image:
                     {
-                        return (coordinates, id) => { return new RGBAPoint(coordinates); };
+                        return (coordinates, id) => { return new LabColorPoint(coordinates); };
                     }
             }
             return null!;
@@ -115,6 +121,54 @@ namespace Clustering.Model
         public void RunClustering()
         {
             Results = _algorithm.Run(_pointCloud);
+        }
+
+        //todo: move image stuff to its own class when done
+        public void LoadImage(string filePath)
+        {
+            BitmapImage image = new BitmapImage();
+
+            image.BeginInit();
+            image.UriSource = new Uri(filePath);
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+
+            BitmapSource bitmap = image;
+
+            if (bitmap.Format != PixelFormats.Bgr24)
+            {
+                bitmap = new FormatConvertedBitmap(
+                    bitmap,
+                    PixelFormats.Bgr24,
+                    null,
+                    0);
+            }
+
+            int width = bitmap.PixelWidth;
+            int height = bitmap.PixelHeight;
+
+            int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
+            int stride = width * bytesPerPixel;
+
+            byte[] pixels = new byte[height * stride];
+            bitmap.CopyPixels(pixels, stride, 0);
+
+            IColorConverter<RGBColor,LabColor> converter = new ConverterBuilder().FromRGB().ToLab().Build();
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int index = y * stride + x * bytesPerPixel;
+
+                    byte blue = pixels[index];
+                    byte green = pixels[index + 1];
+                    byte red = pixels[index + 2];
+
+                    LabColorPoint point = new LabColorPoint(converter.Convert(RGBColor.FromRGB8Bit(red, green, blue)));
+                }
+            }
+
         }
     }
 

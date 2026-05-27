@@ -19,9 +19,13 @@ namespace Clustering.ViewModel
             _model = model;
             _model.Initialize(); //only reinitialize after breaking param changes
 
-            //later initilaize vm based on displaymode
-            DisplayViewModel = new SetupSpatial2DViewModel(_model, resultsNavigationService);
-            DisplayViewModel.NavigatabilityChanged += BubbleDisplayNavigatabilityChanged;
+            switch (this.DisplayMode)
+            {
+                case DisplayMode.Spatial2D: { DisplayViewModel = new SetupSpatial2DViewModel(_model, resultsNavigationService); break; }
+                case DisplayMode.Image: { DisplayViewModel = new SetupImageViewModel(_model, resultsNavigationService); break; }
+            }
+            
+            //DisplayViewModel.NavigatabilityChanged += BubbleDisplayNavigatabilityChanged;
         }
 
         //come back later to check the neccessity of this with the new navigation style

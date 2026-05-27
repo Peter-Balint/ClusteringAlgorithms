@@ -2,6 +2,7 @@
 using Clustering.Model;
 using Clustering.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System.Windows.Input;
 
 namespace Clustering.ViewModel
@@ -23,7 +24,17 @@ namespace Clustering.ViewModel
 
         private void OpenImageDialog()
         {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select a PNG image",
+                Filter = "PNG Files (*.png)|*.png",
+                Multiselect = false
+            };
 
+            if (dialog.ShowDialog() == true)
+            {
+                _model.LoadImage(dialog.FileName);
+            }
         }
     }
 }
