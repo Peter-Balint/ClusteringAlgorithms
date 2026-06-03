@@ -104,7 +104,6 @@ namespace Clustering.ViewModel
 
         private void GoToStep(int stepIndex)
         {
-            //validated twice
             if (stepIndex < 0 || stepIndex >= _model.Results!.GetStepCount()) return;
             CurrentStep = stepIndex;
             Points.Clear();

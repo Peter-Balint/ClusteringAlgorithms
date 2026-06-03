@@ -7,6 +7,7 @@
         public int ClusterId {  get; set; } 
 
         public double GetCoordinateAt(int index);
+        public double[] GetAllCoordinates();
         public IDataPoint DeepCopy();
     }
 }

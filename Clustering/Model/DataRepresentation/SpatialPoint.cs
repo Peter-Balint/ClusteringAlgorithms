@@ -23,34 +23,29 @@ namespace Clustering.Model.DataRepresentation
             ClusterId = clusterId;
         }
 
-
-        public void Modify(double[] newCoordinates)
-        {
-            //unify place to check later
-            if (newCoordinates.Length != Dimension)
-            {
-                throw new Exception("Incorrect dimension while trying to modify spatial point");
-            }
-            for (int i = 1; i < Dimension; i++)
-            {
-                _coordinates[i] = (int)newCoordinates[i];
-            }
-        }
-
         public double GetCoordinateAt(int index)
         {
             return _coordinates[index];
+        }
+        public double[] GetAllCoordinates()
+        {
+            var copy = new double[Dimension];
+            _coordinates.CopyTo(copy, 0);
+            return copy;
         }
 
         public IDataPoint DeepCopy()
         {
             double[] copiedCoordinates = new double[Dimension];
+            //can be changed to .copyTo
+            //but shouldn't be merged with GetAllCoordinates
+            //as this returns a typed variable through its interface, might be useful
             for(int i = 0; i < Dimension; i++)
             {
                 copiedCoordinates[i] = _coordinates[i];
             }
             //with Id copied caution must be taken where the copy is used
-            //main gist: don't readd to the same collection
+            //main gist: don't read to the same collection
             return new SpatialPoint(copiedCoordinates,Dimension,Id,ClusterId);
         }
     }

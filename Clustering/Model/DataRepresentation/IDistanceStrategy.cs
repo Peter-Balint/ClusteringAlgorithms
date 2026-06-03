@@ -1,4 +1,6 @@
 ﻿
+using Colourful;
+
 namespace Clustering.Model.DataRepresentation
 {
     internal interface IDistanceStrategy
@@ -49,11 +51,12 @@ namespace Clustering.Model.DataRepresentation
         }
     }
 
-    internal class RGBADistance : IDistanceStrategy
+    internal class LabDistance : IDistanceStrategy
     {
-        public double Distance(IDataPoint a, IDataPoint b)
+        private readonly CIEDE2000ColorDifference diffCalculator = new CIEDE2000ColorDifference();
+        public double Distance(IDataPoint colorOne, IDataPoint colorTwo)
         {
-            throw new NotImplementedException();
+            return diffCalculator.ComputeDifference(new LabColor(colorOne.GetAllCoordinates()), new LabColor(colorTwo.GetAllCoordinates()));
         }
     }
 }

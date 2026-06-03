@@ -3,9 +3,7 @@ using Clustering.Model.DataRepresentation;
 using Clustering.Model.DimensionalityReduction;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using Colourful;
-using SharpDX.Mathematics.Interop;
 
 
 namespace Clustering.Model
@@ -25,6 +23,7 @@ namespace Clustering.Model
 
         public event EventHandler<IDataPoint>? PointCreated;
         public event EventHandler<IDataPoint[]>? PointsCreated;
+        public event EventHandler<BitmapImage>? InitialImageLoaded;
 
         public bool ResultsAvailable => Results != null;
         public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
@@ -50,7 +49,7 @@ namespace Clustering.Model
                     }
                 case DisplayMode.Image:
                     {
-                        return (coordinates, id) => { return new LabColorPoint(coordinates); };
+                        return (coordinates, id) => { return new LabColorPoint(coordinates, id); };
                     }
             }
             return null!;
@@ -124,6 +123,8 @@ namespace Clustering.Model
         }
 
         //todo: move image stuff to its own class when done
+        public int ImageHeight = 0;
+        public int ImageWidth = 0;
         public void LoadImage(string filePath)
         {
             BitmapImage image = new BitmapImage();
@@ -132,20 +133,22 @@ namespace Clustering.Model
             image.UriSource = new Uri(filePath);
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.EndInit();
+            image.Freeze();
+            InitialImageLoaded?.Invoke(this, image);
 
             BitmapSource bitmap = image;
 
-            if (bitmap.Format != PixelFormats.Bgr24)
+            if (bitmap.Format != PixelFormats.Rgb24)
             {
                 bitmap = new FormatConvertedBitmap(
                     bitmap,
-                    PixelFormats.Bgr24,
+                    PixelFormats.Rgb24,
                     null,
                     0);
             }
 
-            int width = bitmap.PixelWidth;
-            int height = bitmap.PixelHeight;
+            int width = bitmap.PixelWidth; ImageWidth = width;
+            int height = bitmap.PixelHeight; ImageHeight = height;
 
             int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
             int stride = width * bytesPerPixel;
@@ -161,11 +164,11 @@ namespace Clustering.Model
                 {
                     int index = y * stride + x * bytesPerPixel;
 
-                    byte blue = pixels[index];
+                    byte red = pixels[index];
                     byte green = pixels[index + 1];
-                    byte red = pixels[index + 2];
+                    byte blue = pixels[index + 2];
 
-                    LabColorPoint point = new LabColorPoint(converter.Convert(RGBColor.FromRGB8Bit(red, green, blue)));
+                    _pointCloud.AddPoint(converter.Convert(RGBColor.FromRGB8Bit(red, green, blue)).Vector);
                 }
             }
 

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Clustering.View"
              xmlns:c="clr-namespace:Clustering.View.Components"
+             xmlns:viewmodel="clr-namespace:Clustering.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,11 +13,19 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewmodel:ResultsSpatial2DViewModel}">
+                <c:ResultsSpatial2D />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ResultsImageViewModel}">
+                <c:ResultsImage />
+            </DataTemplate>
+        </Grid.Resources>
         <TextBlock
             Grid.Row="0"
             FontSize="28"
             Text="Result"
             Margin="10" />
-        <c:ResultsSpatial2D Grid.Row="1"  DataContext="{Binding DisplayViewModel}"/>
+        <ContentControl Grid.Row ="1" Content="{Binding DisplayViewModel}" />
     </Grid>
 </UserControl>

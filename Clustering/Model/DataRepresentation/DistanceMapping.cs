@@ -11,7 +11,7 @@ namespace Clustering.Model.DataRepresentation
             }
             if (pointType == typeof(LabColorPoint))
             {
-                return typeof(RGBADistance);
+                return typeof(LabDistance);
             }
             else return null;
         }

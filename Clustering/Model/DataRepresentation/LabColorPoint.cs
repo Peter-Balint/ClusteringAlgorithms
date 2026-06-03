@@ -12,33 +12,27 @@ namespace Clustering.Model.DataRepresentation
 
         public int Dimension { get { return 3; } }
 
-        public LabColorPoint(double[] coordinates, int clusterId = 0) 
+        public LabColorPoint(double[] coordinates, int id, int clusterId = 0) 
         {
             lab = new LabColor(coordinates);
+            Id = id;
             ClusterId = clusterId;
         }
-        public LabColorPoint(LabColor labColor, int clusterId = 0)
+        public LabColorPoint(LabColor labColor, int id, int clusterId = 0)
         {
             lab = labColor;
+            Id = id;
             ClusterId = clusterId;
         }
-
-        /*public void Modify(double[] newCoordinates)
-        {
-            if (newCoordinates.Length != Dimension)
-            {
-                throw new Exception("Incorrect dimension while trying to modify RGBA point");
-            }
-            for (int i = 1; i < 4; i++)
-            {
-                _colorCoordinates[i] = (byte)Math.Clamp(Math.Round(newCoordinates[i]), 0, 255);
-            }
-        }*/
 
         /// <param name="index"> L=0,a=1,b=2 </param>
         public double GetCoordinateAt(int index)
         {
             return lab.Vector[index];
+        }
+        public double[] GetAllCoordinates()
+        {
+            return lab.Vector;
         }
 
         public IDataPoint DeepCopy()
