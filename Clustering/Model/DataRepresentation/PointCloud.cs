@@ -78,5 +78,14 @@ namespace Clustering.Model.DataRepresentation
             _clusters.Clear();
             _newId = 0;
         }
+        public void ResetClustersOnly()
+        {
+            _clusters.Clear();
+            //is there a more economical way to keep track of cluster identities? not the bottleneck but still. though this seems minimal already
+            foreach(KeyValuePair<int,IDataPoint> pointMapping in _points)
+            {
+                pointMapping.Value.ClusterId = 0;
+            }
+        }
     }
 }

@@ -40,6 +40,7 @@ namespace Clustering.Model.Algorithm
             StepSequence results = new StepSequence();
 
             //add initial clusters, with randomized center elements from points
+            pointCloud.ResetClustersOnly();
             List<int> centerIds = new List<int>();
             int[] pointIds = pointCloud.GetIds();
             Random rand = _parameters.GetRandomInstance();
