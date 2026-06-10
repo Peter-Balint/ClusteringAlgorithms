@@ -45,6 +45,7 @@ namespace Clustering.Model.Algorithm
             Random rand = _parameters.GetRandomInstance();
             for(int i = 0; i < _parameters.InitialClusterNumber; i++)
             {
+                //can try to check if chosen points are different by value as well, not just different instances of the same point in space or color
                 int index = rand.Next(pointIds.Length);
                 while (centerIds.Contains(pointIds[index])){
                     index = rand.Next(pointIds.Length);
@@ -58,6 +59,7 @@ namespace Clustering.Model.Algorithm
 
             IDataPoint[] points = pointCloud.GetAllPoints().ToArray();
             Cluster[] clusters = pointCloud.GetClusters().ToArray();
+            //other: 0th step doesn't really make sense for images this way, but that shouldn't be the reason the rest doesn't work either 
             results.SaveStepCopy(points, clusters);
 
             do

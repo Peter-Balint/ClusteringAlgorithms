@@ -43,7 +43,7 @@ namespace Clustering.Model.DataRepresentation
             {
                 copiedCoordinates[i] = colorCoordinates[i];
             }
-            return new LabColorPoint(copiedCoordinates,ClusterId);
+            return new LabColorPoint(copiedCoordinates,Id,ClusterId);
         }
     }
 }
