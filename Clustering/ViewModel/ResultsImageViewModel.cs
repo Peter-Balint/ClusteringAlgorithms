@@ -42,10 +42,13 @@ namespace Clustering.ViewModel
 
             int stepCount = _model.Results!.GetStepCount();
             _images = new ImageViewModel[stepCount];
-            for(int i = 0; i < stepCount; i++)
+
+            (IDataPoint[] pointsAtZero, _) = _model.Results.GetStepAt(0);
+            _images[0] = new ImageViewModel(_model.ImageWidth, _model.ImageHeight, converter, pointsAtZero);
+            for(int i = 1; i < stepCount; i++)
             {
                 (IDataPoint[] points, Cluster[] clusters) = _model.Results.GetStepAt(i);
-                _images[i] = new ImageViewModel(points, clusters,_model.ImageWidth,_model.ImageHeight,converter);
+                _images[i] = new ImageViewModel(_model.ImageWidth,_model.ImageHeight, converter, points, clusters);
             }
 
             StepBackCommand = new RelayCommand(() => GoToStep(CurrentStep - 1));

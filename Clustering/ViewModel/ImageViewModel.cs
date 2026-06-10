@@ -10,32 +10,26 @@ namespace Clustering.ViewModel
     {
         public BitmapSource Source { get; }
 
-        public ImageViewModel(IDataPoint[] points, Cluster[] clusters, int imageWidth, int imageHeight, IColorConverter<LabColor, RGBColor> converter)
+        public ImageViewModel(int imageWidth, int imageHeight, IColorConverter<LabColor, RGBColor> converter, IDataPoint[] points, Cluster[]? clusters = null)
         {
             byte[] pixels = new byte[points.Length*3];
-            RGBColor[] colors = new RGBColor[clusters.Length];
-            int index = 0;
-            clusters = clusters.OrderBy(c => c.Id).ToArray();
-            for(int i=0;i<clusters.Length;i++)
+
+            if (clusters is null)
             {
-                LabColor labColor = new LabColor(clusters[i].CenterPoint.GetAllCoordinates());
-                colors[i] = converter.Convert(labColor);
+                SetPixelsConvertOnly(pixels, points, imageWidth, imageHeight, converter);
             }
-            foreach(IDataPoint point in points)
+            else
             {
-                /*LabColor labColor = new LabColor(point.GetAllCoordinates());
-                RGBColor rgbColor = converter.Convert(labColor);
-                pixels[index] = (byte)Math.Clamp(rgbColor.R*255,0,255);
-                pixels[index+1] = (byte)Math.Clamp(rgbColor.G*255, 0, 255);
-                pixels[index+2] = (byte)Math.Clamp(rgbColor.B*255, 0, 255);*/
-                RGBColor rgbColor = colors[point.ClusterId];
-                pixels[index] = (byte)Math.Clamp(rgbColor.R * 255, 0, 255);
-                pixels[index + 1] = (byte)Math.Clamp(rgbColor.G * 255, 0, 255);
-                pixels[index + 2] = (byte)Math.Clamp(rgbColor.B * 255, 0, 255);
-                index += 3;
+                SetPixelsWithClusters(pixels, points, clusters, imageWidth, imageHeight, converter);
             }
 
-            Source = BitmapSource.Create(
+            Source = CreateBitmapSource(imageWidth, imageHeight, pixels);
+
+        }
+
+        private BitmapSource CreateBitmapSource(int imageWidth, int imageHeight, byte[] pixels)
+        {
+            return BitmapSource.Create(
                 imageWidth,
                 imageHeight,
                 96,
@@ -44,9 +38,44 @@ namespace Clustering.ViewModel
                 null,
                 pixels,
                 imageWidth * 3);
-
         }
 
+        private void SetPixelsWithClusters(byte[] pixels, IDataPoint[] points, Cluster[] clusters, int imageWidth, int imageHeight, IColorConverter<LabColor, RGBColor> converter)
+        {
+
+            RGBColor[] colors = new RGBColor[clusters.Length];
+            clusters = clusters.OrderBy(c => c.Id).ToArray();
+
+            for (int i = 0; i < clusters.Length; i++)
+            {
+                LabColor labColor = new LabColor(clusters[i].CenterPoint.GetAllCoordinates());
+                colors[i] = converter.Convert(labColor);
+            }
+
+            int index = 0;
+            foreach (IDataPoint point in points)
+            {
+
+                RGBColor rgbColor = colors[point.ClusterId];
+                pixels[index] = (byte)Math.Clamp(rgbColor.R * 255, 0, 255);
+                pixels[index + 1] = (byte)Math.Clamp(rgbColor.G * 255, 0, 255);
+                pixels[index + 2] = (byte)Math.Clamp(rgbColor.B * 255, 0, 255);
+                index += 3;
+            }
+        }
+        private void SetPixelsConvertOnly(byte[] pixels, IDataPoint[] points, int imageWidth, int imageHeight, IColorConverter<LabColor, RGBColor> converter)
+        {
+            int index = 0;
+            foreach (IDataPoint point in points)
+            {
+                LabColor labColor = new LabColor(point.GetAllCoordinates());
+                RGBColor rgbColor = converter.Convert(labColor);
+                pixels[index] = (byte)Math.Clamp(rgbColor.R * 255, 0, 255);
+                pixels[index + 1] = (byte)Math.Clamp(rgbColor.G * 255, 0, 255);
+                pixels[index + 2] = (byte)Math.Clamp(rgbColor.B * 255, 0, 255);
+                index += 3;
+            }
+        }
 
     }
 }
