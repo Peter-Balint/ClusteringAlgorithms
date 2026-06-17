@@ -11,19 +11,21 @@ namespace Clustering.Model
     public class MainModel
     {
         private PointCloud _pointCloud;
-        //may be removed, only to be initialized in the algorithm
-        private IDistanceStrategy _distanceStrategy;
+        public ImageHandler ImageHandler { get; }
         public ParameterSet ParameterSet { get; private set; }
         public ParameterSet? PreviousParameterSet { get; set; }
+
         private IAlgorithm _algorithm;
+
+        private CancellationTokenSource _tokenSource;
 
         public StepSequence? Results { get; private set; }
 
-        public Action ClusteringFinished;
+        public event EventHandler ClusteringFinished;
+        public event EventHandler<int>? StepFinished;
 
         public event EventHandler<IDataPoint>? PointCreated;
         public event EventHandler<IDataPoint[]>? PointsCreated;
-        public event EventHandler<BitmapImage>? InitialImageLoaded;
 
         public bool ResultsAvailable => Results != null;
         public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
@@ -33,6 +35,8 @@ namespace Clustering.Model
         {
             ParameterSet = new ParameterSet();
             PreviousParameterSet = null;
+            ImageHandler = new ImageHandler();
+            _tokenSource = new CancellationTokenSource();
         }
 
         private Func<double[],int,IDataPoint> CreatePointFactory()
@@ -105,6 +109,7 @@ namespace Clustering.Model
             {
                 _pointCloud = new PointCloud(CreatePointFactory());
                 _algorithm = new KMeansAlgorithm(ParameterSet);
+                _algorithm.StepFinished += (_,progress) => StepFinished?.Invoke(this,progress);
                 if(PreviousParameterSet is null) { PreviousParameterSet = ParameterSet.Copy(); }
             }
         }
@@ -117,62 +122,24 @@ namespace Clustering.Model
             _firstParameterSet = true;
         }
 
-        public void RunClustering()
+        public async void RunClustering()
         {
-            Results = _algorithm.Run(_pointCloud);
+            Results = await Task.Run(()=>_algorithm.Run(_pointCloud, _tokenSource.Token));
+            ClusteringFinished?.Invoke(this, EventArgs.Empty);
         }
 
-        //todo: move image stuff to its own class when done
-        public int ImageHeight = 0;
-        public int ImageWidth = 0;
+        public void StopClustering()
+        {
+            _tokenSource.Cancel();
+            _tokenSource.Dispose();
+            _tokenSource = new CancellationTokenSource();
+        }
+ 
         public void LoadImage(string filePath)
         {
-            BitmapImage image = new BitmapImage();
-
-            image.BeginInit();
-            image.UriSource = new Uri(filePath);
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.EndInit();
-            image.Freeze();
-            InitialImageLoaded?.Invoke(this, image);
-
-            BitmapSource bitmap = image;
-
-            if (bitmap.Format != PixelFormats.Rgb24)
-            {
-                bitmap = new FormatConvertedBitmap(
-                    bitmap,
-                    PixelFormats.Rgb24,
-                    null,
-                    0);
-            }
-
-            int width = bitmap.PixelWidth; ImageWidth = width;
-            int height = bitmap.PixelHeight; ImageHeight = height;
-
-            int bytesPerPixel = (bitmap.Format.BitsPerPixel + 7) / 8;
-            int stride = width * bytesPerPixel;
-
-            byte[] pixels = new byte[height * stride];
-            bitmap.CopyPixels(pixels, stride, 0);
-
-            IColorConverter<RGBColor,LabColor> converter = new ConverterBuilder().FromRGB().ToLab().Build();
-
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    int index = y * stride + x * bytesPerPixel;
-
-                    byte red = pixels[index];
-                    byte green = pixels[index + 1];
-                    byte blue = pixels[index + 2];
-
-                    _pointCloud.AddPoint(converter.Convert(RGBColor.FromRGB8Bit(red, green, blue)).Vector);
-                }
-            }
-
+            ImageHandler.LoadImage(filePath, _pointCloud);
         }
+
     }
 
 

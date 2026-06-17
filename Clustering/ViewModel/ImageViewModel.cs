@@ -24,7 +24,10 @@ namespace Clustering.ViewModel
             }
 
             Source = CreateBitmapSource(imageWidth, imageHeight, pixels);
-
+        }
+        public ImageViewModel(BitmapSource ImageSource)
+        {
+            Source = ImageSource;
         }
 
         private BitmapSource CreateBitmapSource(int imageWidth, int imageHeight, byte[] pixels)

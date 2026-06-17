@@ -8,6 +8,8 @@ namespace Clustering.Model.Algorithm
         private readonly ParameterSet _parameters;
         private IDistanceStrategy _distanceStrategy;
 
+        public event EventHandler<int>? StepFinished;
+
         public KMeansAlgorithm(ParameterSet parameters)
         {
             _parameters = parameters;
@@ -35,7 +37,7 @@ namespace Clustering.Model.Algorithm
             else _distanceStrategy = new LabDistance();
         }
 
-        public StepSequence Run(PointCloud pointCloud)
+        public StepSequence Run(PointCloud pointCloud, CancellationToken ct)
         {
             StepSequence results = new StepSequence();
 
@@ -60,17 +62,20 @@ namespace Clustering.Model.Algorithm
 
             IDataPoint[] points = pointCloud.GetAllPoints().ToArray();
             Cluster[] clusters = pointCloud.GetClusters().ToArray();
-            //other: 0th step doesn't really make sense for images this way, but that shouldn't be the reason the rest doesn't work either 
+            
             results.SaveStepCopy(points, clusters);
 
+            int currentStep = 0;
             do
             {
-                //is this in the right order?
+                currentStep++;
+
                 RedistributePoints(points, clusters);
                 AssignNewCenters(points, clusters, pointCloud.GetPointFactoryMethod());
 
                 results.SaveStepCopy(points, clusters);
-            } while (!IsTerminateConditionFullfilled(results));
+                StepFinished?.Invoke(this, currentStep);
+            } while (!IsTerminateConditionFullfilled(results) && !ct.IsCancellationRequested);
 
             return results;
         }

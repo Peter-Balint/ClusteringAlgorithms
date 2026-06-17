@@ -20,6 +20,7 @@ namespace Clustering.ViewModel.Navigation
         public void Navigate()
         {
             _navigationStore.CurrentViewModel = new LayoutViewModel(_createNavigationBarViewModel(), _createViewModel());
+
         }
     }
 }

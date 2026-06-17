@@ -9,27 +9,27 @@ namespace Clustering.ViewModel
 
 
         private readonly NavigationStore _navigationStore;
-        //private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly ModalNavigationStore _modalNavigationStore;
 
         public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
-        /*public ViewModelBase CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
-        public bool IsOpen => _modalNavigationStore.IsOpen;*/
+        public ViewModelBase CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
+        public bool IsOpen => _modalNavigationStore.IsOpen;
 
-        public MainViewModel(MainModel model, NavigationStore navigationStore/*, ModalNavigationStore modalNavigationStore*/)
+        public MainViewModel(MainModel model, NavigationStore navigationStore, ModalNavigationStore modalNavigationStore)
         {
             _model = model;
 
             _navigationStore = navigationStore;
-            //_modalNavigationStore = modalNavigationStore;
+            _modalNavigationStore = modalNavigationStore;
 
             _navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentViewModel));
-            //_modalNavigationStore.CurrentViewModelChanged += OnCurrentModalViewModelChanged;
+            _modalNavigationStore.CurrentViewModelChanged += OnCurrentModalViewModelChanged;
         }
 
-        /*private void OnCurrentModalViewModelChanged()
+        private void OnCurrentModalViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentModalViewModel));
             OnPropertyChanged(nameof(IsOpen));
-        }*/
+        }
     }
 }

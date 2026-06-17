@@ -11,20 +11,23 @@ namespace Clustering.ViewModel.Navigation
             set
             {
                 _currentViewModel?.Dispose();
-                _currentViewModel = null;
-                CurrentViewModelChanged?.Invoke();
                 _currentViewModel = value;
-                CurrentViewModelChanged?.Invoke();
+                OnCurrentViewModelChanged();
             }
         }
 
         public bool IsOpen => CurrentViewModel != null;
 
-        public event Action CurrentViewModelChanged;
+        public event Action? CurrentViewModelChanged;
 
         public void Close()
         {
             CurrentViewModel = null;
+        }
+
+        private void OnCurrentViewModelChanged()
+        {
+            CurrentViewModelChanged?.Invoke();
         }
 
     }

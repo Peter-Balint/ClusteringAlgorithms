@@ -11,6 +11,7 @@ namespace Clustering.ViewModel
     public class ResultsImageViewModel : ViewModelBase
     {
         private MainModel _model;
+        private ImageHandler _imageHandler => _model.ImageHandler;
 
         private ImageViewModel[] _images;
         public BitmapSource CurrentImage => _images[CurrentStep].Source;
@@ -44,11 +45,12 @@ namespace Clustering.ViewModel
             _images = new ImageViewModel[stepCount];
 
             (IDataPoint[] pointsAtZero, _) = _model.Results.GetStepAt(0);
-            _images[0] = new ImageViewModel(_model.ImageWidth, _model.ImageHeight, converter, pointsAtZero);
+            //_images[0] = new ImageViewModel(_imageHandler.ImageWidth, _imageHandler.ImageHeight, converter, pointsAtZero);
+            _images[0] = new ImageViewModel(_imageHandler.ImageSource!);
             for(int i = 1; i < stepCount; i++)
             {
                 (IDataPoint[] points, Cluster[] clusters) = _model.Results.GetStepAt(i);
-                _images[i] = new ImageViewModel(_model.ImageWidth,_model.ImageHeight, converter, points, clusters);
+                _images[i] = new ImageViewModel(_imageHandler.ImageWidth, _imageHandler.ImageHeight, converter, points, clusters);
             }
 
             StepBackCommand = new RelayCommand(() => GoToStep(CurrentStep - 1));

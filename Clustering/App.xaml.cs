@@ -20,14 +20,18 @@ namespace Clustering
             IServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<MainModel>();
+
             services.AddSingleton<NavigationStore>();
+            services.AddSingleton<ModalNavigationStore>();
+            services.AddSingleton<CloseModalNavigationService>();
 
             services.AddTransient<ParametersViewModel>(s =>
                 new ParametersViewModel(s.GetRequiredService<MainModel>(), CreateSetupNavigationService(s)));
             services.AddTransient<SetupViewModel>(s => 
-                new SetupViewModel(s.GetRequiredService<MainModel>(), CreateResultNavigationService(s)));
+                new SetupViewModel(s.GetRequiredService<MainModel>(), CreateProgressNavigationService(s)));
             services.AddTransient<ResultsViewModel>();
             services.AddTransient<NavigationBarViewModel>(CreateNavigationBarViewModel);
+            services.AddTransient<ProgressViewModel>(CreateProgressViewModel);
             services.AddSingleton<MainViewModel>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
@@ -41,7 +45,6 @@ namespace Clustering
         protected override void OnStartup(StartupEventArgs e)
         {
             CreateParametersNavigationService(_serviceProvider).Navigate();
-            //CreateSetupNavigationService(_serviceProvider).Navigate();
             MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
@@ -53,7 +56,22 @@ namespace Clustering
             return new NavigationBarViewModel(
                 CreateParametersNavigationService(serviceProvider),
                 CreateSetupNavigationService(serviceProvider),
-                CreateResultNavigationService(serviceProvider));
+                CreateResultsNavigationService(serviceProvider));
+        }
+
+        private ProgressViewModel CreateProgressViewModel(IServiceProvider serviceProvider)
+        {
+            CompositeNavigationService navigationService = new CompositeNavigationService(
+                serviceProvider.GetRequiredService<CloseModalNavigationService>(),
+                CreateResultsNavigationService(serviceProvider));
+            return new ProgressViewModel(serviceProvider.GetRequiredService<MainModel>(), navigationService);
+        }
+
+        private INavigationService CreateProgressNavigationService(IServiceProvider serviceProvider)
+        {
+            return new ModalNavigationService<ProgressViewModel>(
+                serviceProvider.GetRequiredService<ModalNavigationStore>(),
+                () => serviceProvider.GetRequiredService<ProgressViewModel>());
         }
 
         private INavigationService CreateParametersNavigationService(IServiceProvider serviceProvider)
@@ -74,7 +92,7 @@ namespace Clustering
                 );
         }
 
-        private INavigationService CreateResultNavigationService(IServiceProvider serviceProvider)
+        private INavigationService CreateResultsNavigationService(IServiceProvider serviceProvider)
         {
             return new NavigationService<ResultsViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),

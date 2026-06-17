@@ -14,15 +14,15 @@ namespace Clustering.ViewModel
 
         public ViewModelBase DisplayViewModel { get; private set; }
 
-        public SetupViewModel(MainModel model, INavigationService resultsNavigationService)
+        public SetupViewModel(MainModel model, INavigationService progressNavigationService)
         {
             _model = model;
             _model.Initialize(); //only reinitialize after breaking param changes
 
             switch (this.DisplayMode)
             {
-                case DisplayMode.Spatial2D: { DisplayViewModel = new SetupSpatial2DViewModel(_model, resultsNavigationService); break; }
-                case DisplayMode.Image: { DisplayViewModel = new SetupImageViewModel(_model, resultsNavigationService); break; }
+                case DisplayMode.Spatial2D: { DisplayViewModel = new SetupSpatial2DViewModel(_model, progressNavigationService); break; }
+                case DisplayMode.Image: { DisplayViewModel = new SetupImageViewModel(_model, progressNavigationService); break; }
             }
             
             //DisplayViewModel.NavigatabilityChanged += BubbleDisplayNavigatabilityChanged;

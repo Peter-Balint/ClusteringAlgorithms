@@ -15,7 +15,7 @@ namespace Clustering.ViewModel
     class SetupSpatial2DViewModel : ViewModelBase
     {
         private MainModel _mainModel;
-        private INavigationService _resultsNavigationService;
+        private INavigationService _progressNavigationService;
 
         private bool _isSelectMode;
         public bool IsSelectMode
@@ -105,10 +105,10 @@ namespace Clustering.ViewModel
         public ICommand RunCommand { get; }
         public ICommand LoadPointsCommand { get; }
 
-        public SetupSpatial2DViewModel(MainModel model, INavigationService resultsNavigationService)
+        public SetupSpatial2DViewModel(MainModel model, INavigationService progressNavigationService)
         {
             _mainModel = model;
-            _resultsNavigationService = resultsNavigationService;
+            _progressNavigationService = progressNavigationService;
 
             Points = new ObservableCollection<CircleViewModel>();
 
@@ -360,7 +360,7 @@ namespace Clustering.ViewModel
         private void RunClustering()
         {
             _mainModel.RunClustering();
-            _resultsNavigationService.Navigate();
+            _progressNavigationService.Navigate();
         }
     }
 }

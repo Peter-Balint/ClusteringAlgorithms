@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Clustering.View"
+        xmlns:component="clr-namespace:Clustering.View.Components"
         xmlns:viewmodel="clr-namespace:Clustering.ViewModel"
+        xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
         mc:Ignorable="d"
         Title="Clustering" 
         Height="720" Width="1280" ResizeMode="CanMinimize">
@@ -22,11 +24,15 @@
             <DataTemplate DataType="{x:Type viewmodel:LayoutViewModel}">
                 <local:Layout />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ProgressViewModel}">
+                <component:Progress />
+            </DataTemplate>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+
+        <custom:Modal Panel.ZIndex="1" IsOpen="{Binding IsOpen}">
+            <ContentControl Content="{Binding CurrentModalViewModel}" />
+        </custom:Modal>
+
         <ContentControl Grid.Row ="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
