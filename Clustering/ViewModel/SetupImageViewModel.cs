@@ -17,15 +17,9 @@ namespace Clustering.ViewModel
         private bool _isImageLoaded = false;
         public bool IsRunnable => _mainModel.IsRunnable && _isImageLoaded;
 
-        //private BitmapImage? _image;
         public BitmapSource? Image
         {
             get => _imageHandler.ImageSource;
-            /*set
-            {
-                _image = value;
-                OnPropertyChanged(nameof(Image));
-            }*/
         }
 
         public ICommand LoadImageCommand { get; }
@@ -60,9 +54,8 @@ namespace Clustering.ViewModel
             }
         }
 
-        private void OnInitialImageLoaded(object? sender, /*BitmapImage*/ EventArgs e)
+        private void OnInitialImageLoaded(object? sender, EventArgs e)
         {
-            //Image = e;
             OnPropertyChanged(nameof(Image));
         }
 

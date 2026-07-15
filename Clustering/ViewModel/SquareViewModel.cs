@@ -7,6 +7,7 @@ namespace Clustering.ViewModel
     {
         private double _offsetX;
         private double _offsetY;
+        private double _zoomFactor;
 
         private double _sideLength;
         public double SideLength
@@ -30,7 +31,7 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToX));
             }
         }
-        public double PutCenterToX => X + _offsetX - SideLength / 2;
+        public double PutCenterToX => X * _zoomFactor - _offsetX * _zoomFactor - SideLength / 2;
 
         private double _y;
         public double Y
@@ -43,21 +44,24 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToY));
             }
         }
-        public double PutCenterToY => Y + _offsetY - SideLength / 2;
+        public double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - SideLength / 2;
 
-        public SquareViewModel(IDataPoint point, double sideLength, double offsetX = 0, double offsetY = 0)
+        public SquareViewModel(IDataPoint point, double baseSize, double zoomFactor, double offsetX, double offsetY)
         {
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
-            SideLength = sideLength;
+            SideLength = baseSize/2*zoomFactor;
+            _zoomFactor = zoomFactor;
             _offsetX = offsetX;
             _offsetY = offsetY;
         }
 
-        public void ScaleOffset(double offsetX, double offsetY)
+        public void Scale(double offsetX, double offsetY, double zoomFactor, int baseSize)
         {
-            _offsetX += offsetX;
-            _offsetY += offsetY;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+            _zoomFactor = zoomFactor;
+            SideLength = baseSize/2 * zoomFactor;
             OnPropertyChanged();
         }
     }

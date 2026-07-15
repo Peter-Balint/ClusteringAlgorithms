@@ -44,9 +44,9 @@
                                 <i:EventTrigger EventName="MouseMove">
                                     <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True"/>
                                 </i:EventTrigger>
-                                <!--<i:EventTrigger EventName="PreviewMouseWheel">
+                                <i:EventTrigger EventName="PreviewMouseWheel">
                                     <i:InvokeCommandAction Command="{Binding ZoomCommand}" PassEventArgsToCommand="True"/>
-                                </i:EventTrigger>-->
+                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Canvas>
                     </ItemsPanelTemplate>

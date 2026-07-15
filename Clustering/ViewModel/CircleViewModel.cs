@@ -13,6 +13,7 @@ namespace Clustering.ViewModel
     {
         private double _offsetX;
         private double _offsetY;
+        private double _zoomFactor;
 
         private double _diameter;
         public double Diameter
@@ -35,7 +36,7 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToX));
             }
         }
-        public double PutCenterToX => X + _offsetX - Diameter / 2;
+        public double PutCenterToX => X*_zoomFactor - _offsetX*_zoomFactor - Diameter / 2;
 
         private double _y;
         public double Y
@@ -48,7 +49,7 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(PutCenterToY));
             }
         }
-        public double PutCenterToY => Y + _offsetY- Diameter/2;
+        public double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - Diameter/2;
 
         public int Id { get; }
         public int _clusterId;
@@ -79,46 +80,38 @@ namespace Clustering.ViewModel
         public ICommand OnClickCommand { get; private set; } = null!;
         public event EventHandler? PointClicked;
 
-        public CircleViewModel(double  x, double y, double diameter, int id, double offsetX = 0, double offsetY = 0)
+        public CircleViewModel(double  x, double y, double baseDiameter, int id, double zoomFactor, double offsetX, double offsetY)
         {
-            SetShared(diameter, offsetX, offsetY);
+            SetShared(baseDiameter, zoomFactor, offsetX, offsetY);
             X = x;
             Y = y;
             Id = id;
         }
-        public CircleViewModel(IDataPoint point, double diameter, double offsetX = 0, double offsetY = 0)
+        public CircleViewModel(IDataPoint point, double baseDiameter, double zoomFactor, double offsetX, double offsetY)
         {
-            SetShared(diameter, offsetX, offsetY);
+            SetShared(baseDiameter, zoomFactor, offsetX, offsetY);
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
             Id = point.Id;
             _clusterId = point.ClusterId;
         }
 
-        private void SetShared(double diameter, double offsetX, double offsetY)
+        private void SetShared(double baseDiameter, double zoomfactor, double offsetX, double offsetY)
         {
-            Diameter = diameter;
+            Diameter = baseDiameter*zoomfactor;
+            _zoomFactor = zoomfactor;
             _offsetX = offsetX;
             _offsetY = offsetY;
             _isSelected = false;
             OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
         }
 
-        public void ScaleOffset(double offsetX, double offsetY)
+        public void Scale(double offsetX, double offsetY, double zoomFactor, int baseDiameter)
         {
-            _offsetX += offsetX;
-            _offsetY += offsetY;
-            OnPropertyChanged();
-        }
-        public void ScaleZoom(double centerX, double centerY, double newDiameter, double zoomDelta)
-        {
-            //not correct yet
-            //offset changes have happened in displayvm since
-            double _deltaX = ((centerX - X) * zoomDelta)/3;
-            double _deltaY = ((centerY - Y) * zoomDelta)/3;
-            _offsetX += _deltaX;
-            _offsetY += _deltaY;
-            Diameter = newDiameter;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+            _zoomFactor = zoomFactor;
+            Diameter = baseDiameter * zoomFactor;
             OnPropertyChanged();
         }
     }

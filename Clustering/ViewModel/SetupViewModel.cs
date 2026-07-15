@@ -17,7 +17,7 @@ namespace Clustering.ViewModel
         public SetupViewModel(MainModel model, INavigationService progressNavigationService)
         {
             _model = model;
-            _model.Initialize(); //only reinitialize after breaking param changes
+            _model.Initialize();
 
             switch (this.DisplayMode)
             {

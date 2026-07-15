@@ -20,7 +20,18 @@ namespace Clustering.ViewModel
         private double _dragStartX;
         private double _dragStartY;
 
-        private double _baseDiameter = 30;
+        private int _baseDiameter = 30;
+
+        private double _zoomFactor = 1;
+        public double ZoomFactor
+        {
+            get => _zoomFactor;
+            set
+            {
+                _zoomFactor = value;
+                OnPropertyChanged(nameof(ZoomFactor));
+            }
+        }
 
         public bool ResultsAvailable => _model.ResultsAvailable;
 
@@ -42,6 +53,7 @@ namespace Clustering.ViewModel
         public ICommand CanvasClickedCommand { get; private set; }
         public ICommand MouseMoveCommand { get; private set; }
         public ICommand CanvasReleasedCommand { get; }
+        public ICommand ZoomCommand { get; }
         public ICommand StepBackCommand { get; }
         public ICommand StepForwardsCommand { get; }
 
@@ -60,6 +72,8 @@ namespace Clustering.ViewModel
             CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
             CanvasReleasedCommand = new RelayCommand(OnDragReleased);
 
+            ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
+
             StepBackCommand = new RelayCommand(()=>GoToStep(CurrentStep-1));
             StepForwardsCommand = new RelayCommand(() => GoToStep(CurrentStep+1));
         }
@@ -76,7 +90,7 @@ namespace Clustering.ViewModel
         }
         private void OnMouseDrag(MouseEventArgs? m)
         {
-            if (m is null) return;
+            if (m is null || m.Source is not Canvas) return;
 
             var currentLocation = m.GetPosition((IInputElement)m.Source);
 
@@ -84,7 +98,7 @@ namespace Clustering.ViewModel
             double offsetIncrementY = currentLocation.Y - _dragStartY;
             _offsetX -= offsetIncrementX;
             _offsetY -= offsetIncrementY;
-            ScalePointsOffset(offsetIncrementX, offsetIncrementY);
+            ScalePoints();
             _dragStartX = currentLocation.X;
             _dragStartY = currentLocation.Y;
         }
@@ -94,11 +108,27 @@ namespace Clustering.ViewModel
             OnPropertyChanged(nameof(MouseMoveCommand));
         }
 
-        private void ScalePointsOffset(double offsetIncrementX, double offsetIncrementY)
+        private void OnCanvasScrolling(MouseWheelEventArgs? m)
+        {
+            if (m is null) return;
+
+            if (m.Delta > 0 && ZoomFactor <= 2.9)
+            {
+                ZoomFactor += 0.1;
+                ScalePoints();
+            }
+            else if (m.Delta < 0 && ZoomFactor >= 0.2)
+            {
+                ZoomFactor -= 0.1;
+                ScalePoints();
+            }
+        }
+
+        private void ScalePoints()
         {
             foreach (IShape point in Points)
             {
-                point.ScaleOffset(offsetIncrementX, offsetIncrementY);
+                point.Scale(_offsetX, _offsetY, ZoomFactor, _baseDiameter);
             }
         }
 
@@ -110,11 +140,12 @@ namespace Clustering.ViewModel
             (IDataPoint[] points, Cluster[] clusters) = _model.Results!.GetStepAt(stepIndex);
             foreach(IDataPoint point in points)
             {
-                Points.Add(new CircleViewModel(point, _baseDiameter, -_offsetX, -_offsetY));
+                //todo: implement zoom here as well
+                Points.Add(new CircleViewModel(point, _baseDiameter, ZoomFactor, _offsetX, _offsetY));
             }
             foreach(Cluster cluster in clusters)
             {
-                Points.Add(new SquareViewModel(cluster.CenterPoint,_baseDiameter/2, -_offsetX, -_offsetY));
+                Points.Add(new SquareViewModel(cluster.CenterPoint,_baseDiameter, ZoomFactor, _offsetX, _offsetY));
             }
         }
     }

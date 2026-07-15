@@ -83,6 +83,7 @@
             <Button Content="Load Points" Command="{Binding LoadPointsCommand}" Margin="10"/>
             <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
                     IsEnabled="{Binding IsRunnable}"/>
+            <TextBlock Text="{Binding ZoomFactor}"></TextBlock>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}">
@@ -114,7 +115,6 @@
                         <Canvas Background="PaleGoldenrod" ClipToBounds="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <!--add a select and a drag mode-->
                                     <i:InvokeCommandAction Command="{Binding CanvasClickedCommand}" PassEventArgsToCommand="True"/>
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="MouseLeftButtonUp">

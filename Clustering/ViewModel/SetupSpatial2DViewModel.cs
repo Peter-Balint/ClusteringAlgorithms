@@ -36,16 +36,16 @@ namespace Clustering.ViewModel
         private double _offsetX = 0;
         private double _offsetY = 0;
 
-        private double _baseDiameter = 30;
-        private double _currentDiameter => _baseDiameter / ZoomFactor; //will have some zoom factor
+        private int _baseDiameter = 30;
 
-        private double _zoomFactor;
+        private double _zoomFactor = 1;
         public double ZoomFactor
         {
             get => _zoomFactor;
             set
             {
                 _zoomFactor = value;
+                OnPropertyChanged(nameof(ZoomFactor));
             }
         }
 
@@ -67,7 +67,7 @@ namespace Clustering.ViewModel
             get
             {
                 if (_clickedX == null) return null;
-                return Math.Round(_clickedX.Value+_offsetX, 2);
+                return Math.Round(_clickedX.Value / ZoomFactor + _offsetX, 2);
             }
             set
             {
@@ -81,7 +81,7 @@ namespace Clustering.ViewModel
             get
             {
                 if (_clickedY == null) return null;
-                return Math.Round(_clickedY.Value+_offsetY,2);
+                return Math.Round(_clickedY.Value / ZoomFactor + _offsetY, 2);
             }
             set
             {
@@ -112,12 +112,10 @@ namespace Clustering.ViewModel
 
             Points = new ObservableCollection<CircleViewModel>();
 
-            ZoomFactor = 1;
-
             IEnumerable<IDataPoint> modelPoints = _mainModel.GetAllPoints();
             foreach(IDataPoint point in modelPoints)
             {
-                Points.Add(new CircleViewModel(point,_currentDiameter));
+                Points.Add(new CircleViewModel(point,_baseDiameter,ZoomFactor,_offsetX,_offsetY));
             }
 
             foreach (CircleViewModel point in Points)
@@ -130,7 +128,7 @@ namespace Clustering.ViewModel
             CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
             CanvasReleasedCommand = new RelayCommand(OnDragReleased);
 
-            //ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
+            ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
 
             AddPointCommand = new RelayCommand(AddPoint);
             RemovePointCommand = new RelayCommand(RemovePoint);
@@ -201,7 +199,7 @@ namespace Clustering.ViewModel
             double offsetIncrementY = currentLocation.Y - _dragStartY;
             _offsetX -= offsetIncrementX;
             _offsetY -= offsetIncrementY;
-            ScalePointsOffset(offsetIncrementX,offsetIncrementY);
+            ScalePoints();
             _dragStartX = currentLocation.X;
             _dragStartY = currentLocation.Y;
         }
@@ -215,31 +213,16 @@ namespace Clustering.ViewModel
         {
             if (m is null) return;
 
-            double zoomDelta;
-            if (m.Delta > 0)
+            if (m.Delta > 0 && ZoomFactor <= 2.9)
             {
-                zoomDelta = -0.1;
-                ZoomFactor += zoomDelta;
+                ZoomFactor += 0.1;
+                ScalePoints();
             }
-            else
+            else if(m.Delta < 0 && ZoomFactor >= 0.2)
             {
-                zoomDelta = 0.1;
-                ZoomFactor += zoomDelta;
+                ZoomFactor -= 0.1;
+                ScalePoints();
             }
-
-            if (ZoomFactor < 0.1)
-            {
-                zoomDelta = -ZoomFactor;
-                ZoomFactor = 0.1;
-            }
-            else if(ZoomFactor > 3)
-            {
-                zoomDelta = 3 - (ZoomFactor - 0.1);
-                ZoomFactor = 3;
-            }
-
-            var currentLocation = m.GetPosition((IInputElement)m.Source);
-            ScalePointsZoom(currentLocation.X + _offsetX, currentLocation.Y + _offsetY, zoomDelta);
         }
 
         private void AddPoint()
@@ -263,7 +246,7 @@ namespace Clustering.ViewModel
 
         private void OnPointCreated(object? sender, IDataPoint point)
         {
-            CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, -_offsetX,-_offsetY);
+            CircleViewModel pointVM = new CircleViewModel(point, _baseDiameter, ZoomFactor, _offsetX, _offsetY);
             pointVM.PointClicked += OnPointClicked;
             Points.Add(pointVM);
             OnPropertyChanged(nameof(IsRunnable));
@@ -272,27 +255,21 @@ namespace Clustering.ViewModel
         {
             foreach(IDataPoint point in points)
             {
-                CircleViewModel pointVM = new CircleViewModel(point, _currentDiameter, -_offsetX, -_offsetY);
+                CircleViewModel pointVM = new CircleViewModel(point, _baseDiameter, ZoomFactor, _offsetX, _offsetY);
                 pointVM.PointClicked += OnPointClicked;
                 Points.Add(pointVM);
             }
             OnPropertyChanged(nameof(IsRunnable));
         }
 
-        private void ScalePointsOffset(double offsetIncrementX, double offsetIncrementY)
+        private void ScalePoints()
         {
             foreach (CircleViewModel point in Points)
             {
-                point.ScaleOffset(offsetIncrementX, offsetIncrementY);
+                point.Scale(_offsetX, _offsetY, ZoomFactor, _baseDiameter);
             }
         }
-        private void ScalePointsZoom(double aroundX, double aroundY, double zoomDelta)
-        {
-            foreach (CircleViewModel point in Points)
-            {
-                point.ScaleZoom(aroundX, aroundY, _currentDiameter, zoomDelta);
-            }
-        }
+
 
         private void LoadPoints()
         {
