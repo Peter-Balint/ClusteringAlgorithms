@@ -22,6 +22,7 @@ namespace Clustering.ViewModel
             switch (this.DisplayMode)
             {
                 case DisplayMode.Spatial2D: { DisplayViewModel = new SetupSpatial2DViewModel(_model, progressNavigationService); break; }
+                case DisplayMode.Spatial3D: { DisplayViewModel = new SetupSpatial3DViewModel(progressNavigationService); break; }
                 case DisplayMode.Image: { DisplayViewModel = new SetupImageViewModel(_model, progressNavigationService); break; }
             }
             
