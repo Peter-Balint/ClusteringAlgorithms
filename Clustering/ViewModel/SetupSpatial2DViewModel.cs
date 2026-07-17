@@ -1,11 +1,10 @@
 ﻿
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
+using Clustering.ViewModel.FileHandling;
 using Clustering.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -273,58 +272,15 @@ namespace Clustering.ViewModel
 
         private void LoadPoints()
         {
-            FileDialog fd = new OpenFileDialog();
-            fd.Filter = "Setup files (*.sup)|*.sup";
-            if (fd.ShowDialog() == false)
-            {
-                return;
-            }
-            using var reader = new StreamReader(fd.FileName);
-            List<double[]> pointsFromFile = new List<double[]>();
-            int lineCounter = 1;
-            string? line = reader.ReadLine();
-            if (line is null)
-            {
-                MessageBox.Show($"Opened file was empty:\n{fd.FileName}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-                return;
-            }
-            line = line.Trim();
-            if (int.TryParse(line, out int dimension) == false)
-            {
-                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points was not declared","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-                return;
-            }
-            if (dimension < 2)
-            {
-                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points must be at least 2", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            while ((line = reader.ReadLine()) is not null)
-            {
-                lineCounter++;
-                string[] splits = line.Split(';');
-                if (splits.Length != dimension)
-                {
-                    MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nNumber of coordinates of point didn't match the declared dimension","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-                    return;
-                }
-                double[] coordinates = new double[dimension];
-                for (int i = 0; i < dimension; i++)
-                {
-                    if (double.TryParse(splits[i], out double coordinate) == false)
-                    {
-                        MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nCoordinate could not be parsed: {splits[i]}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-                        return;
-                    }
-                    coordinates[i] = coordinate;
-                }
-                pointsFromFile.Add(coordinates);
-            }
+            var pointsFromFile = PointsLoader.Load(2);
+            if (pointsFromFile.Count == 0) return;
             //from here on out operating under the assumption that once parameters are set
             //setting them again, or at least the important ones, leads to a full reset
             //do I need to unsubscribe from the events of points?
             Points.Clear();
-            if (dimension > 2)
+            //this small bit is a little inelegant after the refactor but it should be fine overall
+            //adding a new return value or making a whole unique structure because of this seems overkill
+            if (pointsFromFile.First().Length > 2)
             {
                 _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(),2);
             }

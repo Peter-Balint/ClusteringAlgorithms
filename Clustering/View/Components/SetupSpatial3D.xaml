@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Clustering.View.Components"
              
              xmlns:h="http://helix-toolkit.org/wpf"
-             xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
              
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -22,16 +21,20 @@
             <TextBox x:Name="YTextBox" Width="60" Text="0" Margin="0,0,10,0"/>
             <TextBlock Text="Z:" VerticalAlignment="Center" Margin="0,0,5,0"/>
             <TextBox x:Name="ZTextBox" Width="60" Text="0" Margin="0,0,20,0"/>
-            <Button  Content="Add Sphere"
+            <Button  Content="Add Point"
                 Margin="5"
                 Width="100"
-                Click="AddSphereButton_Click"/>
-            <Button  Content="Load Points"
+                Click="AddPointButton_Click"/>
+            <Button Content="Load Points"
                 Margin="5"
                 Width="100"
                 Click="LoadPointsButton_Click"/>
+            <Button Content="Remove Selected Point" x:Name="RemoveButton"
+                Margin="5"
+                Width="100"
+                Click="RemovePointButton_Click"/>
         </StackPanel>
-        <h:HelixViewport3D x:Name="Viewport" Grid.Column="1" Background="Black" >
+        <h:HelixViewport3D x:Name="Viewport" Grid.Column="1" Background="Black" MouseDown="Viewport_MouseDown" ItemsSource="{Binding Objects}">
 
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera Position="10,10,10"
@@ -44,5 +47,6 @@
             <h:GridLinesVisual3D></h:GridLinesVisual3D>
 
         </h:HelixViewport3D>
+
     </Grid>
 </UserControl>

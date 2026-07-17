@@ -1,10 +1,10 @@
 ﻿
 using Clustering.ViewModel;
+using Clustering.ViewModel.FileHandling;
 using HelixToolkit.Wpf;
-using Microsoft.Win32;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
@@ -12,6 +12,7 @@ namespace Clustering.View.Components
 {
     /// <summary>
     /// Interaction logic for SetupSpatial3D.xaml
+    /// For now not fully linked with the vm and model
     /// </summary>
     public partial class SetupSpatial3D : UserControl
     {
@@ -19,9 +20,12 @@ namespace Clustering.View.Components
         private readonly Random _random = new();
         private SetupSpatial3DViewModel _viewModel => (SetupSpatial3DViewModel)DataContext;
 
+        private SphereVisual3D? _selectedSphere = null;
+
         public SetupSpatial3D()
         {
             InitializeComponent();
+            RemoveButton.Visibility = Visibility.Collapsed;
         }
 
         private void AddSphere(Point3D center, double radius, Brush fill)
@@ -33,70 +37,57 @@ namespace Clustering.View.Components
                 Fill = fill
             };
 
-            _spheres.Add(sphere);
+            _spheres.Add(sphere); //most még nem csinál sokat, majd id-val tároljuk
             Viewport.Children.Add(sphere);
         }
 
-        private void AddSphereButton_Click(object sender, RoutedEventArgs e)
+        private void AddPointButton_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(XTextBox.Text, out double x) && 
                 double.TryParse(YTextBox.Text, out double y) && 
                 double.TryParse(ZTextBox.Text, out double z)) {
                 AddSphere(new Point3D(x, y, z), 0.5, Brushes.Red);
                 _viewModel.AddPoint(x, y, z);
+                //majd itt a flow más lesz:
+                //elküldi a vmodellnek a koordinátákat, visszakapja onnnan eventtel és id-val, akkor hozza létre
             } 
             else { MessageBox.Show("Please enter valid numeric coordinates."); }
         }
 
+        private void Viewport_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var position = e.GetPosition(Viewport);
+
+            var hits = Viewport.Viewport.FindHits(position);
+
+            if (hits.Count == 0) return;
+
+            var hit = hits[0];
+
+            if (hit.Visual is SphereVisual3D sphere)
+            {
+                if (_selectedSphere is not null)
+                {
+                    _selectedSphere.Fill = Brushes.Red;
+                }
+                _selectedSphere = sphere;
+                _selectedSphere.Fill = Brushes.Pink;
+                RemoveButton.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void RemovePointButton_Click(object sender, RoutedEventArgs e)
+        {
+            Viewport.Children.Remove(_selectedSphere);
+            _selectedSphere = null;
+            RemoveButton.Visibility= Visibility.Collapsed;
+        }
+
         private void LoadPointsButton_Click(object sender, RoutedEventArgs e)
         {
-            FileDialog fd = new OpenFileDialog();
-            fd.Filter = "Setup files (*.sup)|*.sup";
-            if (fd.ShowDialog() == false)
-            {
-                return;
-            }
-            using var reader = new StreamReader(fd.FileName);
-            List<double[]> pointsFromFile = new List<double[]>();
-            int lineCounter = 1;
-            string? line = reader.ReadLine();
-            if (line is null)
-            {
-                MessageBox.Show($"Opened file was empty:\n{fd.FileName}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            line = line.Trim();
-            if (int.TryParse(line, out int dimension) == false)
-            {
-                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points was not declared", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (dimension < 2)
-            {
-                MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nDimension of points must be at least 2", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            while ((line = reader.ReadLine()) is not null)
-            {
-                lineCounter++;
-                string[] splits = line.Split(';');
-                if (splits.Length != dimension)
-                {
-                    MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nNumber of coordinates of point didn't match the declared dimension", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                double[] coordinates = new double[dimension];
-                for (int i = 0; i < dimension; i++)
-                {
-                    if (double.TryParse(splits[i], out double coordinate) == false)
-                    {
-                        MessageBox.Show($"Error on line {lineCounter} in opened file:\n{fd.FileName}\nCoordinate could not be parsed: {splits[i]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    coordinates[i] = coordinate;
-                }
-                pointsFromFile.Add(coordinates);
-            }
+            //ez is lehet vm-be megy majd
+            //see the 2d implementation
+            var pointsFromFile = PointsLoader.Load(3);
             foreach (double[] coordinates in pointsFromFile)
             {
                 AddSphere(new Point3D(coordinates[0], coordinates[1], coordinates[2]), 0.5, Brushes.Red);
