@@ -9,12 +9,8 @@ using MediaColor = System.Windows.Media.Color;
 
 namespace Clustering.ViewModel
 {
-    class CircleViewModel : ViewModelBase, IShape
+    internal class CircleViewModel : Shape2DViewModelBase
     {
-        private double _offsetX;
-        private double _offsetY;
-        private double _zoomFactor;
-
         private double _diameter;
         public double Diameter
         {
@@ -25,31 +21,9 @@ namespace Clustering.ViewModel
                 OnPropertyChanged(nameof(Diameter));
             }
         }
-        private double _x;
-        public double X
-        {
-            get => _x;
-            set
-            {
-                _x = value;
-                OnPropertyChanged(nameof(X));
-                OnPropertyChanged(nameof(PutCenterToX));
-            }
-        }
-        public double PutCenterToX => X*_zoomFactor - _offsetX*_zoomFactor - Diameter / 2;
-
-        private double _y;
-        public double Y
-        {
-            get => _y;
-            set
-            {
-                _y = value;
-                OnPropertyChanged(nameof(Y));
-                OnPropertyChanged(nameof(PutCenterToY));
-            }
-        }
-        public double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - Diameter/2;
+        
+        public override double PutCenterToX => X*_zoomFactor - _offsetX*_zoomFactor - Diameter / 2;
+        public override double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - Diameter/2;
 
         public int Id { get; }
         public int _clusterId;
@@ -106,7 +80,7 @@ namespace Clustering.ViewModel
             OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
         }
 
-        public void Scale(double offsetX, double offsetY, double zoomFactor, int baseDiameter)
+        public override void Scale(double offsetX, double offsetY, double zoomFactor, int baseDiameter)
         {
             _offsetX = offsetX;
             _offsetY = offsetY;

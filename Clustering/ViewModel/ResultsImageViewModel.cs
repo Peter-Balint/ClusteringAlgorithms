@@ -45,7 +45,6 @@ namespace Clustering.ViewModel
             _images = new ImageViewModel[stepCount];
 
             (IDataPoint[] pointsAtZero, _) = _model.Results.GetStepAt(0);
-            //_images[0] = new ImageViewModel(_imageHandler.ImageWidth, _imageHandler.ImageHeight, converter, pointsAtZero);
             _images[0] = new ImageViewModel(_imageHandler.ImageSource!);
             for(int i = 1; i < stepCount; i++)
             {

@@ -3,12 +3,8 @@ using Clustering.Model.DataRepresentation;
 
 namespace Clustering.ViewModel
 {
-    public class SquareViewModel : ViewModelBase, IShape
+    internal class SquareViewModel : Shape2DViewModelBase
     {
-        private double _offsetX;
-        private double _offsetY;
-        private double _zoomFactor;
-
         private double _sideLength;
         public double SideLength
         {
@@ -20,31 +16,8 @@ namespace Clustering.ViewModel
             }
         }
 
-        private double _x;
-        public double X
-        {
-            get => _x;
-            set
-            {
-                _x = value;
-                OnPropertyChanged(nameof(X));
-                OnPropertyChanged(nameof(PutCenterToX));
-            }
-        }
-        public double PutCenterToX => X * _zoomFactor - _offsetX * _zoomFactor - SideLength / 2;
-
-        private double _y;
-        public double Y
-        {
-            get => _y;
-            set
-            {
-                _y = value;
-                OnPropertyChanged(nameof(Y));
-                OnPropertyChanged(nameof(PutCenterToY));
-            }
-        }
-        public double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - SideLength / 2;
+        public override double PutCenterToX => X * _zoomFactor - _offsetX * _zoomFactor - SideLength / 2;
+        public override double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - SideLength / 2;
 
         public SquareViewModel(IDataPoint point, double baseSize, double zoomFactor, double offsetX, double offsetY)
         {
@@ -56,7 +29,7 @@ namespace Clustering.ViewModel
             _offsetY = offsetY;
         }
 
-        public void Scale(double offsetX, double offsetY, double zoomFactor, int baseSize)
+        public override void Scale(double offsetX, double offsetY, double zoomFactor, int baseSize)
         {
             _offsetX = offsetX;
             _offsetY = offsetY;

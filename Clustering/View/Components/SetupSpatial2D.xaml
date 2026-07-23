@@ -83,7 +83,6 @@
             <Button Content="Load Points" Command="{Binding LoadPointsCommand}" Margin="10"/>
             <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
                     IsEnabled="{Binding IsRunnable}"/>
-            <TextBlock Text="{Binding ZoomFactor}"></TextBlock>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}">
