@@ -34,7 +34,7 @@
                 Width="100"
                 Click="RemovePointButton_Click"/>
         </StackPanel>
-        <h:HelixViewport3D x:Name="Viewport" Grid.Column="1" Background="Black" MouseDown="Viewport_MouseDown" ItemsSource="{Binding Objects}">
+        <h:HelixViewport3D x:Name="Viewport" Grid.Column="1" Background="Black" MouseDown="Viewport_MouseDown">
 
             <h:HelixViewport3D.Camera>
                 <PerspectiveCamera Position="10,10,10"

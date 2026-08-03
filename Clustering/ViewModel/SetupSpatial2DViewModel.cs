@@ -174,6 +174,7 @@ namespace Clustering.ViewModel
             if (SelectedPoint is not null)
             {
                 _mainModel.RemovePoint(SelectedPoint!.Id);
+                //flow isn't the same as in creation, is it alright? or rather is it justified?
                 Points.Remove(SelectedPoint);
                 SelectedPoint.PointClicked -= OnPointClicked;
                 SelectedPoint = null;
@@ -214,8 +215,6 @@ namespace Clustering.ViewModel
             if (pointsFromFile.Count == 0) return;
             //do I need to unsubscribe from the events of points?
             Points.Clear();
-            //this small bit is a little inelegant after the refactor but it should be fine overall
-            //adding a new return value or making a whole unique structure because of this seems overkill
             if (pointsFromFile.First().Length > 2)
             {
                 _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(),2);

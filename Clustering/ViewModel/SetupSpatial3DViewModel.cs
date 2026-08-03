@@ -1,7 +1,9 @@
 ﻿
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
+using Clustering.ViewModel.FileHandling;
 using Clustering.ViewModel.Navigation;
+using System.Numerics;
 
 namespace Clustering.ViewModel
 {
@@ -12,31 +14,58 @@ namespace Clustering.ViewModel
 
         public bool IsRunnable => _mainModel.IsRunnable;
 
+        public event EventHandler<SphereViewModel>? PointAdded;
+        public event EventHandler<SphereViewModel[]>? PointsAdded;
 
         public SetupSpatial3DViewModel(MainModel model, INavigationService progressNavigationService)
         {
             _mainModel = model;
             _progressNavigationService = progressNavigationService;
+
+            _mainModel.PointCreated += OnPointCreated;
+            _mainModel.PointsCreated += OnPointsCreated;
+        }
+
+        public void AddInitialPoints()
+        {
+            IDataPoint[] modelPoints = _mainModel.GetAllPoints().ToArray();
+            OnPointsCreated(null, modelPoints);
         }
 
         public void AddPoint(double x, double y, double z)
         {
             _mainModel.AddPoint([x, y, z]);
         }
-        //might work on id, might work on a shared selected point thing, will depend on the type of data structures and the connection the view+vm will have
-        private void RemovePoint()
+        public void RemovePoint(int id)
         {
+            _mainModel.RemovePoint(id);
         }
 
         private void OnPointCreated(object? sender, IDataPoint point)
         {
+            PointAdded?.Invoke(this, new SphereViewModel(point));
         }
         private void OnPointsCreated(object? sender, IDataPoint[] points)
         {
+            SphereViewModel[] spheres = new SphereViewModel[points.Length];
+            for (int i = 0; i < spheres.Length; i++){
+                spheres[i] = new SphereViewModel(points[i]);
+            }
+            PointsAdded?.Invoke(this, spheres);
         }
 
-        private void LoadPoints()
+        public void LoadPoints()
         {
+            var pointsFromFile = PointsLoader.Load(3);
+            if (pointsFromFile.Count == 0) return;
+            if (pointsFromFile.First().Length > 3)
+            {
+                _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(), 3);
+            }
+            else
+            {
+                _mainModel.NewPointSet(pointsFromFile);
+            }
         }
 
         private void RunClustering()
