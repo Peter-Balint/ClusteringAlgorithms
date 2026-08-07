@@ -17,6 +17,9 @@
             <DataTemplate DataType="{x:Type viewmodel:ResultsSpatial2DViewModel}">
                 <c:ResultsSpatial2D />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodel:ResultsSpatial3DViewModel}">
+                <c:ResultsSpatial3D />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodel:ResultsImageViewModel}">
                 <c:ResultsImage />
             </DataTemplate>

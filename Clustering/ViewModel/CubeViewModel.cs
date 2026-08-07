@@ -3,21 +3,19 @@ using Clustering.Model.DataRepresentation;
 
 namespace Clustering.ViewModel
 {
-    public class SphereViewModel : ViewModelBase
+    internal class CubeViewModel
     {
         public double X { get; }
         public double Y { get; }
         public double Z { get; }
         public int Id { get; }
-        public int ClusterId { get; }
 
-        public SphereViewModel(IDataPoint point)
+        public CubeViewModel(IDataPoint point)
         {
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
             Z = point.GetCoordinateAt(2);
             Id = point.Id;
-            ClusterId = point.ClusterId;
         }
     }
 }

@@ -33,6 +33,8 @@
                 Margin="5"
                 Width="100"
                 Click="RemovePointButton_Click"/>
+            <Button Content="Run" Command="{Binding RunCommand}" Margin="10"
+                    IsEnabled="{Binding IsRunnable}"/>
         </StackPanel>
         <h:HelixViewport3D x:Name="Viewport" Grid.Column="1" Background="Black" MouseDown="Viewport_MouseDown">
 

@@ -3,7 +3,9 @@ using Clustering.Model;
 using Clustering.Model.DataRepresentation;
 using Clustering.ViewModel.FileHandling;
 using Clustering.ViewModel.Navigation;
+using CommunityToolkit.Mvvm.Input;
 using System.Numerics;
+using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
@@ -17,6 +19,8 @@ namespace Clustering.ViewModel
         public event EventHandler<SphereViewModel>? PointAdded;
         public event EventHandler<SphereViewModel[]>? PointsAdded;
 
+        public ICommand RunCommand { get; }
+
         public SetupSpatial3DViewModel(MainModel model, INavigationService progressNavigationService)
         {
             _mainModel = model;
@@ -24,6 +28,8 @@ namespace Clustering.ViewModel
 
             _mainModel.PointCreated += OnPointCreated;
             _mainModel.PointsCreated += OnPointsCreated;
+
+            RunCommand = new RelayCommand(RunClustering);
         }
 
         public void AddInitialPoints()
@@ -44,6 +50,7 @@ namespace Clustering.ViewModel
         private void OnPointCreated(object? sender, IDataPoint point)
         {
             PointAdded?.Invoke(this, new SphereViewModel(point));
+            OnPropertyChanged(nameof(IsRunnable));
         }
         private void OnPointsCreated(object? sender, IDataPoint[] points)
         {
@@ -52,6 +59,7 @@ namespace Clustering.ViewModel
                 spheres[i] = new SphereViewModel(points[i]);
             }
             PointsAdded?.Invoke(this, spheres);
+            OnPropertyChanged(nameof(IsRunnable));
         }
 
         public void LoadPoints()
@@ -70,6 +78,8 @@ namespace Clustering.ViewModel
 
         private void RunClustering()
         {
+            _mainModel.RunClustering();
+            _progressNavigationService.Navigate();
         }
 
     }

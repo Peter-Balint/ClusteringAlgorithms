@@ -26,7 +26,7 @@ namespace Clustering.ViewModel
         public override double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - Diameter/2;
 
         public int Id { get; }
-        public int _clusterId;
+        private int _clusterId;
 
         public Brush Color => new SolidColorBrush(GetColorFromId(_clusterId));
 
