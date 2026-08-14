@@ -26,9 +26,14 @@ namespace Clustering.Model
 
         public event EventHandler<IDataPoint>? PointCreated;
         public event EventHandler<IDataPoint[]>? PointsCreated;
+        public event EventHandler<IDataPoint>? CenterCreated;
 
         public bool ResultsAvailable => Results != null;
-        public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber;
+
+        private List<IDataPoint> _handPickedInitialCenters;
+        public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber 
+            && (ParameterSet.ClusterInitializationMethod == ClusterInitializationMethod.RandomDataPoint || _handPickedInitialCenters.Count >= ParameterSet.InitialClusterNumber);
+        
         private bool _firstParameterSet = true;
 
         public MainModel() 
@@ -37,6 +42,7 @@ namespace Clustering.Model
             PreviousParameterSet = null;
             ImageHandler = new ImageHandler();
             _tokenSource = new CancellationTokenSource();
+            _handPickedInitialCenters = [];
         }
 
         private Func<double[],int,IDataPoint> CreatePointFactory()
@@ -91,6 +97,12 @@ namespace Clustering.Model
             NewPointSet(pointCoordinates);
         }
 
+        public void AddCenter(double[] coordinates)
+        {
+            _handPickedInitialCenters.Add(CreatePointFactory().Invoke(coordinates, -1));
+            CenterCreated?.Invoke(this, _handPickedInitialCenters.Last());
+        }
+
         public void NewParameterSet()
         {
             if (_firstParameterSet){
@@ -124,7 +136,7 @@ namespace Clustering.Model
 
         public async void RunClustering()
         {
-            Results = await Task.Run(()=>_algorithm.Run(_pointCloud, _tokenSource.Token));
+            Results = await Task.Run(()=>_algorithm.Run(_pointCloud, _tokenSource.Token, _handPickedInitialCenters));
             ClusteringFinished?.Invoke(this, EventArgs.Empty);
         }
 

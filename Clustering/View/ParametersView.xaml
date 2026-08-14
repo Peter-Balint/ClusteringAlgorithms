@@ -76,7 +76,7 @@
                                 SelectedItem="{Binding TerminateCondition}"/>
                         </StackPanel>
                     </Border>
-                    <Border Style="{StaticResource RoundedBorderStyleBlack}">
+                    <Border Style="{StaticResource RoundedBorderStyleBlack}" Visibility="{Binding IsClusterInitializationMethodApplicable, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <Label>Cluster Initialization Method</Label>
                             <ComboBox

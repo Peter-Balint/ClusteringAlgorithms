@@ -30,6 +30,12 @@ namespace Clustering.ViewModel
                 _model.ParameterSet.DisplayMode = value;
                 OnPropertyChanged(nameof(DisplayMode));
                 OnPropertyChanged(nameof(IsSpatialDistanceMetricApplicable));
+                OnPropertyChanged(nameof(IsClusterInitializationMethodApplicable));
+                if (value != DisplayMode.Spatial2D)
+                {
+                    ClusterInitializationMethod = ClusterInitializationMethod.RandomDataPoint;
+                    OnPropertyChanged(nameof(ClusterInitializationMethod));
+                }
             }
         }        
         public DisplayMode[] DisplayModeValues => Enum.GetValues<DisplayMode>();
@@ -157,6 +163,7 @@ namespace Clustering.ViewModel
             }
         }
         public ClusterInitializationMethod[] ClusterInitializationMethodValues => Enum.GetValues<ClusterInitializationMethod>();
+        public bool IsClusterInitializationMethodApplicable => DisplayMode == DisplayMode.Spatial2D;
 
         public RandomizationType RandomizationType
         {

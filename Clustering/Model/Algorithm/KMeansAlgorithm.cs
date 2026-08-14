@@ -37,27 +37,38 @@ namespace Clustering.Model.Algorithm
             else _distanceStrategy = new LabDistance();
         }
 
-        public StepSequence Run(PointCloud pointCloud, CancellationToken ct)
+        public StepSequence Run(PointCloud pointCloud, CancellationToken ct, List<IDataPoint>? initialCenters = null)
         {
             StepSequence results = new StepSequence();
 
-            //add initial clusters, with randomized center elements from points
             pointCloud.ResetClustersOnly();
             List<int> centerIds = new List<int>();
             int[] pointIds = pointCloud.GetIds();
             Random rand = _parameters.GetRandomInstance();
-            for(int i = 0; i < _parameters.InitialClusterNumber; i++)
+
+            if(initialCenters is null || _parameters.ClusterInitializationMethod == ClusterInitializationMethod.RandomDataPoint)
             {
-                //can try to check if chosen points are different by value as well, not just different instances of the same point in space or color
-                int index = rand.Next(pointIds.Length);
-                while (centerIds.Contains(pointIds[index])){
-                    index = rand.Next(pointIds.Length);
+                for (int i = 0; i < _parameters.InitialClusterNumber; i++)
+                {
+                    //can try to check if chosen points are different by value as well, not just different instances of the same point in space or color
+                    int index = rand.Next(pointIds.Length);
+                    while (centerIds.Contains(pointIds[index]))
+                    {
+                        index = rand.Next(pointIds.Length);
+                    }
+                    centerIds.Add(pointIds[index]);
                 }
-                centerIds.Add(pointIds[index]);
+                for (int i = 0; i < _parameters.InitialClusterNumber; i++)
+                {
+                    pointCloud.AddCluster(i, pointCloud.GetPoint(centerIds[i]));
+                }
             }
-            for (int i = 0; i < _parameters.InitialClusterNumber; i++)
+            else
             {
-                pointCloud.AddCluster(i, pointCloud.GetPoint(centerIds[i]));
+                for (int i = 0; i < _parameters.InitialClusterNumber; i++)
+                {
+                    pointCloud.AddCluster(i, initialCenters[i]);
+                }
             }
 
             IDataPoint[] points = pointCloud.GetAllPoints().ToArray();

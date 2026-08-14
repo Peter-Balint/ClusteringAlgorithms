@@ -1,9 +1,12 @@
 ﻿using Clustering.ViewModel;
 using HelixToolkit.Wpf;
+using Microsoft.VisualStudio.Modeling.Diagrams;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using DrawingColor = System.Drawing.Color;
+using MediaColor = System.Windows.Media.Color;
 
 
 namespace Clustering.View.Components
@@ -16,8 +19,6 @@ namespace Clustering.View.Components
 
         private List<SphereVisual3D[]> _stepSpheres = new List<SphereVisual3D[]>();
         private List<CubeVisual3D[]> _stepCenters = new List<CubeVisual3D[]>();
-
-        SolidColorBrush[] brushes = [Brushes.Red, Brushes.Pink, Brushes.Blue, Brushes.Green, Brushes.Yellow, Brushes.Turquoise];
 
         public ResultsSpatial3D()
         {
@@ -58,7 +59,7 @@ namespace Clustering.View.Components
                 {
                     Center = new Point3D(args.points[i].X, args.points[i].Y, args.points[i].Z),
                     Radius = 0.5,
-                    Fill = brushes[args.points[i].ClusterId % brushes.Length]
+                    Fill = new SolidColorBrush(GetColorFromId(args.points[i].ClusterId))
                 };
                 if(_stepCount == 0) Viewport.Children.Add(spheres[i]);
             }
@@ -67,7 +68,7 @@ namespace Clustering.View.Components
                 centers[i] = new CubeVisual3D
                 {
                     Center = new Point3D(args.centers[i].X, args.centers[i].Y, args.centers[i].Z),
-                    SideLength = 0.5,
+                    SideLength = 0.8,
                     Fill = Brushes.White
                 };
                 if (_stepCount == 0) Viewport.Children.Add(centers[i]);
@@ -133,6 +134,13 @@ namespace Clustering.View.Components
             }
 
             CurrentStepTextBlock.Text = $"Current step: {_currentStep}";
+        }
+
+        private Color GetColorFromId(int id)
+        {
+            int hue = (id * 137) % 240;
+            DrawingColor dColor = new HslColor(hue, 120, 120).ToRgbColor();
+            return MediaColor.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
         }
     }
 }

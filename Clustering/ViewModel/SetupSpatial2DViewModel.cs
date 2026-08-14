@@ -71,11 +71,16 @@ namespace Clustering.ViewModel
             }
         }
 
-        public bool IsRunnable => _mainModel.IsRunnable;
+        private int _centerCount = 0;
 
-        public ObservableCollection<CircleViewModel> Points { get; set; }
+        public bool IsRunnable => _mainModel.IsRunnable;
+        public bool CanAddCenter => _mainModel.ParameterSet.ClusterInitializationMethod == ClusterInitializationMethod.UserDefined
+            && _mainModel.ParameterSet.InitialClusterNumber > _centerCount;
+
+        public ObservableCollection<Shape2DViewModelBase> Points { get; set; }
 
         public ICommand AddPointCommand { get; }
+        public ICommand AddCenterCommand {  get; }
         public ICommand RemovePointCommand { get; }
         public ICommand SwitchToSelectModeCommand {  get; }
         public ICommand SwitchToDragModeCommand { get; }
@@ -87,8 +92,7 @@ namespace Clustering.ViewModel
             _mainModel = model;
             _progressNavigationService = progressNavigationService;
 
-            Points = new ObservableCollection<CircleViewModel>();
-
+            Points = new ObservableCollection<Shape2DViewModelBase>();
             IEnumerable<IDataPoint> modelPoints = _mainModel.GetAllPoints();
             foreach(IDataPoint point in modelPoints)
             {
@@ -108,10 +112,12 @@ namespace Clustering.ViewModel
             ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
 
             AddPointCommand = new RelayCommand(AddPoint);
+            AddCenterCommand = new RelayCommand(AddCenter);
             RemovePointCommand = new RelayCommand(RemovePoint);
 
             _mainModel.PointCreated += OnPointCreated;
             _mainModel.PointsCreated += OnPointsCreated;
+            _mainModel.CenterCreated += OnCenterCreated;
 
             SwitchToSelectModeCommand = new RelayCommand(() => 
                 { 
@@ -182,6 +188,14 @@ namespace Clustering.ViewModel
             }
         }
 
+        private void AddCenter()
+        {
+            if (ClickedX is not null && ClickedY is not null)
+            {
+                _mainModel.AddCenter([ClickedX.Value, ClickedY.Value]);
+            }
+        }
+
         private void OnPointCreated(object? sender, IDataPoint point)
         {
             CircleViewModel pointVM = new CircleViewModel(point, _baseDiameter, _zoomFactor, _offsetX, _offsetY);
@@ -200,9 +214,18 @@ namespace Clustering.ViewModel
             OnPropertyChanged(nameof(IsRunnable));
         }
 
+        private void OnCenterCreated(object? sender, IDataPoint point)
+        {
+            SquareViewModel centerVM = new SquareViewModel(point, _baseDiameter, _zoomFactor, _offsetX, _offsetY);
+            Points.Add(centerVM);
+            _centerCount++;
+            OnPropertyChanged(nameof(IsRunnable));
+            OnPropertyChanged(nameof(CanAddCenter));
+        }
+
         protected override void ScalePoints()
         {
-            foreach (CircleViewModel point in Points)
+            foreach (Shape2DViewModelBase point in Points)
             {
                 point.Scale(_offsetX, _offsetY, _zoomFactor, _baseDiameter);
             }

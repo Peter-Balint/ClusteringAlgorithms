@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Clustering.View.Components"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:Clustering.ViewModel"
+             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -74,6 +76,23 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button Content="Add center" Command="{Binding AddCenterCommand}" Margin="10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ClickedX}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CanAddCenter}" Value="true">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding CanAddCenter}" Value="false">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="Switch to Select Mode" Command="{Binding SwitchToSelectModeCommand}" Margin="10"
                     Visibility="{Binding IsDragMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             </Button>
@@ -86,8 +105,8 @@
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl ItemsSource="{Binding Points}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:CircleViewModel}">
                         <Ellipse StrokeThickness="3" Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="BlueViolet">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -108,7 +127,10 @@
                             </Ellipse.Style>
                         </Ellipse>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:SquareViewModel}">
+                        <Rectangle Width="{Binding SideLength}" Height="{Binding SideLength}" Fill="Black"/>
+                    </DataTemplate>
+                </ItemsControl.Resources>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Background="PaleGoldenrod" ClipToBounds="True">
