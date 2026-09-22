@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Clustering.View.Components
 {
@@ -21,6 +15,34 @@ namespace Clustering.View.Components
         public ResultsSpatial2D()
         {
             InitializeComponent();
+        }
+
+        private void SaveAsImageButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog
+            {
+                Title = "Save image",
+                Filter = "PNG Image (*.png)|*.png",
+                DefaultExt = ".png",
+                AddExtension = true
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                /*Canvas canvas = (Canvas)PointsItemsControl.ItemsPanel;
+                Rect rect = new Rect(MyCanvas.RenderSize);
+                RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right,
+                  (int)rect.Bottom, 96d, 96d, System.Windows.Media.PixelFormats.Default);
+                rtb.Render(MyCanvas);
+                //endcode as PNG
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(rtb));
+
+                using var stream = File.Create(dialog.FileName);
+                encoder.Save(stream);*/
+            }
+
+
+
         }
     }
 }

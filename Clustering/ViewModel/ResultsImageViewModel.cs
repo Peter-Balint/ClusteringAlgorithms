@@ -3,8 +3,10 @@ using Clustering.Model;
 using Clustering.Model.DataRepresentation;
 using Colourful;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace Clustering.ViewModel
 {
@@ -33,6 +35,8 @@ namespace Clustering.ViewModel
 
         public ICommand StepBackCommand { get; }
         public ICommand StepForwardsCommand { get; }
+        public ICommand SaveImageCommand { get; }
+        public ICommand SaveImageSequenceCommand { get; }
 
         public ResultsImageViewModel(MainModel model)
         {
@@ -54,6 +58,8 @@ namespace Clustering.ViewModel
 
             StepBackCommand = new RelayCommand(() => GoToStep(CurrentStep - 1));
             StepForwardsCommand = new RelayCommand(() => GoToStep(CurrentStep + 1));
+            SaveImageCommand = new RelayCommand(SaveCurrentImage);
+            SaveImageSequenceCommand = new RelayCommand(SaveImageSequence);
         }
 
         private void GoToStep(int stepIndex)
@@ -61,6 +67,53 @@ namespace Clustering.ViewModel
             if (stepIndex < 0 || stepIndex >= _model.Results!.GetStepCount()) return;
             CurrentStep = stepIndex;
             OnPropertyChanged(nameof(CurrentImage));
+        }
+
+        private void SaveCurrentImage()
+        {
+            if (_images is null || _images.Length == 0) return;
+            var dialog = new SaveFileDialog
+            {
+                Title = "Save image",
+                Filter = "PNG Image (*.png)|*.png",
+                DefaultExt = ".png",
+                AddExtension = true
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(CurrentImage));
+
+                using var stream = File.Create(dialog.FileName);
+                encoder.Save(stream);
+            }
+        }
+        private void SaveImageSequence()
+        {
+            if (_images is null || _images.Length == 0) return;
+
+            var dialog = new SaveFileDialog
+            {
+                Title = "Save images",
+                Filter = "PNG Image (*.png)|*.png",
+                AddExtension = false
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                string directory = Path.GetDirectoryName(dialog.FileName)!;
+                string baseName = Path.GetFileNameWithoutExtension(dialog.FileName);
+
+                for (int i = 0; i < _images.Length; i++)
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(_images[i].Source));
+
+                    string fileName = Path.Combine(directory, $"{baseName}{i:D3}.png");
+
+                    using var stream = File.Create(fileName);
+                    encoder.Save(stream);
+                }
+            }
         }
     }
 }

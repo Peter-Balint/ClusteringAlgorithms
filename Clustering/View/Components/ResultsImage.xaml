@@ -15,6 +15,8 @@
             <Button Content="Step Back" Command="{Binding StepBackCommand}" Margin="10"/>
             <Button Content="Step Forwards" Command="{Binding StepForwardsCommand}" Margin="10"/>
             <TextBlock Text="{Binding CurrentStep, StringFormat={}Current step: {0}}" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <Button Content="Save Image" Command="{Binding SaveImageCommand}" Margin="10"></Button>
+            <Button Content="Save All" Command="{Binding SaveImageSequenceCommand}" Margin="10"></Button>
         </StackPanel>
         <Image Grid.Column="1" Source="{Binding CurrentImage}"></Image>
     </Grid>
