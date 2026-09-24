@@ -1,4 +1,5 @@
 ﻿
+using Clustering.ViewModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
@@ -13,11 +14,21 @@ namespace Clustering.View.Components
     /// </summary>
     public partial class ResultsSpatial2D : UserControl
     {
+        private ResultsSpatial2DViewModel _viewModel => (ResultsSpatial2DViewModel)DataContext;
         private Canvas canvas;
         public ResultsSpatial2D()
         {
             InitializeComponent();
             Loaded += OnLoaded;
+            DataContextChanged += OnDataContextChanged;
+        }
+
+        private void OnDataContextChanged(object? sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is not ResultsSpatial2DViewModel vm)
+                return;
+
+            DataContextChanged -= OnDataContextChanged;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -56,11 +67,9 @@ namespace Clustering.View.Components
             };
             if (dialog.ShowDialog() == true)
             {
-                canvas.Background = Brushes.AliceBlue;
-
                 Rect rect = new Rect(canvas.RenderSize);
                 RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right,
-                  (int)rect.Bottom, 96d, 96d, System.Windows.Media.PixelFormats.Default);
+                  (int)rect.Bottom, 96d, 96d, PixelFormats.Default);
                 rtb.Render(canvas);
 
                 BitmapEncoder encoder = new PngBitmapEncoder();
@@ -69,6 +78,46 @@ namespace Clustering.View.Components
                 using var stream = File.Create(dialog.FileName);
                 encoder.Save(stream);
             }
+        }
+
+        private void SaveAsImageSequenceButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog
+            {
+                Title = "Save image",
+                Filter = "PNG Image (*.png)|*.png",
+                AddExtension = false
+            };
+            if(dialog.ShowDialog() == true)
+            {
+                _viewModel.IsInteractible = false;
+                int originalStep = _viewModel.CurrentStep;
+
+                string directory = Path.GetDirectoryName(dialog.FileName)!;
+                string baseName = Path.GetFileNameWithoutExtension(dialog.FileName);
+
+                for (int i = 0; i < _viewModel.StepCount; i++)
+                {
+                    _viewModel.GoToStep(i);
+                    Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+                    Rect rect = new Rect(canvas.RenderSize);
+                    RenderTargetBitmap rtb = new RenderTargetBitmap((int)rect.Right,
+                      (int)rect.Bottom, 96d, 96d, PixelFormats.Default);
+                    rtb.Render(canvas);
+
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(rtb));
+
+                    string fileName = Path.Combine(directory, $"{baseName}{i:D3}.png");
+
+                    using var stream = File.Create(fileName);
+                    encoder.Save(stream);
+                }
+
+                _viewModel.GoToStep(originalStep);
+                _viewModel.IsInteractible = true;
+            }
+
         }
     }
 }

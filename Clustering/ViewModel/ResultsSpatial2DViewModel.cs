@@ -17,12 +17,26 @@ namespace Clustering.ViewModel
         public int CurrentStep
         {
             get => _currentStep;
-            set
+            private set
             {
                 if (!_model.ResultsAvailable) return;
-                if (value < 0 || value >= _model.Results!.GetStepCount()) return;
+                if (value < 0 || value >= StepCount) return;
                 _currentStep = value;
                 OnPropertyChanged(nameof(CurrentStep));
+            }
+        }
+
+        public int StepCount => _model.Results!.GetStepCount();
+
+        private bool _isInteractible = true;
+        public bool IsInteractible
+        {
+            get => _isInteractible;
+            set
+            {
+                if (value == _isInteractible) return;
+                _isInteractible = value;
+                OnPropertyChanged(nameof(IsInteractible));
             }
         }
 
@@ -61,9 +75,9 @@ namespace Clustering.ViewModel
             }
         }
 
-        private void GoToStep(int stepIndex)
+        public void GoToStep(int stepIndex)
         {
-            if (stepIndex < 0 || stepIndex >= _model.Results!.GetStepCount()) return;
+            if (stepIndex < 0 || stepIndex >= StepCount) return;
             CurrentStep = stepIndex;
             Points.Clear();
             (IDataPoint[] points, Cluster[] clusters) = _model.Results!.GetStepAt(stepIndex);
@@ -76,5 +90,6 @@ namespace Clustering.ViewModel
                 Points.Add(new SquareViewModel(cluster.CenterPoint,_baseDiameter, _zoomFactor, _offsetX, _offsetY));
             }
         }
+
     }
 }

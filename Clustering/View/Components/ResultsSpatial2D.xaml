@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid>
+    <Grid IsEnabled="{Binding IsInteractible}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="8*"/>
@@ -21,6 +21,7 @@
             <Button Content="Step Forwards" Command="{Binding StepForwardsCommand}" Margin="10"/>
             <TextBlock Text="{Binding CurrentStep, StringFormat={}Current step: {0}}" HorizontalAlignment="Center" TextAlignment="Center"/>
             <Button Content="Save As Image" Click="SaveAsImageButton_Click" Margin="10"/>
+            <Button Content="Save All As Images" Click="SaveAsImageSequenceButton_Click" Margin="10"/>
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="3" Grid.Column="1">
             <ItemsControl x:Name="PointsItemsControl" ItemsSource="{Binding Points}" Background="Aquamarine">
