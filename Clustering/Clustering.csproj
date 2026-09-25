@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Persistence\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Colourful" Version="3.2.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="HelixToolkit.Core.Wpf" Version="2.27.3" />

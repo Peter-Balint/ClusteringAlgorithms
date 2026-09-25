@@ -1,9 +1,6 @@
 ﻿using Clustering.Model.Algorithm;
 using Clustering.Model.DataRepresentation;
 using Clustering.Model.DimensionalityReduction;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using Colourful;
 
 
 namespace Clustering.Model
