@@ -1,7 +1,6 @@
 ﻿
 using Clustering.Model;
 using Clustering.ViewModel.Navigation;
-using System.Windows.Input;
 
 namespace Clustering.ViewModel
 {
@@ -25,15 +24,6 @@ namespace Clustering.ViewModel
                 case DisplayMode.Spatial3D: { DisplayViewModel = new SetupSpatial3DViewModel(_model, progressNavigationService); break; }
                 case DisplayMode.Image: { DisplayViewModel = new SetupImageViewModel(_model, progressNavigationService); break; }
             }
-            
-            //DisplayViewModel.NavigatabilityChanged += BubbleDisplayNavigatabilityChanged;
-        }
-
-        //come back later to check the neccessity of this with the new navigation style
-        private void BubbleDisplayNavigatabilityChanged(object? sender, bool IsEnabled)
-        {
-            if (IsEnabled) EnableNavigation();
-            else DisableNavigation();
         }
     }
 }

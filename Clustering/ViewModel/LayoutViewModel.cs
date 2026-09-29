@@ -24,20 +24,10 @@ namespace Clustering.ViewModel
 
             if (ContentViewModel is ParametersViewModel _) _isNavigationEnabled = false;
             else _isNavigationEnabled = true;
-
-            ContentViewModel.NavigatabilityChanged += OnContentNavigatabilityChanged;
-        }
-
-        //these events might have become obsolete
-        private void OnContentNavigatabilityChanged(object? sender, bool isEnabled)
-        {
-            IsNavigationEnabled = isEnabled;
         }
 
         public override void Dispose()
         {
-            ContentViewModel.NavigatabilityChanged -= OnContentNavigatabilityChanged;
-
             NavigationBarViewModel.Dispose();
             ContentViewModel.Dispose();
 

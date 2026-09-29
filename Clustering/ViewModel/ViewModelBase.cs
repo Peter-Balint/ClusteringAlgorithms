@@ -13,15 +13,5 @@ namespace Clustering.ViewModel
         }
 
         public virtual void Dispose() { }
-
-        public event EventHandler<bool>? NavigatabilityChanged;
-        protected void DisableNavigation()
-        {
-            NavigatabilityChanged?.Invoke(this, false);
-        }
-        protected void EnableNavigation()
-        {
-            NavigatabilityChanged?.Invoke(this, true);
-        }
     }
 }
