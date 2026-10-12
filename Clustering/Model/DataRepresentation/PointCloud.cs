@@ -23,7 +23,7 @@ namespace Clustering.Model.DataRepresentation
             _clusters = new List<Cluster>();
         }
 
-        public IDataPoint AddPoint(double[] coordinates, int clusterId = 0)
+        public IDataPoint AddPoint(double[] coordinates)
         {
             IDataPoint point = CreatePoint(coordinates, GetNewId());
             _points.Add(point.Id, point);

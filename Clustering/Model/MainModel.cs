@@ -18,7 +18,7 @@ namespace Clustering.Model
 
         public StepSequence? Results { get; private set; }
 
-        public event EventHandler ClusteringFinished;
+        public event EventHandler? ClusteringFinished;
         public event EventHandler<int>? StepFinished;
 
         public event EventHandler<IDataPoint>? PointCreated;
@@ -44,22 +44,20 @@ namespace Clustering.Model
 
         private Func<double[],int,IDataPoint> CreatePointFactory()
         {
-            switch (ParameterSet.DisplayMode)
+            return ParameterSet.DisplayMode switch
             {
-                case DisplayMode.Spatial2D:
-                    {
-                        return (coordinates, id) => { return new SpatialPoint(coordinates, 2, id); };
-                    }
-                case DisplayMode.Spatial3D:
-                    {
-                        return (coordinates, id) => { return new SpatialPoint(coordinates, 3, id); };
-                    }
-                case DisplayMode.Image:
-                    {
-                        return (coordinates, id) => { return new LabColorPoint(coordinates, id); };
-                    }
-            }
-            return null!;
+                DisplayMode.Spatial2D =>
+                    (coordinates, id) => new SpatialPoint(coordinates, 2, id),
+
+                DisplayMode.Spatial3D =>
+                    (coordinates, id) => new SpatialPoint(coordinates, 3, id),
+
+                DisplayMode.Image =>
+                    (coordinates, id) => new LabColorPoint(coordinates, id),
+
+                _ => throw new ArgumentOutOfRangeException(
+                    nameof(ParameterSet.DisplayMode))
+            };
         }
 
 

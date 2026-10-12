@@ -1,5 +1,4 @@
-﻿
-namespace Clustering.ViewModel
+﻿namespace Clustering.ViewModel.Navigation
 {
     public class LayoutViewModel : ViewModelBase
     {

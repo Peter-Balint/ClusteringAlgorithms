@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Clustering.View"
         xmlns:component="clr-namespace:Clustering.View.Components"
         xmlns:viewmodel="clr-namespace:Clustering.ViewModel"
+        xmlns:vmNav="clr-namespace:Clustering.ViewModel.Navigation"
         xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
         mc:Ignorable="d"
         Title="Clustering" 
@@ -21,7 +22,7 @@
             <DataTemplate DataType="{x:Type viewmodel:ResultsViewModel}">
                 <local:ResultsView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodel:LayoutViewModel}">
+            <DataTemplate DataType="{x:Type vmNav:LayoutViewModel}">
                 <local:Layout />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodel:ProgressViewModel}">

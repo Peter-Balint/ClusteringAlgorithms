@@ -1,8 +1,6 @@
-﻿
-using Clustering.ViewModel.Navigation;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.ViewModel.Navigation
 {
     public class NavigationBarViewModel : ViewModelBase
     {
