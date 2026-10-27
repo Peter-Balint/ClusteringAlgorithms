@@ -3,12 +3,8 @@ using Clustering.Model.DataRepresentation;
 
 namespace Clustering.ViewModel
 {
-    public class SphereViewModel : ViewModelBase
+    internal class SphereViewModel : Shape3DViewModelBase
     {
-        public double X { get; }
-        public double Y { get; }
-        public double Z { get; }
-        public int Id { get; }
         public int ClusterId { get; }
 
         public SphereViewModel(IDataPoint point)

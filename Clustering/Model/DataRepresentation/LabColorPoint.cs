@@ -18,7 +18,7 @@ namespace Clustering.Model.DataRepresentation
             Id = id;
             ClusterId = clusterId;
         }
-
+        
         /// <param name="index"> L=0,a=1,b=2 </param>
         public double GetCoordinateAt(int index)
         {

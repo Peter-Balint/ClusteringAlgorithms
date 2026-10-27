@@ -13,6 +13,7 @@ namespace Clustering.ViewModel
 
         public bool ResultsAvailable => _model.ResultsAvailable;
 
+        //qol todo: change button availability based currentstep
         private int _currentStep = 0;
         public int CurrentStep
         {

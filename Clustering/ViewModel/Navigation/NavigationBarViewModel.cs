@@ -4,9 +4,9 @@ namespace Clustering.ViewModel.Navigation
 {
     public class NavigationBarViewModel : ViewModelBase
     {
-        public ICommand NavigateToParameters { get; }
-        public ICommand NavigateToSetup { get; }
-        public ICommand NavigateToResult { get; }
+        public NavigateCommand NavigateToParameters { get; }
+        public NavigateCommand NavigateToSetup { get; }
+        public NavigateCommand NavigateToResult { get; }
 
         public NavigationBarViewModel(
             INavigationService parametersNavigationService,

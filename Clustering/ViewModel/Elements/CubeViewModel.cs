@@ -3,13 +3,8 @@ using Clustering.Model.DataRepresentation;
 
 namespace Clustering.ViewModel
 {
-    internal class CubeViewModel
+    internal class CubeViewModel : Shape3DViewModelBase
     {
-        public double X { get; }
-        public double Y { get; }
-        public double Z { get; }
-        public int Id { get; }
-
         public CubeViewModel(IDataPoint point)
         {
             X = point.GetCoordinateAt(0);

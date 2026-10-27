@@ -3,7 +3,7 @@
 namespace Clustering.ViewModel
 {
 
-    public class ViewModelBase : INotifyPropertyChanged, IDisposable
+    public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

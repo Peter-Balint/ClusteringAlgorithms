@@ -23,7 +23,7 @@ namespace Clustering
 
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<ModalNavigationStore>();
-            services.AddSingleton<CloseModalNavigationService>();
+            services.AddTransient<CloseModalNavigationService>();
 
             services.AddTransient<ParametersViewModel>(s =>
                 new ParametersViewModel(s.GetRequiredService<MainModel>(), CreateSetupNavigationService(s)));

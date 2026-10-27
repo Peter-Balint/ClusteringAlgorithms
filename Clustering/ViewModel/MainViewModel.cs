@@ -1,4 +1,4 @@
-﻿using Clustering.Model;
+﻿
 using Clustering.ViewModel.Navigation;
 
 namespace Clustering.ViewModel
@@ -9,7 +9,7 @@ namespace Clustering.ViewModel
         private readonly ModalNavigationStore _modalNavigationStore;
 
         public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
-        public ViewModelBase CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
+        public ViewModelBase? CurrentModalViewModel => _modalNavigationStore.CurrentViewModel;
         public bool IsOpen => _modalNavigationStore.IsOpen;
 
         public MainViewModel(NavigationStore navigationStore, ModalNavigationStore modalNavigationStore)

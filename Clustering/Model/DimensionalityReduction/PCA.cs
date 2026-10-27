@@ -63,7 +63,6 @@ namespace Clustering.Model.DimensionalityReduction
                     pointCoordinates[i][j] = results.ElementAt(i).PCAFeatures[j];
                 }
             }
-            Console.WriteLine(pointCoordinates);
         }
     }
 }

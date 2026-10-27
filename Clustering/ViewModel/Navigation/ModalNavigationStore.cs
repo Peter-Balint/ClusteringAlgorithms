@@ -12,7 +12,7 @@ namespace Clustering.ViewModel.Navigation
             {
                 _currentViewModel?.Dispose();
                 _currentViewModel = value;
-                OnCurrentViewModelChanged();
+                CurrentViewModelChanged?.Invoke();
             }
         }
 
@@ -24,11 +24,5 @@ namespace Clustering.ViewModel.Navigation
         {
             CurrentViewModel = null;
         }
-
-        private void OnCurrentViewModelChanged()
-        {
-            CurrentViewModelChanged?.Invoke();
-        }
-
     }
 }

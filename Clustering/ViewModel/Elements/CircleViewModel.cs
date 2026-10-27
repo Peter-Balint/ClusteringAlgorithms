@@ -54,30 +54,18 @@ namespace Clustering.ViewModel
         public ICommand OnClickCommand { get; private set; } = null!;
         public event EventHandler? PointClicked;
 
-        public CircleViewModel(double  x, double y, double baseDiameter, int id, double zoomFactor, double offsetX, double offsetY)
-        {
-            SetShared(baseDiameter, zoomFactor, offsetX, offsetY);
-            X = x;
-            Y = y;
-            Id = id;
-        }
         public CircleViewModel(IDataPoint point, double baseDiameter, double zoomFactor, double offsetX, double offsetY)
         {
-            SetShared(baseDiameter, zoomFactor, offsetX, offsetY);
-            X = point.GetCoordinateAt(0);
-            Y = point.GetCoordinateAt(1);
-            Id = point.Id;
-            _clusterId = point.ClusterId;
-        }
-
-        private void SetShared(double baseDiameter, double zoomfactor, double offsetX, double offsetY)
-        {
-            Diameter = baseDiameter*zoomfactor;
-            _zoomFactor = zoomfactor;
+            Diameter = baseDiameter * zoomFactor;
+            _zoomFactor = zoomFactor;
             _offsetX = offsetX;
             _offsetY = offsetY;
             _isSelected = false;
             OnClickCommand = new RelayCommand(() => PointClicked?.Invoke(this, EventArgs.Empty));
+            X = point.GetCoordinateAt(0);
+            Y = point.GetCoordinateAt(1);
+            Id = point.Id;
+            _clusterId = point.ClusterId;
         }
 
         public override void Scale(double offsetX, double offsetY, double zoomFactor, int baseDiameter)
