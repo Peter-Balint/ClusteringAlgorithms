@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="Clustering.csproj" />
+  <Project Path="Clustering.Model/Clustering.Model.csproj" Id="398dc047-89cd-40ae-902b-8562b1529f09" />
+  <Project Path="CLustering.WPF\Clustering.WPF.csproj" />
 </Solution>
