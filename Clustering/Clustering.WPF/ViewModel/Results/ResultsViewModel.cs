@@ -1,7 +1,7 @@
 ﻿
 using Clustering.Model;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class ResultsViewModel : ViewModelBase
     {

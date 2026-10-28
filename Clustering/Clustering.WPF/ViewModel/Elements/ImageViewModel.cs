@@ -4,7 +4,7 @@ using Colourful;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class ImageViewModel
     {

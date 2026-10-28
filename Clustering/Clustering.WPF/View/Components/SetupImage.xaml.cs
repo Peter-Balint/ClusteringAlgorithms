@@ -1,7 +1,7 @@
 ﻿
 using System.Windows.Controls;
 
-namespace Clustering.View.Components
+namespace Clustering.WPF.View.Components
 {
     /// <summary>
     /// Interaction logic for SetupImage.xaml

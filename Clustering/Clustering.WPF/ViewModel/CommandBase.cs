@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public abstract class CommandBase : ICommand
     {

@@ -1,7 +1,7 @@
 ﻿
 using Clustering.Model.DataRepresentation;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class SphereViewModel : Shape3DViewModelBase
     {

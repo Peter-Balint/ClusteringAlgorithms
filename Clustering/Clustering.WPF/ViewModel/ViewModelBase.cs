@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
 
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable

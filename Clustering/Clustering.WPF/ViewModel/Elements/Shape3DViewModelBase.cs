@@ -1,5 +1,5 @@
 ﻿
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal abstract class Shape3DViewModelBase : ViewModelBase
     {

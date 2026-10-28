@@ -1,5 +1,5 @@
 ﻿
-using Clustering.ViewModel;
+using Clustering.WPF.ViewModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows;
@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Clustering.View.Components
+namespace Clustering.WPF.View.Components
 {
     /// <summary>
     /// Interaction logic for ResultsSpatial2D.xaml

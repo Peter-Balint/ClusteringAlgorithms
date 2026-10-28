@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Modeling.Diagrams;
 using DrawingColor = System.Drawing.Color;
 using MediaColor = System.Windows.Media.Color;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class CircleViewModel : Shape2DViewModelBase
     {

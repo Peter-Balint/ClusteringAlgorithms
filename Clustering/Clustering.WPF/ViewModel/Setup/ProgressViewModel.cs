@@ -1,9 +1,9 @@
 ﻿using Clustering.Model;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class ProgressViewModel : ViewModelBase
     {

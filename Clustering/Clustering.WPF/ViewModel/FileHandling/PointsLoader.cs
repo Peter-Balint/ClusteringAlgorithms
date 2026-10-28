@@ -3,7 +3,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Windows;
 
-namespace Clustering.ViewModel.FileHandling
+namespace Clustering.WPF.ViewModel.FileHandling
 {
     internal static class PointsLoader
     {

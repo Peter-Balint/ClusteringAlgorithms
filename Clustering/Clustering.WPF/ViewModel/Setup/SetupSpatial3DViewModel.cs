@@ -1,13 +1,13 @@
 ﻿
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
-using Clustering.ViewModel.FileHandling;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.FileHandling;
+using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using System.Numerics;
 using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class SetupSpatial3DViewModel : ViewModelBase
     {

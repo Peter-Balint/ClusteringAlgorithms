@@ -1,12 +1,12 @@
 ﻿
 using Clustering.Model;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class SetupImageViewModel : ViewModelBase
     {

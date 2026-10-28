@@ -1,15 +1,15 @@
 ﻿
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
-using Clustering.ViewModel.FileHandling;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.FileHandling;
+using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class SetupSpatial2DViewModel : Spatial2DViewModelBase
     {

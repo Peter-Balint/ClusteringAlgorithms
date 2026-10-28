@@ -1,11 +1,11 @@
 ﻿
 using Clustering.Model;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class ParametersViewModel : ViewModelBase
     {

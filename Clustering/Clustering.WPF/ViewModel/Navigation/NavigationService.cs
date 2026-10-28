@@ -1,4 +1,4 @@
-﻿namespace Clustering.ViewModel.Navigation
+﻿namespace Clustering.WPF.ViewModel.Navigation
 {
     //originally class of LayoutNavigationService
     class NavigationService<TViewModel> : INavigationService where TViewModel : ViewModelBase

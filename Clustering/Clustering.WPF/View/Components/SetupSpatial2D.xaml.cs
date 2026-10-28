@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Clustering.View.Components
+namespace Clustering.WPF.View.Components
 {
     /// <summary>
     /// Interaction logic for SetupSpatial2D.xaml

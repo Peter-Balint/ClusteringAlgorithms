@@ -1,6 +1,6 @@
 ﻿
 
-namespace Clustering.ViewModel.Navigation
+namespace Clustering.WPF.ViewModel.Navigation
 {
     public class ModalNavigationStore
     {

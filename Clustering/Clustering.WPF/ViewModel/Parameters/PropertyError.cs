@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.ObjectModel;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class PropertyError
     {

@@ -1,4 +1,4 @@
-﻿using Clustering.ViewModel;
+﻿using Clustering.WPF.ViewModel;
 using HelixToolkit.Wpf;
 using Microsoft.VisualStudio.Modeling.Diagrams;
 using System.Windows;
@@ -9,7 +9,7 @@ using DrawingColor = System.Drawing.Color;
 using MediaColor = System.Windows.Media.Color;
 
 
-namespace Clustering.View.Components
+namespace Clustering.WPF.View.Components
 {
     public partial class ResultsSpatial3D : UserControl
     {

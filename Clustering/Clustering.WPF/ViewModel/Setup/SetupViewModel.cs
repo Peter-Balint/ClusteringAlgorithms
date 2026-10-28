@@ -1,8 +1,8 @@
 ﻿
 using Clustering.Model;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.Navigation;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class SetupViewModel : ViewModelBase
     {

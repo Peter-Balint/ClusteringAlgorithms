@@ -1,5 +1,5 @@
 ﻿
-namespace Clustering.ViewModel.Navigation
+namespace Clustering.WPF.ViewModel.Navigation
 {
     public class ModalNavigationService<TViewModel> : INavigationService
         where TViewModel : ViewModelBase

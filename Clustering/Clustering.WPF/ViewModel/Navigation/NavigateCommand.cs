@@ -1,7 +1,7 @@
 ﻿
 using System.Windows;
 
-namespace Clustering.ViewModel.Navigation
+namespace Clustering.WPF.ViewModel.Navigation
 {
     public class NavigateCommand : CommandBase
     {

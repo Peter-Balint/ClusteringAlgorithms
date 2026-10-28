@@ -1,5 +1,5 @@
 ﻿
-using Clustering.ViewModel;
+using Clustering.WPF.ViewModel;
 using HelixToolkit.Wpf;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-namespace Clustering.View.Components
+namespace Clustering.WPF.View.Components
 {
     public partial class SetupSpatial3D : UserControl
     {

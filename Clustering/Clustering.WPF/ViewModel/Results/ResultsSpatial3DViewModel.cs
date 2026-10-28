@@ -2,7 +2,7 @@
 using Clustering.Model;
 using Clustering.Model.DataRepresentation;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     internal class ResultsSpatial3DViewModel : ViewModelBase
     {

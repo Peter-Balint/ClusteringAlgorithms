@@ -1,10 +1,10 @@
 ﻿using Clustering.Model;
-using Clustering.ViewModel;
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel;
+using Clustering.WPF.ViewModel.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
-namespace Clustering
+namespace Clustering.WPF
 {
 
     /// <summary>

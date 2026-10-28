@@ -1,7 +1,7 @@
 ﻿
-using Clustering.ViewModel.Navigation;
+using Clustering.WPF.ViewModel.Navigation;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     class MainViewModel : ViewModelBase
     {

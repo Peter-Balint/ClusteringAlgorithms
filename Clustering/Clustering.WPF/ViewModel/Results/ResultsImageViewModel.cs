@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.IO;
 
-namespace Clustering.ViewModel
+namespace Clustering.WPF.ViewModel
 {
     public class ResultsImageViewModel : ViewModelBase
     {
