@@ -4,7 +4,7 @@
     {
         public int Id { get; }
         public int Dimension { get; }
-        public int ClusterId {  get; set; } 
+        public int ClusterId { get; set; }
 
         public double GetCoordinateAt(int index);
         public double[] GetAllCoordinates();

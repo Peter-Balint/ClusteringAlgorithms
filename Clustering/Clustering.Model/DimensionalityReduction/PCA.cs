@@ -20,10 +20,10 @@ namespace Clustering.Model.DimensionalityReduction
             var mlContext = new MLContext();
 
             InputData[] data = new InputData[pointCoordinates.Count()];
-            for(int i = 0; i < pointCoordinates.Count();i++)
+            for (int i = 0; i < pointCoordinates.Count(); i++)
             {
                 float[] convertedCoordinates = new float[pointCoordinates[i].Length];
-                for(int j = 0; j < convertedCoordinates.Length; j++)
+                for (int j = 0; j < convertedCoordinates.Length; j++)
                 {
                     convertedCoordinates[j] = (float)pointCoordinates[i][j];
                 }
@@ -55,7 +55,7 @@ namespace Clustering.Model.DimensionalityReduction
             var results = mlContext.Data.CreateEnumerable<TransformedData>(
                 transformedData, reuseRowObject: false);
 
-            for(int i=0;i<results.Count();i++)
+            for (int i = 0; i < results.Count(); i++)
             {
                 pointCoordinates[i] = new double[toDim];
                 for (int j = 0; j < toDim; j++)

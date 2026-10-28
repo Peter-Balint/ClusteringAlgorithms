@@ -32,7 +32,7 @@ namespace Clustering.WPF.ViewModel
 
         private CircleViewModel? _selectedPoint = null;
         public CircleViewModel? SelectedPoint
-        { 
+        {
             get => _selectedPoint;
             set
             {
@@ -43,7 +43,7 @@ namespace Clustering.WPF.ViewModel
         }
 
         private double? _clickedX = null;
-        public double? ClickedX 
+        public double? ClickedX
         {
             get
             {
@@ -80,9 +80,9 @@ namespace Clustering.WPF.ViewModel
         public ObservableCollection<Shape2DViewModelBase> Points { get; set; }
 
         public ICommand AddPointCommand { get; }
-        public ICommand AddCenterCommand {  get; }
+        public ICommand AddCenterCommand { get; }
         public ICommand RemovePointCommand { get; }
-        public ICommand SwitchToSelectModeCommand {  get; }
+        public ICommand SwitchToSelectModeCommand { get; }
         public ICommand SwitchToDragModeCommand { get; }
         public ICommand RunCommand { get; }
         public ICommand LoadPointsCommand { get; }
@@ -94,9 +94,9 @@ namespace Clustering.WPF.ViewModel
 
             Points = new ObservableCollection<Shape2DViewModelBase>();
             IEnumerable<IDataPoint> modelPoints = _mainModel.GetAllPoints();
-            foreach(IDataPoint point in modelPoints)
+            foreach (IDataPoint point in modelPoints)
             {
-                Points.Add(new CircleViewModel(point,_baseDiameter,_zoomFactor,_offsetX,_offsetY));
+                Points.Add(new CircleViewModel(point, _baseDiameter, _zoomFactor, _offsetX, _offsetY));
             }
 
             foreach (CircleViewModel point in Points)
@@ -119,14 +119,14 @@ namespace Clustering.WPF.ViewModel
             _mainModel.PointsCreated += OnPointsCreated;
             _mainModel.CenterCreated += OnCenterCreated;
 
-            SwitchToSelectModeCommand = new RelayCommand(() => 
-                { 
+            SwitchToSelectModeCommand = new RelayCommand(() =>
+                {
                     CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedSelect);
                     IsSelectMode = true;
                     OnPropertyChanged(nameof(CanvasClickedCommand));
                 });
-            SwitchToDragModeCommand = new RelayCommand(() => 
-                { 
+            SwitchToDragModeCommand = new RelayCommand(() =>
+                {
                     CanvasClickedCommand = new RelayCommand<MouseButtonEventArgs>(OnCanvasClickedDrag);
                     IsSelectMode = false;
                     OnPropertyChanged(nameof(CanvasClickedCommand));
@@ -138,7 +138,7 @@ namespace Clustering.WPF.ViewModel
 
         private void OnPointClicked(object? sender, EventArgs e)
         {
-            if(sender is not null && sender is CircleViewModel point && point!= SelectedPoint)
+            if (sender is not null && sender is CircleViewModel point && point != SelectedPoint)
             {
                 SelectedPoint?.IsSelected = false;
                 ClickedX = ClickedY = null;
@@ -166,7 +166,7 @@ namespace Clustering.WPF.ViewModel
             SelectedPoint = null;
             ClickedX = ClickedY = null;
         }
-        
+
 
         private void AddPoint()
         {
@@ -205,7 +205,7 @@ namespace Clustering.WPF.ViewModel
         }
         private void OnPointsCreated(object? sender, IDataPoint[] points)
         {
-            foreach(IDataPoint point in points)
+            foreach (IDataPoint point in points)
             {
                 CircleViewModel pointVM = new CircleViewModel(point, _baseDiameter, _zoomFactor, _offsetX, _offsetY);
                 pointVM.PointClicked += OnPointClicked;
@@ -240,7 +240,7 @@ namespace Clustering.WPF.ViewModel
             Points.Clear();
             if (pointsFromFile.First().Length > 2)
             {
-                _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(),2);
+                _mainModel.NewPointSetFromHigherDimension(pointsFromFile.ToArray(), 2);
             }
             else
             {

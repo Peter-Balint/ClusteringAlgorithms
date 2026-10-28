@@ -18,7 +18,7 @@ namespace Clustering.WPF.ViewModel
                 OnPropertyChanged(nameof(PutCenterToX));
             }
         }
-        public abstract double PutCenterToX {  get; }
+        public abstract double PutCenterToX { get; }
 
         private double _y;
         public double Y

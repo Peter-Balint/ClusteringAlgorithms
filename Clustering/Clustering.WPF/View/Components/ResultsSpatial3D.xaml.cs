@@ -50,10 +50,10 @@ namespace Clustering.WPF.View.Components
 
         private void OnStepAdded(object? sender, (SphereViewModel[] points, CubeViewModel[] centers) args)
         {
-            
+
             SphereVisual3D[] spheres = new SphereVisual3D[args.points.Length];
             CubeVisual3D[] centers = new CubeVisual3D[args.centers.Length];
-            for(int i = 0; i < args.points.Length; i++)
+            for (int i = 0; i < args.points.Length; i++)
             {
                 spheres[i] = new SphereVisual3D
                 {
@@ -61,7 +61,7 @@ namespace Clustering.WPF.View.Components
                     Radius = 0.5,
                     Fill = new SolidColorBrush(GetColorFromId(args.points[i].ClusterId))
                 };
-                if(_stepCount == 0) Viewport.Children.Add(spheres[i]);
+                if (_stepCount == 0) Viewport.Children.Add(spheres[i]);
             }
             for (int i = 0; i < args.centers.Length; i++)
             {
@@ -83,12 +83,12 @@ namespace Clustering.WPF.View.Components
         {
             if (_currentStep <= 0) return;
             SphereVisual3D[] currentSpheres = _stepSpheres.ElementAt(_currentStep);
-            foreach(var sphere in currentSpheres)
+            foreach (var sphere in currentSpheres)
             {
                 Viewport.Children.Remove(sphere);
             }
             CubeVisual3D[] currentCenters = _stepCenters.ElementAt(_currentStep);
-            foreach(var cube in currentCenters)
+            foreach (var cube in currentCenters)
             {
                 Viewport.Children.Remove(cube);
             }
@@ -109,7 +109,7 @@ namespace Clustering.WPF.View.Components
         }
         private void StepForwardButton_Click(Object? sender, RoutedEventArgs e)
         {
-            if (_currentStep >= _stepCount-1) return;
+            if (_currentStep >= _stepCount - 1) return;
             SphereVisual3D[] currentSpheres = _stepSpheres.ElementAt(_currentStep);
             foreach (var sphere in currentSpheres)
             {

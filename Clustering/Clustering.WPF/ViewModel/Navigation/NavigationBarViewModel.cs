@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-namespace Clustering.WPF.ViewModel.Navigation
+﻿namespace Clustering.WPF.ViewModel.Navigation
 {
     public class NavigationBarViewModel : ViewModelBase
     {

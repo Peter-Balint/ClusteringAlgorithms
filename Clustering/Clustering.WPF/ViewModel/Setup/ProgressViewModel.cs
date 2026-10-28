@@ -12,7 +12,7 @@ namespace Clustering.WPF.ViewModel
 
         private int _currentStep = 1;
         public string StepText => $"Current step: {_currentStep}";
-        public bool IsFinished {  get; private set; }
+        public bool IsFinished { get; private set; }
 
         public ICommand FinishCommand { get; }
         public ICommand NavigateToResultsCommand { get; }

@@ -4,9 +4,9 @@ using Clustering.Model.DataRepresentation;
 using Colourful;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.IO;
 
 namespace Clustering.WPF.ViewModel
 {
@@ -50,7 +50,7 @@ namespace Clustering.WPF.ViewModel
 
             (IDataPoint[] pointsAtZero, _) = _model.Results.GetStepAt(0);
             _images[0] = new ImageViewModel(_imageHandler.ImageSource!);
-            for(int i = 1; i < stepCount; i++)
+            for (int i = 1; i < stepCount; i++)
             {
                 (IDataPoint[] points, Cluster[] clusters) = _model.Results.GetStepAt(i);
                 _images[i] = new ImageViewModel(_imageHandler.ImageWidth, _imageHandler.ImageHeight, converter, points, clusters);

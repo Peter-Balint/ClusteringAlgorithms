@@ -12,11 +12,11 @@ namespace Clustering.Model
         public ClusterInitializationMethod ClusterInitializationMethod { get; set; }
         public RandomizationType RandomizationType { get; set; }
         public int Seed { get; set; }
-        public int InitialClusterNumber{ get; set; }
+        public int InitialClusterNumber { get; set; }
 
         public Random GetRandomInstance()
         {
-            if(RandomizationType == RandomizationType.Random) return new Random();
+            if (RandomizationType == RandomizationType.Random) return new Random();
             else return new Random(Seed);
         }
 

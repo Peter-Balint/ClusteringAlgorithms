@@ -7,13 +7,13 @@
 
         private bool _isNavigationEnabled;
         public bool IsNavigationEnabled
-        { 
+        {
             get => _isNavigationEnabled;
             private set
             {
                 _isNavigationEnabled = value;
                 OnPropertyChanged(nameof(IsNavigationEnabled));
-            } 
+            }
         }
 
         public LayoutViewModel(NavigationBarViewModel navigationBarViewModel, ViewModelBase contentViewModel)

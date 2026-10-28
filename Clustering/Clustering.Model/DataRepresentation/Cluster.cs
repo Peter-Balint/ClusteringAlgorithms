@@ -10,7 +10,7 @@ namespace Clustering.Model.DataRepresentation
         public Cluster(int id, IDataPoint? centerPoint = null)
         {
             Id = id;
-            if(centerPoint is not null) CenterPoint = centerPoint;
+            if (centerPoint is not null) CenterPoint = centerPoint;
         }
     }
 }

@@ -14,9 +14,9 @@ namespace Clustering.WPF.ViewModel.Navigation
 
         public override void Execute(object? parameter)
         {
-            if(parameter != null && parameter is string warning)
+            if (parameter != null && parameter is string warning)
             {
-                if(MessageBox.Show(warning, "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                if (MessageBox.Show(warning, "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     _navigationService.Navigate();
                 }

@@ -17,13 +17,13 @@ namespace Clustering.WPF.ViewModel
         }
 
         public override double PutCenterToX => X * _zoomFactor - _offsetX * _zoomFactor - SideLength / 2;
-        public override double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - SideLength / 2;
+        public override double PutCenterToY => Y * _zoomFactor - _offsetY * _zoomFactor - SideLength / 2;
 
         public SquareViewModel(IDataPoint point, double baseSize, double zoomFactor, double offsetX, double offsetY)
         {
             X = point.GetCoordinateAt(0);
             Y = point.GetCoordinateAt(1);
-            SideLength = baseSize/2*zoomFactor;
+            SideLength = baseSize / 2 * zoomFactor;
             _zoomFactor = zoomFactor;
             _offsetX = offsetX;
             _offsetY = offsetY;
@@ -34,7 +34,7 @@ namespace Clustering.WPF.ViewModel
             _offsetX = offsetX;
             _offsetY = offsetY;
             _zoomFactor = zoomFactor;
-            SideLength = baseSize/2 * zoomFactor;
+            SideLength = baseSize / 2 * zoomFactor;
             OnPropertyChanged();
         }
     }

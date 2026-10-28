@@ -1,6 +1,5 @@
 ﻿
 using Clustering.Model.DataRepresentation;
-using System.Collections.Immutable;
 
 namespace Clustering.Model
 {
@@ -19,14 +18,14 @@ namespace Clustering.Model
         public void SaveStepCopy(IDataPoint[] points, Cluster[] clusters)
         {
             IDataPoint[] copiedPoints = new IDataPoint[points.Length];
-            for(int i=0; i<points.Length; i++)
+            for (int i = 0; i < points.Length; i++)
             {
                 copiedPoints[i] = points[i].DeepCopy();
             }
             _points.Add(copiedPoints);
 
             Cluster[] copiedClusters = new Cluster[clusters.Length];
-            for(int i=0; i<clusters.Length; i++)
+            for (int i = 0; i < clusters.Length; i++)
             {
                 copiedClusters[i] = new Cluster(clusters[i].Id, clusters[i].CenterPoint.DeepCopy());
             }
@@ -38,9 +37,9 @@ namespace Clustering.Model
             return _points.Count;
         }
 
-        public (IDataPoint[],Cluster[]) GetStepAt(int stepIndex)
+        public (IDataPoint[], Cluster[]) GetStepAt(int stepIndex)
         {
-            return (_points.ElementAt(stepIndex),_clusters.ElementAt(stepIndex));
+            return (_points.ElementAt(stepIndex), _clusters.ElementAt(stepIndex));
         }
     }
 }

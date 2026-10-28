@@ -63,8 +63,8 @@ namespace Clustering.WPF.ViewModel
 
             ZoomCommand = new RelayCommand<MouseWheelEventArgs>(OnCanvasScrolling);
 
-            StepBackCommand = new RelayCommand(()=>GoToStep(CurrentStep-1));
-            StepForwardsCommand = new RelayCommand(() => GoToStep(CurrentStep+1));
+            StepBackCommand = new RelayCommand(() => GoToStep(CurrentStep - 1));
+            StepForwardsCommand = new RelayCommand(() => GoToStep(CurrentStep + 1));
         }
 
 
@@ -82,13 +82,13 @@ namespace Clustering.WPF.ViewModel
             CurrentStep = stepIndex;
             Points.Clear();
             (IDataPoint[] points, Cluster[] clusters) = _model.Results!.GetStepAt(stepIndex);
-            foreach(IDataPoint point in points)
+            foreach (IDataPoint point in points)
             {
                 Points.Add(new CircleViewModel(point, _baseDiameter, _zoomFactor, _offsetX, _offsetY));
             }
-            foreach(Cluster cluster in clusters)
+            foreach (Cluster cluster in clusters)
             {
-                Points.Add(new SquareViewModel(cluster.CenterPoint,_baseDiameter, _zoomFactor, _offsetX, _offsetY));
+                Points.Add(new SquareViewModel(cluster.CenterPoint, _baseDiameter, _zoomFactor, _offsetX, _offsetY));
             }
         }
 

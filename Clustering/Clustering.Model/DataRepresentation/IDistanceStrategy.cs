@@ -7,14 +7,14 @@ namespace Clustering.Model.DataRepresentation
     {
         double Distance(IDataPoint a, IDataPoint b);
     }
-    internal interface ISpatialDistanceStrategy : IDistanceStrategy{}
+    internal interface ISpatialDistanceStrategy : IDistanceStrategy { }
 
     internal class ManhattanDistance : ISpatialDistanceStrategy
     {
         public double Distance(IDataPoint a, IDataPoint b)
         {
             double distance = 0;
-            for(int i=0; i<a.Dimension; i++)
+            for (int i = 0; i < a.Dimension; i++)
             {
                 distance += Math.Abs(a.GetCoordinateAt(i) - b.GetCoordinateAt(i));
             }
@@ -28,7 +28,7 @@ namespace Clustering.Model.DataRepresentation
             double distance = 0;
             for (int i = 0; i < a.Dimension; i++)
             {
-                distance += Math.Pow(a.GetCoordinateAt(i) - b.GetCoordinateAt(i),2);
+                distance += Math.Pow(a.GetCoordinateAt(i) - b.GetCoordinateAt(i), 2);
             }
             return Math.Sqrt(distance);
         }

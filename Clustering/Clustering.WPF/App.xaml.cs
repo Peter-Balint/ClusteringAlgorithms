@@ -27,7 +27,7 @@ namespace Clustering.WPF
 
             services.AddTransient<ParametersViewModel>(s =>
                 new ParametersViewModel(s.GetRequiredService<MainModel>(), CreateSetupNavigationService(s)));
-            services.AddTransient<SetupViewModel>(s => 
+            services.AddTransient<SetupViewModel>(s =>
                 new SetupViewModel(s.GetRequiredService<MainModel>(), CreateProgressNavigationService(s)));
             services.AddTransient<ResultsViewModel>();
             services.AddTransient<NavigationBarViewModel>(CreateNavigationBarViewModel);
@@ -100,7 +100,7 @@ namespace Clustering.WPF
                 () => serviceProvider.GetRequiredService<NavigationBarViewModel>()
                 );
         }
-        
+
     }
 
 }

@@ -46,7 +46,7 @@ namespace Clustering.Model.Algorithm
             int[] pointIds = pointCloud.GetIds();
             Random rand = _parameters.GetRandomInstance();
 
-            if(initialCenters is null || _parameters.ClusterInitializationMethod == ClusterInitializationMethod.RandomDataPoint)
+            if (initialCenters is null || _parameters.ClusterInitializationMethod == ClusterInitializationMethod.RandomDataPoint)
             {
                 for (int i = 0; i < _parameters.InitialClusterNumber; i++)
                 {
@@ -73,7 +73,7 @@ namespace Clustering.Model.Algorithm
 
             IDataPoint[] points = pointCloud.GetAllPoints().ToArray();
             Cluster[] clusters = pointCloud.GetClusters().ToArray();
-            
+
             results.SaveStepCopy(points, clusters);
 
             int currentStep = 0;
@@ -104,7 +104,7 @@ namespace Clustering.Model.Algorithm
                 foreach (Cluster cluster in clusters)
                 {
                     distance = _distanceStrategy.Distance(point, cluster.CenterPoint);
-                    if(distance <= minDistance)
+                    if (distance <= minDistance)
                     {
                         minDistance = distance;
                         closestCluster = cluster;
@@ -128,9 +128,9 @@ namespace Clustering.Model.Algorithm
                         double maxDelta = 0; double delta;
                         int stepCount = pastSteps.GetStepCount();
                         if (stepCount < 2) return false;
-                        Cluster[] lastStepClusters = pastSteps.GetStepAt(stepCount-1).Item2;
-                        Cluster[] stepBeforeClusters = pastSteps.GetStepAt(stepCount-2).Item2;
-                        for(int i = 0; i < lastStepClusters.Length; i++)
+                        Cluster[] lastStepClusters = pastSteps.GetStepAt(stepCount - 1).Item2;
+                        Cluster[] stepBeforeClusters = pastSteps.GetStepAt(stepCount - 2).Item2;
+                        for (int i = 0; i < lastStepClusters.Length; i++)
                         {
                             delta = _distanceStrategy.Distance(lastStepClusters[i].CenterPoint, stepBeforeClusters[i].CenterPoint);
                             if (delta > maxDelta) maxDelta = delta;
@@ -148,34 +148,34 @@ namespace Clustering.Model.Algorithm
             int pointNumber;
             //nem euklidészi metrikánál ugyanaz az átlag?
             double[] centerCoordinates;
-            foreach(Cluster cluster in clusters)
+            foreach (Cluster cluster in clusters)
             {
                 centerCoordinates = new double[points[0].Dimension];
                 pointsInCluster = points.Where((p) => p.ClusterId == cluster.Id).ToArray();
                 pointNumber = pointsInCluster.Length;
-                foreach(IDataPoint point in pointsInCluster)
+                foreach (IDataPoint point in pointsInCluster)
                 {
-                    for(int i=0; i<point.Dimension; i++)
+                    for (int i = 0; i < point.Dimension; i++)
                     {
-                        centerCoordinates[i] += point.GetCoordinateAt(i)/pointNumber;
+                        centerCoordinates[i] += point.GetCoordinateAt(i) / pointNumber;
                     }
                 }
-                if(_parameters.CenterType == CenterType.Mean)
+                if (_parameters.CenterType == CenterType.Mean)
                 {
                     //cluster centers don't need their own id when they are not actual points, and if they are they aren't assigned like this
                     cluster.CenterPoint = CreatePoint(centerCoordinates, -1);
                 }
-                else if(_parameters.CenterType == CenterType.Medoid)
+                else if (_parameters.CenterType == CenterType.Medoid)
                 {
                     //what happens if cluster is empty? for now not possible, but could become problematic later
                     IDataPoint centerMean = CreatePoint(centerCoordinates, -1);
                     IDataPoint bestRepresentative = pointsInCluster[0];
                     double minDistance = _distanceStrategy.Distance(bestRepresentative, centerMean);
                     double distance;
-                    for(int i=1;i<pointsInCluster.Length;i++)
+                    for (int i = 1; i < pointsInCluster.Length; i++)
                     {
                         distance = _distanceStrategy.Distance(pointsInCluster[i], centerMean);
-                        if(distance < minDistance)
+                        if (distance < minDistance)
                         {
                             minDistance = distance;
                             bestRepresentative = pointsInCluster[i];

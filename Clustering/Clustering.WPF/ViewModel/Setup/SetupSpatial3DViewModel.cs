@@ -4,7 +4,6 @@ using Clustering.Model.DataRepresentation;
 using Clustering.WPF.ViewModel.FileHandling;
 using Clustering.WPF.ViewModel.Navigation;
 using CommunityToolkit.Mvvm.Input;
-using System.Numerics;
 using System.Windows.Input;
 
 namespace Clustering.WPF.ViewModel
@@ -55,7 +54,8 @@ namespace Clustering.WPF.ViewModel
         private void OnPointsCreated(object? sender, IDataPoint[] points)
         {
             SphereViewModel[] spheres = new SphereViewModel[points.Length];
-            for (int i = 0; i < spheres.Length; i++){
+            for (int i = 0; i < spheres.Length; i++)
+            {
                 spheres[i] = new SphereViewModel(points[i]);
             }
             PointsAdded?.Invoke(this, spheres);

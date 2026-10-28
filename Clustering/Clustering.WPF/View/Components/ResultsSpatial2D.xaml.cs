@@ -88,7 +88,7 @@ namespace Clustering.WPF.View.Components
                 Filter = "PNG Image (*.png)|*.png",
                 AddExtension = false
             };
-            if(dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
                 _viewModel.IsInteractible = false;
                 int originalStep = _viewModel.CurrentStep;

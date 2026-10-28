@@ -28,12 +28,12 @@ namespace Clustering.Model
         public bool ResultsAvailable => Results != null;
 
         private List<IDataPoint> _handPickedInitialCenters;
-        public bool IsRunnable => ParameterSet.InitialClusterNumber !=0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber 
+        public bool IsRunnable => ParameterSet.InitialClusterNumber != 0 && _pointCloud.PointCount > ParameterSet.InitialClusterNumber
             && (ParameterSet.ClusterInitializationMethod == ClusterInitializationMethod.RandomDataPoint || _handPickedInitialCenters.Count >= ParameterSet.InitialClusterNumber);
-        
+
         private bool _firstParameterSet = true;
 
-        public MainModel() 
+        public MainModel()
         {
             ParameterSet = new ParameterSet();
             PreviousParameterSet = null;
@@ -42,7 +42,7 @@ namespace Clustering.Model
             _handPickedInitialCenters = [];
         }
 
-        private Func<double[],int,IDataPoint> CreatePointFactory()
+        private Func<double[], int, IDataPoint> CreatePointFactory()
         {
             return ParameterSet.DisplayMode switch
             {
@@ -69,7 +69,7 @@ namespace Clustering.Model
         public void AddPoint(double[] coordinates, int clusterId = 0)
         {
             IDataPoint point = _pointCloud.AddPoint(coordinates);
-            PointCreated?.Invoke(this,point);
+            PointCreated?.Invoke(this, point);
         }
         public void RemovePoint(int id)
         {
@@ -100,7 +100,8 @@ namespace Clustering.Model
 
         public void NewParameterSet()
         {
-            if (_firstParameterSet){
+            if (_firstParameterSet)
+            {
                 _firstParameterSet = false;
                 PreviousParameterSet = null;
             }
@@ -116,8 +117,8 @@ namespace Clustering.Model
             {
                 _pointCloud = new PointCloud(CreatePointFactory());
                 _algorithm = new KMeansAlgorithm(ParameterSet);
-                _algorithm.StepFinished += (_,progress) => StepFinished?.Invoke(this,progress);
-                if(PreviousParameterSet is null) { PreviousParameterSet = ParameterSet.Copy(); }
+                _algorithm.StepFinished += (_, progress) => StepFinished?.Invoke(this, progress);
+                if (PreviousParameterSet is null) { PreviousParameterSet = ParameterSet.Copy(); }
             }
         }
 
@@ -131,7 +132,7 @@ namespace Clustering.Model
 
         public async void RunClustering()
         {
-            Results = await Task.Run(()=>_algorithm.Run(_pointCloud, _tokenSource.Token, _handPickedInitialCenters));
+            Results = await Task.Run(() => _algorithm.Run(_pointCloud, _tokenSource.Token, _handPickedInitialCenters));
             ClusteringFinished?.Invoke(this, EventArgs.Empty);
         }
 
@@ -141,7 +142,7 @@ namespace Clustering.Model
             _tokenSource.Dispose();
             _tokenSource = new CancellationTokenSource();
         }
- 
+
         public void LoadImage(string filePath)
         {
             ImageHandler.LoadImage(filePath, _pointCloud);

@@ -29,14 +29,14 @@ namespace Clustering.Model.DataRepresentation
             _points.Add(point.Id, point);
             return point;
         }
-        public void RemovePoint(int PointId) 
-        { 
+        public void RemovePoint(int PointId)
+        {
             _points.Remove(PointId);
         }
 
         public void AddCluster(int id, IDataPoint? centerPoint = null)
         {
-            _clusters.Add(new Cluster(id,centerPoint));
+            _clusters.Add(new Cluster(id, centerPoint));
         }
 
         public Func<double[], int, IDataPoint> GetPointFactoryMethod()

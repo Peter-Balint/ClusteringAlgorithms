@@ -1,9 +1,9 @@
 ﻿
 using Clustering.Model.DataRepresentation;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualStudio.Modeling.Diagrams;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.VisualStudio.Modeling.Diagrams;
 using DrawingColor = System.Drawing.Color;
 using MediaColor = System.Windows.Media.Color;
 
@@ -21,9 +21,9 @@ namespace Clustering.WPF.ViewModel
                 OnPropertyChanged(nameof(Diameter));
             }
         }
-        
-        public override double PutCenterToX => X*_zoomFactor - _offsetX*_zoomFactor - Diameter / 2;
-        public override double PutCenterToY => Y*_zoomFactor - _offsetY*_zoomFactor - Diameter/2;
+
+        public override double PutCenterToX => X * _zoomFactor - _offsetX * _zoomFactor - Diameter / 2;
+        public override double PutCenterToY => Y * _zoomFactor - _offsetY * _zoomFactor - Diameter / 2;
 
         public int Id { get; }
         private int _clusterId;
@@ -32,13 +32,13 @@ namespace Clustering.WPF.ViewModel
 
         private Color GetColorFromId(int id)
         {
-            int hue = (id * 137) %240;
+            int hue = (id * 137) % 240;
             DrawingColor dColor = new HslColor(hue, 120, 120).ToRgbColor();
-            return MediaColor.FromArgb(dColor.A,dColor.R,dColor.G,dColor.B);
+            return MediaColor.FromArgb(dColor.A, dColor.R, dColor.G, dColor.B);
         }
 
         private bool _isSelected;
-        public bool IsSelected 
+        public bool IsSelected
         {
             get => _isSelected;
             set

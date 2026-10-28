@@ -12,7 +12,7 @@ namespace Clustering.WPF.ViewModel
 
         public ImageViewModel(int imageWidth, int imageHeight, IColorConverter<LabColor, RGBColor> converter, IDataPoint[] points, Cluster[]? clusters = null)
         {
-            byte[] pixels = new byte[points.Length*3];
+            byte[] pixels = new byte[points.Length * 3];
 
             if (clusters is null)
             {

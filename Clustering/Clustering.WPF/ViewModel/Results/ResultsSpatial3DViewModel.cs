@@ -19,12 +19,12 @@ namespace Clustering.WPF.ViewModel
         {
             if (!_model.ResultsAvailable) return;
             int stepCount = _model.Results!.GetStepCount();
-            for(int i = 0; i < stepCount; i++)
+            for (int i = 0; i < stepCount; i++)
             {
                 (IDataPoint[] stepPoints, Cluster[] stepClusters) = _model.Results!.GetStepAt(i);
                 var pointVMs = new SphereViewModel[stepPoints.Length];
                 var centerVMs = new CubeViewModel[stepClusters.Length];
-                for(int j = 0; j < stepPoints.Length; j++)
+                for (int j = 0; j < stepPoints.Length; j++)
                 {
                     pointVMs[j] = new SphereViewModel(stepPoints[j]);
                 }
@@ -32,7 +32,7 @@ namespace Clustering.WPF.ViewModel
                 {
                     centerVMs[j] = new CubeViewModel(stepClusters[j].CenterPoint);
                 }
-                StepAdded?.Invoke(this, (pointVMs,centerVMs));
+                StepAdded?.Invoke(this, (pointVMs, centerVMs));
             }
         }
     }

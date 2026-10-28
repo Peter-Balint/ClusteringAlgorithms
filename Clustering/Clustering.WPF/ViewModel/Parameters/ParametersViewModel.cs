@@ -19,7 +19,7 @@ namespace Clustering.WPF.ViewModel
         public bool HasErrors => Errors.Any();
         public bool HasPreviousState => _model.PreviousParameterSet is not null;
 
-        public ICommand ApplyCommand {  get; }
+        public ICommand ApplyCommand { get; }
         public ICommand CancelCommand { get; }
 
         public DisplayMode DisplayMode
@@ -37,7 +37,7 @@ namespace Clustering.WPF.ViewModel
                     OnPropertyChanged(nameof(ClusterInitializationMethod));
                 }
             }
-        }        
+        }
         public DisplayMode[] DisplayModeValues => Enum.GetValues<DisplayMode>();
 
         public SpatialDistanceMetric SpatialDistanceMetric
@@ -77,7 +77,7 @@ namespace Clustering.WPF.ViewModel
                 //maybe replace this with a method that checks for the errors the same way the setter does
                 //since just the errors getting added is what we want and the binding isn't two way
                 //find out if that works on start as well
-                if(IsIterationNumberApplicable) IterationNumberDisplay = IterationNumber.ToString();
+                if (IsIterationNumberApplicable) IterationNumberDisplay = IterationNumber.ToString();
                 OnPropertyChanged(nameof(IsMinimalDeltaApplicable));
                 ClearErrors(nameof(MinimalDelta));
                 if (IsMinimalDeltaApplicable) MinimalDeltaDisplay = MinimalDelta.ToString();
@@ -100,12 +100,12 @@ namespace Clustering.WPF.ViewModel
             {
                 ClearErrors(nameof(IterationNumber));
 
-                if(value == string.Empty)
+                if (value == string.Empty)
                 {
                     IterationNumber = 0;
                     AddError(nameof(IterationNumber), "Iteration Number field should not be empty", IsIterationNumberApplicable);
                 }
-                else if(!int.TryParse(value, out int parsedValue) || parsedValue < 1)
+                else if (!int.TryParse(value, out int parsedValue) || parsedValue < 1)
                 {
                     IterationNumber = 0;
                     AddError(nameof(IterationNumber), "Iteration Number field should contain a positive integer", IsIterationNumberApplicable);
@@ -281,13 +281,13 @@ namespace Clustering.WPF.ViewModel
         }
         private void ClearErrors(string? propertyName = null)
         {
-            if(propertyName is null)
+            if (propertyName is null)
             {
                 Errors.Clear();
             }
             else
             {
-                for(int i = 0; i < Errors.Count; i++)
+                for (int i = 0; i < Errors.Count; i++)
                 {
                     if (Errors[i].PropertyName == propertyName)
                     {

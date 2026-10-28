@@ -11,7 +11,7 @@ namespace Clustering.WPF.View.Components
 {
     public partial class SetupSpatial3D : UserControl
     {
-        private readonly Dictionary<int,SphereVisual3D> _spheres = new();
+        private readonly Dictionary<int, SphereVisual3D> _spheres = new();
         private readonly Random _random = new();
         private SetupSpatial3DViewModel _viewModel => (SetupSpatial3DViewModel)DataContext;
 
@@ -51,11 +51,12 @@ namespace Clustering.WPF.View.Components
 
         private void AddPointButton_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(XTextBox.Text, out double x) && 
-                double.TryParse(YTextBox.Text, out double y) && 
-                double.TryParse(ZTextBox.Text, out double z)) {
+            if (double.TryParse(XTextBox.Text, out double x) &&
+                double.TryParse(YTextBox.Text, out double y) &&
+                double.TryParse(ZTextBox.Text, out double z))
+            {
                 _viewModel.AddPoint(x, y, z);
-            } 
+            }
             else { MessageBox.Show("Please enter valid numeric coordinates."); }
         }
 
@@ -87,7 +88,7 @@ namespace Clustering.WPF.View.Components
             _viewModel.RemovePoint(_spheres.Where(pair => pair.Value == _selectedSphere).First().Key);
             Viewport.Children.Remove(_selectedSphere);
             _selectedSphere = null;
-            RemoveButton.Visibility= Visibility.Collapsed;
+            RemoveButton.Visibility = Visibility.Collapsed;
         }
 
         private void LoadPointsButton_Click(object sender, RoutedEventArgs e)
@@ -128,7 +129,7 @@ namespace Clustering.WPF.View.Components
         }
         private void ClearSpheres()
         {
-            foreach(SphereVisual3D sphere in _spheres.Values)
+            foreach (SphereVisual3D sphere in _spheres.Values)
             {
                 Viewport.Children.Remove(sphere);
             }
